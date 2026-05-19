@@ -3,12 +3,13 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const { createClient } = require('@supabase/supabase-js');
-console.log('Full URL:', SUPABASE_URL);
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+console.log('Full URL:', SUPABASE_URL);
 
 async function dbGet(key) {
   const { data } = await supabase
