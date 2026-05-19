@@ -21,7 +21,7 @@ async function dbGet(key) {
 async function dbSet(key, value) {
   await supabase
     .from('store')
-    .upsert({ key, value: JSON.stringify(value) });
+    ..upsert({ key, value });
 }
 
 async function dbDel(key) {
