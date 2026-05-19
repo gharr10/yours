@@ -2,7 +2,34 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
-const { initDb, dbGet, dbSet, dbDel } = require('./db');
+const { createClient } = require('@supabase/supabase-js');
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_KEY;
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function dbGet(key) {
+  const { data } = await supabase
+    .from('store')
+    .select('value')
+    .eq('key', key)
+    .single();
+  return data ? data.value : null;
+}
+
+async function dbSet(key, value) {
+  await supabase
+    .from('store')
+    .upsert({ key, value: JSON.stringify(value) });
+}
+
+async function dbDel(key) {
+  await supabase
+    .from('store')
+    .delete()
+    .eq('key', key);
+}
 
 async function readBody(req) {
   return new Promise((res, rej) => {
@@ -22,34 +49,28 @@ const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
 
-  try {
-    if (pathname === '/db/get') {
-      const key = parsed.query.key;
-      if (!key) { res.writeHead(400); res.end('missing key'); return; }
-      const val = await dbGet(key);
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(val || 'null');
-      return;
-    }
+  if (pathname === '/db/get') {
+    const key = parsed.query.key;
+    if (!key) { res.writeHead(400); res.end('missing key'); return; }
+    const val = await dbGet(key);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(val || 'null');
+    return;
+  }
 
-    if (pathname === '/db/set' && req.method === 'POST') {
-      const body = await readBody(req);
-      let parsed2;
-      try { parsed2 = JSON.parse(body); } catch { res.writeHead(400); res.end('bad json'); return; }
-      await dbSet(parsed2.key, parsed2.value);
-      res.writeHead(200); res.end('ok');
-      return;
-    }
+  if (pathname === '/db/set' && req.method === 'POST') {
+    const body = await readBody(req);
+    let parsed2;
+    try { parsed2 = JSON.parse(body); } catch { res.writeHead(400); res.end('bad json'); return; }
+    await dbSet(parsed2.key, parsed2.value);
+    res.writeHead(200); res.end('ok');
+    return;
+  }
 
-    if (pathname === '/db/del' && req.method === 'DELETE') {
-      const key = parsed.query.key;
-      if (key) await dbDel(key);
-      res.writeHead(200); res.end('ok');
-      return;
-    }
-  } catch (err) {
-    console.error(err);
-    res.writeHead(500); res.end('server error');
+  if (pathname === '/db/del' && req.method === 'DELETE') {
+    const key = parsed.query.key;
+    if (key) await dbDel(key);
+    res.writeHead(200); res.end('ok');
     return;
   }
 
@@ -62,11 +83,4 @@ const server = http.createServer(async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-initDb().then(() => {
-  server.listen(PORT, () => {
-    console.log(`yours. running on port ${PORT}`);
-  });
-}).catch(err => {
-  console.error('failed to start:', err);
-  process.exit(1);
-});
+server.listen(PORT, () => console.log(`yours. running on port ${PORT}`));
