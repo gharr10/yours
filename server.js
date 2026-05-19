@@ -3,8 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const { createClient } = require('@supabase/supabase-js');
-console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? 'set' : 'MISSING');
-console.log('SUPABASE_KEY:', process.env.SUPABASE_KEY ? 'set' : 'MISSING');
+console.log('Full URL:', SUPABASE_URL);
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
