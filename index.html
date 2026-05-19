@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yours.</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#FAF9F7;--surface:#FFFFFF;--border:#E8E6E1;--border-light:#F0EEE9;
+  --text:#1A1917;--text-muted:#888580;--text-faint:#B8B5AF;
+  --accent:#2D5A27;--accent-light:#EAF3E8;--danger:#C0392B;
+  --radius:14px;--radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;}
+#auth-screen{align-items:center;justify-content:center;padding:2rem;}
+.auth-inner{width:100%;max-width:360px;}
+.auth-logo{font-family:'DM Serif Display',serif;font-size:42px;color:var(--text);margin-bottom:6px;}
+.auth-tagline{font-size:14px;color:var(--text-muted);margin-bottom:40px;font-weight:300;}
+.auth-tabs{display:flex;margin-bottom:24px;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;}
+.auth-tab{flex:1;padding:10px;text-align:center;font-size:14px;cursor:pointer;background:transparent;border:none;color:var(--text-muted);font-family:inherit;transition:all 0.2s;}
+.auth-tab.active{background:var(--text);color:white;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12px;color:var(--text-muted);margin-bottom:6px;font-weight:500;letter-spacing:0.3px;}
+.field input{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;background:var(--surface);color:var(--text);outline:none;transition:border-color 0.2s;}
+.field input:focus{border-color:var(--accent);}
+.btn-primary{width:100%;padding:13px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer;transition:opacity 0.2s;margin-top:4px;}
+.btn-primary:hover{opacity:0.85;}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
+.auth-msg{font-size:13px;margin-top:10px;text-align:center;min-height:18px;}
+.auth-msg.error{color:var(--danger);}
+.auth-msg.success{color:var(--accent);}
+.loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:12px;}
+.loading-logo{font-family:'DM Serif Display',serif;font-size:36px;color:var(--text);}
+.loading-dot{display:flex;gap:6px;}
+.loading-dot span{width:7px;height:7px;border-radius:50%;background:var(--text-faint);animation:pulse 1.2s ease-in-out infinite;}
+.loading-dot span:nth-child(2){animation-delay:0.2s;}
+.loading-dot span:nth-child(3){animation-delay:0.4s;}
+@keyframes pulse{0%,80%,100%{opacity:0.3;}40%{opacity:1;}}
+#app-screen{background:var(--bg);}
+.app-nav{background:var(--surface);border-bottom:1px solid var(--border-light);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.app-logo{font-family:'DM Serif Display',serif;font-size:26px;color:var(--text);}
+.icon-btn{background:none;border:none;cursor:pointer;padding:8px;color:var(--text-muted);border-radius:var(--radius-sm);transition:all 0.15s;display:flex;align-items:center;justify-content:center;}
+.icon-btn:hover{background:var(--bg);color:var(--text);}
+.icon-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.feed-tabs{display:flex;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--border-light);}
+.feed-tab{font-size:13px;padding:12px 0;margin-right:20px;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;}
+.feed-tab.active{color:var(--text);border-bottom-color:var(--text);font-weight:500;}
+.panel{display:none;max-width:520px;margin:0 auto;padding:16px 16px 80px;width:100%;}
+.panel.active{display:block;}
+.panel-title{font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:20px;}
+#feed-panel{max-width:100%;}
+#feed-panel .feed-inner{max-width:520px;margin:0 auto;padding:16px 16px 80px;}
+.post-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;}
+.post-header{display:flex;align-items:center;padding:14px 16px 10px;gap:10px;}
+.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0;}
+.post-meta{flex:1;}
+.post-username{font-size:14px;font-weight:500;color:var(--text);}
+.post-time{font-size:12px;color:var(--text-faint);}
+.post-image-wrap img{width:100%;display:block;max-height:400px;object-fit:cover;}
+.post-body{padding:12px 16px 14px;}
+.post-text{font-size:14px;line-height:1.55;color:var(--text);margin-bottom:12px;}
+.post-footer{display:flex;align-items:center;gap:12px;}
+.post-action{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text-muted);font-family:inherit;padding:0;transition:color 0.15s;}
+.post-action:hover{color:var(--text);}
+.post-action.liked{color:#C0392B;}
+.post-action svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.post-action.liked svg{fill:#C0392B;stroke:#C0392B;}
+.timer-pill{margin-left:auto;font-size:11px;color:var(--text-faint);background:var(--bg);border:1px solid var(--border-light);padding:3px 9px;border-radius:20px;}
+.comments-section{border-top:1px solid var(--border-light);padding:10px 16px 14px;}
+.comment{display:flex;gap:8px;margin-bottom:8px;}
+.comment-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;}
+.comment-user{font-size:12px;font-weight:500;color:var(--text);}
+.comment-text{font-size:13px;color:var(--text-muted);line-height:1.4;}
+.comment-input-row{display:flex;gap:8px;margin-top:8px;}
+.comment-input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:20px;font-family:inherit;font-size:13px;background:var(--bg);color:var(--text);outline:none;}
+.comment-input:focus{border-color:var(--accent);}
+.comment-send{background:var(--text);color:white;border:none;border-radius:20px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
+.empty-state{text-align:center;padding:60px 20px;}
+.empty-state h3{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:8px;}
+.empty-state p{font-size:14px;color:var(--text-muted);line-height:1.5;}
+.composer{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
+.composer textarea{width:100%;border:none;outline:none;font-family:inherit;font-size:15px;color:var(--text);background:transparent;resize:none;line-height:1.6;min-height:80px;}
+.composer textarea::placeholder{color:var(--text-faint);}
+.composer-footer{display:flex;align-items:center;gap:10px;margin-top:12px;border-top:1px solid var(--border-light);padding-top:12px;flex-wrap:wrap;}
+.img-upload-btn{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);cursor:pointer;padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);transition:all 0.15s;}
+.img-upload-btn:hover{border-color:var(--accent);color:var(--accent);}
+.img-upload-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+#img-file{display:none;}
+.timer-control{display:flex;align-items:center;gap:8px;flex:1;min-width:160px;}
+.timer-control label{font-size:12px;color:var(--text-muted);white-space:nowrap;}
+.timer-control input[type=range]{flex:1;accent-color:var(--accent);}
+.timer-val{font-size:12px;color:var(--text);font-weight:500;white-space:nowrap;min-width:60px;}
+.post-btn{background:var(--text);color:white;border:none;border-radius:var(--radius-sm);padding:9px 20px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:opacity 0.2s;margin-left:auto;}
+.post-btn:hover{opacity:0.82;}
+.post-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.img-preview{margin-top:10px;position:relative;display:inline-block;}
+.img-preview img{max-width:100%;max-height:200px;border-radius:var(--radius-sm);display:block;}
+.img-preview-remove{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.55);color:white;border:none;border-radius:50%;width:24px;height:24px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.section-label{font-size:11px;font-weight:500;letter-spacing:0.5px;color:var(--text-faint);text-transform:uppercase;margin-bottom:10px;margin-top:4px;}
+.friend-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.friend-info{flex:1;}
+.friend-name{font-size:14px;font-weight:500;}
+.friend-handle{font-size:12px;color:var(--text-muted);}
+.invite-box{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
+.invite-box h3{font-size:15px;font-weight:500;margin-bottom:6px;}
+.invite-box p{font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;}
+.search-box{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
+.search-box h3{font-size:15px;font-weight:500;margin-bottom:6px;}
+.search-box p{font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;}
+.search-row{display:flex;gap:8px;}
+.search-input{flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;background:var(--bg);color:var(--text);outline:none;}
+.search-input:focus{border-color:var(--accent);}
+.search-btn{background:var(--text);color:white;border:none;border-radius:var(--radius-sm);padding:9px 14px;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.search-result{margin-top:12px;display:none;}
+.search-msg{font-size:13px;color:var(--text-muted);padding:4px 0;}
+.search-result-card{display:flex;align-items:center;gap:12px;padding:10px 0;}
+.add-btn{background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);padding:7px 14px;font-size:13px;cursor:pointer;font-family:inherit;margin-left:auto;}
+.add-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.dm-list-item{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;transition:border-color 0.15s;}
+.dm-list-item:hover{border-color:var(--border);}
+.dm-preview{flex:1;min-width:0;}
+.dm-name{font-size:14px;font-weight:500;color:var(--text);}
+.dm-last{font-size:12px;color:var(--text-muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.dm-time{font-size:11px;color:var(--text-faint);flex-shrink:0;}
+.chat-view{display:none;flex-direction:column;height:calc(100vh - 108px);}
+.chat-view.active{display:flex;}
+.chat-header{display:flex;align-items:center;gap:10px;padding:0 0 14px;border-bottom:1px solid var(--border-light);margin-bottom:12px;flex-shrink:0;}
+.chat-back{background:none;border:none;cursor:pointer;padding:4px 8px 4px 0;color:var(--text-muted);font-family:inherit;font-size:13px;display:flex;align-items:center;gap:4px;}
+.chat-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.chat-title{font-size:16px;font-weight:500;color:var(--text);}
+.chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-bottom:8px;}
+.msg-bubble{max-width:72%;padding:9px 13px;border-radius:18px;font-size:14px;line-height:1.45;word-break:break-word;}
+.msg-out{align-self:flex-end;background:var(--text);color:white;border-bottom-right-radius:5px;}
+.msg-in{align-self:flex-start;background:var(--surface);border:1px solid var(--border-light);color:var(--text);border-bottom-left-radius:5px;}
+.msg-time{font-size:10px;opacity:0.6;margin-top:3px;}
+.chat-input-row{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border-light);flex-shrink:0;}
+.chat-input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:22px;font-family:inherit;font-size:14px;background:var(--bg);color:var(--text);outline:none;}
+.chat-input:focus{border-color:var(--accent);}
+.chat-send{background:var(--text);color:white;border:none;border-radius:22px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit;}
+.unread-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.invite-link-row{display:flex;gap:8px;}
+.invite-link{flex:1;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.copy-btn{background:var(--text);color:white;border:none;border-radius:var(--radius-sm);padding:9px 14px;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.pending-card{background:var(--accent-light);border:1px solid #C8DFC5;border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.pending-actions{display:flex;gap:6px;margin-left:auto;}
+.accept-btn{background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;}
+.decline-btn{background:none;border:1px solid var(--border);color:var(--text-muted);border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;}
+.profile-header{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:20px;margin-bottom:16px;text-align:center;}
+.profile-av{width:64px;height:64px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:500;}
+.profile-name{font-family:'DM Serif Display',serif;font-size:22px;}
+.profile-handle{font-size:13px;color:var(--text-muted);margin-top:2px;}
+.profile-stats{display:flex;justify-content:center;gap:30px;margin-top:16px;}
+.stat{text-align:center;}
+.stat-num{font-size:18px;font-weight:500;}
+.stat-label{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.logout-btn{width:100%;padding:12px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;color:var(--text-muted);cursor:pointer;margin-top:16px;transition:all 0.15s;}
+.logout-btn:hover{border-color:var(--danger);color:var(--danger);}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border-light);display:flex;justify-content:space-around;padding:10px 0 14px;z-index:100;}
+.bn-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 16px;color:var(--text-faint);transition:color 0.15s;}
+.bn-btn.active{color:var(--text);}
+.bn-btn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.bn-dot{width:4px;height:4px;border-radius:50%;background:var(--text);opacity:0;transition:opacity 0.15s;}
+.bn-btn.active .bn-dot{opacity:1;}
+#bn-messages{position:relative;}
+.nav-badge{position:absolute;top:1px;right:6px;background:#C0392B;color:white;font-size:10px;font-weight:600;border-radius:10px;min-width:16px;height:16px;padding:0 4px;display:flex;align-items:center;justify-content:center;pointer-events:none;line-height:1;}
+.dm-list-item.dm-unread .dm-name{font-weight:600;}
+.dm-list-item.dm-unread .dm-last{color:var(--text);}
+.dm-list-item.dm-unread{border-color:var(--border);}
+.c0{background:#EAF3E8;color:#2D5A27;}
+.c1{background:#EEEDFE;color:#3C3489;}
+.c2{background:#FAECE7;color:#712B13;}
+.c3{background:#E6F1FB;color:#0C447C;}
+.c4{background:#FAEEDA;color:#633806;}
+.fp-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;overflow-y:auto;transform:translateX(100%);transition:transform 0.25s cubic-bezier(.4,0,.2,1);}
+.fp-overlay.open{transform:translateX(0);}
+.fp-back{background:none;border:none;cursor:pointer;padding:4px 0 14px;color:var(--text-muted);font-family:inherit;font-size:13px;display:flex;align-items:center;gap:6px;width:100%;}
+.fp-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.stat-btn{cursor:pointer;border-radius:8px;padding:4px 8px;margin:-4px -8px;transition:background 0.15s;}
+.stat-btn:hover,.stat-btn:active{background:var(--bg);}
+.profile-friend-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:8px;cursor:pointer;transition:border-color 0.15s;}
+.profile-friend-row:hover{border-color:var(--border);}
+</style>
+</head>
+<body>
+<div class="loading-overlay" id="loading">
+  <div class="loading-logo">yours.</div>
+  <div class="loading-dot"><span></span><span></span><span></span></div>
+</div>
+<div id="auth-screen" class="screen">
+  <div class="auth-inner">
+    <div class="auth-logo">yours.</div>
+    <div class="auth-tagline">share with the people who actually matter.</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuth('login')">sign in</button>
+      <button class="auth-tab" onclick="switchAuth('signup')">join</button>
+    </div>
+    <div id="login-form">
+      <div class="field"><label>username</label><input type="text" id="login-user" placeholder="username" autocomplete="username"></div>
+      <div class="field"><label>password</label><input type="password" id="login-pass" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"></div>
+      <button class="btn-primary" id="login-btn" onclick="login()">sign in</button>
+    </div>
+    <div id="signup-form" style="display:none">
+      <div class="field"><label>name</label><input type="text" id="signup-name" placeholder="your name"></div>
+      <div class="field"><label>username</label><input type="text" id="signup-user" placeholder="choose a username" autocomplete="username"></div>
+      <div class="field"><label>email</label><input type="email" id="signup-email" placeholder="your email"></div>
+      <div class="field"><label>password</label><input type="password" id="signup-pass" placeholder="choose a password" autocomplete="new-password" onkeydown="if(event.key==='Enter')signup()"></div>
+      <button class="btn-primary" id="signup-btn" onclick="signup()">create account</button>
+    </div>
+    <div class="auth-msg" id="auth-msg"></div>
+  </div>
+</div>
+<div id="app-screen" class="screen">
+  <nav class="app-nav">
+    <span class="app-logo">yours.</span>
+    <div style="display:flex;gap:4px;">
+      <button class="icon-btn" onclick="refreshFeed()" title="refresh">
+        <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div id="feed-panel" style="display:none;flex-direction:column;">
+    <div class="feed-tabs">
+      <div class="feed-tab active" onclick="switchFeed('friends',this)">friends</div>
+      <div class="feed-tab" onclick="switchFeed('favourites',this)">favourites</div>
+    </div>
+    <div class="feed-inner" style="max-width:520px;margin:0 auto;padding:16px 16px 80px;width:100%;">
+      <div id="feed-container"></div>
+    </div>
+  </div>
+  <div id="post-panel" class="panel">
+    <div class="panel-title">share something.</div>
+    <div class="composer">
+      <textarea id="post-text" placeholder="what's on your mind?" rows="4" oninput="updatePostBtn()"></textarea>
+      <div id="img-preview-wrap"></div>
+      <div class="composer-footer">
+        <label class="img-upload-btn" for="img-file">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          photo
+        </label>
+        <input type="file" id="img-file" accept="image/*" onchange="previewImage(this)">
+        <div class="timer-control">
+          <label>keeps for</label>
+          <input type="range" id="timer-slider" min="0" max="4" step="1" value="4" oninput="updateTimerLabel()">
+          <span class="timer-val" id="timer-label">forever</span>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:12px;">
+        <button class="post-btn" id="post-btn" onclick="submitPost()" disabled>post</button>
+      </div>
+    </div>
+  </div>
+  <div id="friends-panel" class="panel">
+    <div class="panel-title">friends.</div>
+    <div class="search-box">
+      <h3>find someone</h3>
+      <p>search by username to send a friend request.</p>
+      <div class="search-row">
+        <input class="search-input" id="friend-search-input" type="text" placeholder="username" autocomplete="off" onkeydown="if(event.key==='Enter')searchUser()">
+        <button class="search-btn" onclick="searchUser()">search</button>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+    <div class="invite-box">
+      <h3>invite someone</h3>
+      <p>share your invite link — only people you invite can join yours.</p>
+      <div class="invite-link-row">
+        <div class="invite-link" id="invite-link-display"></div>
+        <button class="copy-btn" id="copy-btn" onclick="copyInvite()">copy</button>
+      </div>
+    </div>
+    <div id="pending-wrap"></div>
+    <div class="section-label">your friends</div>
+    <div id="friends-list"></div>
+  </div>
+  <div id="profile-panel" class="panel">
+    <div class="panel-title">you.</div>
+    <div class="profile-header">
+      <div class="profile-av c0" id="profile-av"></div>
+      <div class="profile-name" id="profile-name-display"></div>
+      <div class="profile-handle" id="profile-handle-display"></div>
+      <div class="profile-stats">
+        <div class="stat"><div class="stat-num" id="stat-posts">0</div><div class="stat-label">posts</div></div>
+        <div class="stat stat-btn" onclick="toggleProfileFriendsList()"><div class="stat-num" id="stat-friends">0</div><div class="stat-label">friends</div></div>
+      </div>
+    </div>
+    <div id="profile-friends-section" style="display:none;margin-bottom:16px;">
+      <div class="section-label">friends</div>
+      <div id="profile-friends-list"></div>
+    </div>
+    <div id="profile-edit-form" style="display:none;background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:12px;">
+      <div class="section-label" style="margin-bottom:10px;">edit profile</div>
+      <div class="field"><label>display name</label><input type="text" id="edit-name-input" placeholder="your name"></div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn-primary" style="flex:1;padding:10px;margin:0;" onclick="saveProfile()">save</button>
+        <button class="logout-btn" style="flex:1;margin:0;padding:10px;" onclick="cancelEditProfile()">cancel</button>
+      </div>
+    </div>
+    <button class="logout-btn" style="margin-bottom:8px;" onclick="toggleEditProfile()">edit profile</button>
+    <button class="logout-btn" onclick="logout()">sign out</button>
+  </div>
+  <div id="messages-panel" class="panel">
+    <div id="dm-list-view">
+      <div class="panel-title">messages.</div>
+      <div id="dm-list-container"></div>
+    </div>
+    <div class="chat-view" id="chat-view">
+      <div class="chat-header">
+        <button class="chat-back" onclick="closeDM()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> back</button>
+        <div class="chat-title" id="chat-title"></div>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-row">
+        <input class="chat-input" id="chat-input" placeholder="say something..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendDM();}">
+        <button class="chat-send" onclick="sendDM()">send</button>
+      </div>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="bn-btn active" id="bn-feed" onclick="showPanel('feed')">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <div class="bn-dot"></div>
+    </button>
+    <button class="bn-btn" id="bn-post" onclick="showPanel('post')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      <div class="bn-dot"></div>
+    </button>
+    <button class="bn-btn" id="bn-messages" onclick="showPanel('messages')">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <div class="bn-dot"></div>
+      <span class="nav-badge" id="msg-badge" style="display:none"></span>
+    </button>
+    <button class="bn-btn" id="bn-friends" onclick="showPanel('friends')">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <div class="bn-dot"></div>
+    </button>
+    <button class="bn-btn" id="bn-profile" onclick="showPanel('profile')">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <div class="bn-dot"></div>
+    </button>
+  </nav>
+  <div id="friend-profile-overlay" class="fp-overlay">
+    <div style="max-width:520px;margin:0 auto;padding:16px 16px 80px;">
+      <button class="fp-back" onclick="closeFriendProfile()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> back</button>
+      <div class="profile-header">
+        <div class="profile-av c0" id="fp-av"></div>
+        <div class="profile-name" id="fp-name"></div>
+        <div class="profile-handle" id="fp-handle"></div>
+        <div class="profile-stats">
+          <div class="stat"><div class="stat-num" id="fp-stat-posts">0</div><div class="stat-label">posts</div></div>
+          <div class="stat"><div class="stat-num" id="fp-stat-friends">0</div><div class="stat-label">friends</div></div>
+        </div>
+      </div>
+      <div class="section-label" style="margin-top:4px;">posts</div>
+      <div id="fp-posts-container"><div style="text-align:center;padding:40px;color:var(--text-faint);font-size:14px;">loading...</div></div>
+    </div>
+  </div>
+</div>
+<script>
+async function dbGet(key){try{const r=await fetch('/db/get?key='+encodeURIComponent(key));if(!r.ok)return null;const t=await r.text();return t?JSON.parse(t):null;}catch{return null;}}
+async function dbSet(key,value){try{await fetch('/db/set',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key,value:JSON.stringify(value)})});}catch{}}
+async function dbDel(key){try{await fetch('/db/del?key='+encodeURIComponent(key),{method:'DELETE'});}catch{}}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function initials(name){return(name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);}
+function colClass(n){return'c'+(Math.abs([...(n||'')].reduce((a,c)=>a+c.charCodeAt(0),0))%5);}
+function timeAgo(ts){const d=Date.now()-ts;if(d<60000)return'just now';if(d<3600000)return Math.floor(d/60000)+'m ago';if(d<86400000)return Math.floor(d/3600000)+'h ago';return Math.floor(d/86400000)+'d ago';}
+function timeLeft(ts,durMs){if(!durMs)return'forever';const l=(ts+durMs)-Date.now();if(l<=0)return'expired';if(l<3600000)return Math.floor(l/60000)+'m left';if(l<86400000)return Math.floor(l/3600000)+'h left';return Math.floor(l/86400000)+'d left';}
+function timerLabel(v){return['24 hours','7 days','30 days','6 months','forever'][v]||'forever';}
+function timerMs(v){return[86400000,604800000,2592000000,15552000000,null][v];}
+async function hashPwd(pwd,salt){const enc=new TextEncoder();const buf=await crypto.subtle.digest('SHA-256',enc.encode(salt+':'+pwd));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+function setMsg(msg,type='error'){const el=document.getElementById('auth-msg');el.textContent=msg;el.className='auth-msg '+(type||'');}
+function loading(show){document.getElementById('loading').style.display=show?'flex':'none';}
+let CU=null;
+function saveSession(u){localStorage.setItem('yours_user',u);}
+function clearSession(){localStorage.removeItem('yours_user');}
+function getSession(){return localStorage.getItem('yours_user');}
+function switchAuth(tab){document.getElementById('login-form').style.display=tab==='login'?'block':'none';document.getElementById('signup-form').style.display=tab==='signup'?'block':'none';document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='signup')));setMsg('');}
+async function login(){const u=document.getElementById('login-user').value.trim().toLowerCase();const p=document.getElementById('login-pass').value;if(!u||!p)return setMsg('please fill in all fields');const btn=document.getElementById('login-btn');btn.disabled=true;btn.textContent='signing in...';const user=await dbGet('user:'+u);if(!user){setMsg('username or password incorrect');btn.disabled=false;btn.textContent='sign in';return;}let valid=false;if(user.salt){valid=(await hashPwd(p,user.salt))===user.password;}else{valid=user.password===btoa(p);if(valid){const salt=crypto.randomUUID();user.salt=salt;user.password=await hashPwd(p,salt);await dbSet('user:'+u,user);}}if(!valid){setMsg('username or password incorrect');btn.disabled=false;btn.textContent='sign in';return;}CU={username:u,...user};saveSession(u);enterApp();btn.disabled=false;btn.textContent='sign in';}
+async function signup(){const name=document.getElementById('signup-name').value.trim();const u=document.getElementById('signup-user').value.trim().toLowerCase().replace(/\s+/g,'');const email=document.getElementById('signup-email').value.trim().toLowerCase();const p=document.getElementById('signup-pass').value;if(!name||!u||!email||!p)return setMsg('please fill in all fields');if(u.length<3)return setMsg('username must be at least 3 characters');if(p.length<4)return setMsg('password must be at least 4 characters');if(!email.includes('@'))return setMsg('please enter a valid email');const btn=document.getElementById('signup-btn');btn.disabled=true;btn.textContent='creating account...';const existing=await dbGet('user:'+u);if(existing){setMsg('that username is taken');btn.disabled=false;btn.textContent='create account';return;}const params=new URLSearchParams(window.location.search);const invitedBy=params.get('invite')||null;const salt=crypto.randomUUID();const hashedPwd=await hashPwd(p,salt);const userData={name,email,password:hashedPwd,salt,friends:[],favourites:[],colour:Math.abs([...u].reduce((a,c)=>a+c.charCodeAt(0),0))%5,invitedBy,joined:Date.now()};await dbSet('user:'+u,userData);if(invitedBy){const inviter=await dbGet('user:'+invitedBy);if(inviter){if(!inviter.friends.includes(u))inviter.friends.push(u);userData.friends.push(invitedBy);await dbSet('user:'+invitedBy,inviter);await dbSet('user:'+u,userData);}}CU={username:u,...userData};saveSession(u);setMsg('welcome to yours.','success');setTimeout(enterApp,600);btn.disabled=false;btn.textContent='create account';}
+async function logout(){CU=null;clearSession();document.getElementById('app-screen').classList.remove('active');document.getElementById('auth-screen').classList.add('active');document.getElementById('login-user').value='';document.getElementById('login-pass').value='';setMsg('');}
+function enterApp(){document.getElementById('auth-screen').classList.remove('active');document.getElementById('app-screen').classList.add('active');showPanel('feed');setTimeout(checkUnreadBadge,800);if(!window._badgeTimer)window._badgeTimer=setInterval(checkUnreadBadge,30000);}
+function showPanel(name){['feed','post','messages','friends','profile'].forEach(p=>{const el=document.getElementById(p+'-panel');if(p==='feed'){el.style.display=p===name?'flex':'none';}else{el.classList.toggle('active',p===name);}document.getElementById('bn-'+p)?.classList.toggle('active',p===name);});if(name==='feed')renderFeed();if(name==='friends')renderFriends();if(name==='profile')renderProfile();if(name==='post'){updateTimerLabel();updatePostBtn();}if(name==='messages')renderMessages();}
+let feedMode='friends';
+function switchFeed(mode,el){feedMode=mode;document.querySelectorAll('.feed-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderFeed();}
+async function refreshFeed(){await renderFeed();}
+async function renderFeed(){const container=document.getElementById('feed-container');container.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-faint);font-size:14px;">loading...</div>';const userData=await dbGet('user:'+CU.username);if(!userData){container.innerHTML='';return;}CU={...CU,...userData};const friends=userData.friends||[];const favs=userData.favourites||[];const authors=feedMode==='favourites'?favs:[CU.username,...friends];const postIndex=(await dbGet('posts:index')||[]).slice(0,100);const now=Date.now();const posts=[];for(const pid of postIndex){const p=await dbGet('post:'+pid);if(!p)continue;if(!authors.includes(p.author))continue;if(p.durMs&&(p.ts+p.durMs)<now)continue;posts.push(p);}posts.sort((a,b)=>b.ts-a.ts);if(posts.length===0){container.innerHTML=`<div class="empty-state"><h3>${feedMode==='favourites'?'no favourites yet.':'nothing here yet.'}</h3><p>${feedMode==='favourites'?'heart a friend to see their posts first.':'invite friends and start posting.'}</p></div>`;return;}container.innerHTML=posts.map(post=>renderPost(post)).join('');}
+function renderPost(post){const isLiked=(post.likes||[]).includes(CU.username);const likeCount=(post.likes||[]).length;const comments=post.comments||[];const tl=timeLeft(post.ts,post.durMs);const isOwn=post.author===CU.username;return`<div class="post-card" id="post-${post.id}"><div class="post-header"><div class="avatar ${colClass(post.author)}">${initials(post.authorName||post.author)}</div><div class="post-meta"><div class="post-username">${escHtml(post.authorName||post.author)}</div><div class="post-time">${timeAgo(post.ts)}</div></div>${isOwn?`<button class="icon-btn" onclick="deletePost('${post.id}')" title="delete" style="color:var(--text-faint)"><svg viewBox="0 0 24 24" style="width:16px;height:16px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>`:''}</div>${post.image?`<div class="post-image-wrap"><img src="${post.image}" alt="" loading="lazy"></div>`:''}<div class="post-body">${post.text?`<div class="post-text">${escHtml(post.text)}</div>`:''}<div class="post-footer"><button class="post-action${isLiked?' liked':''}" onclick="toggleLike('${post.id}')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>${likeCount>0?likeCount:''}</button><button class="post-action" onclick="focusCmt('${post.id}')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>${comments.length>0?comments.length:''}</button><div class="timer-pill">${tl}</div></div></div>${comments.length>0?`<div class="comments-section">${comments.slice(-3).map(c=>`<div class="comment"><div class="comment-av ${colClass(c.author)}">${initials(c.authorName||c.author)}</div><div><div class="comment-user">${escHtml(c.authorName||c.author)}</div><div class="comment-text">${escHtml(c.text)}</div></div></div>`).join('')}<div class="comment-input-row"><input class="comment-input" id="ci-${post.id}" placeholder="add a comment..." onkeydown="if(event.key==='Enter')addComment('${post.id}')"><button class="comment-send" onclick="addComment('${post.id}')">send</button></div></div>`:''}</div>`;}
+async function toggleLike(postId){const post=await dbGet('post:'+postId);if(!post)return;if(!post.likes)post.likes=[];const idx=post.likes.indexOf(CU.username);if(idx>-1)post.likes.splice(idx,1);else post.likes.push(CU.username);await dbSet('post:'+postId,post);renderFeed();}
+async function addComment(postId){const input=document.getElementById('ci-'+postId);const text=input.value.trim();if(!text)return;const post=await dbGet('post:'+postId);if(!post)return;if(!post.comments)post.comments=[];post.comments.push({author:CU.username,authorName:CU.name,text,ts:Date.now()});await dbSet('post:'+postId,post);input.value='';renderFeed();}
+function focusCmt(postId){setTimeout(()=>{const el=document.getElementById('ci-'+postId);if(el)el.focus();},50);}
+async function deletePost(postId){await dbDel('post:'+postId);let idx=await dbGet('posts:index')||[];idx=idx.filter(id=>id!==postId);await dbSet('posts:index',idx);renderFeed();}
+let selectedImage=null;
+function previewImage(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{const img=new Image();img.onload=()=>{const MAX=900;let w=img.width,h=img.height;if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);selectedImage=canvas.toDataURL('image/jpeg',0.65);document.getElementById('img-preview-wrap').innerHTML=`<div class="img-preview"><img src="${selectedImage}" alt="preview"><button class="img-preview-remove" onclick="removeImage()">×</button></div>`;updatePostBtn();};img.src=e.target.result;};reader.readAsDataURL(file);}
+function removeImage(){selectedImage=null;document.getElementById('img-preview-wrap').innerHTML='';document.getElementById('img-file').value='';updatePostBtn();}
+function updateTimerLabel(){document.getElementById('timer-label').textContent=timerLabel(parseInt(document.getElementById('timer-slider').value));}
+function updatePostBtn(){document.getElementById('post-btn').disabled=!document.getElementById('post-text').value.trim()&&!selectedImage;}
+async function submitPost(){const text=document.getElementById('post-text').value.trim();const tv=parseInt(document.getElementById('timer-slider').value);const btn=document.getElementById('post-btn');btn.disabled=true;btn.textContent='posting...';const post={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),author:CU.username,authorName:CU.name,text,image:selectedImage||null,ts:Date.now(),durMs:timerMs(tv),likes:[],comments:[]};await dbSet('post:'+post.id,post);let idx=await dbGet('posts:index')||[];idx.unshift(post.id);const expNow=Date.now();idx=idx.filter((id,i)=>i<150);await dbSet('posts:index',idx);document.getElementById('post-text').value='';removeImage();document.getElementById('timer-slider').value=4;updateTimerLabel();updatePostBtn();btn.disabled=false;btn.textContent='post';showPanel('feed');}
+async function searchUser(){const input=document.getElementById('friend-search-input');const u=input.value.trim().toLowerCase();const resultEl=document.getElementById('search-result');resultEl.style.display='block';if(!u){resultEl.innerHTML='<div class="search-msg">please enter a username.</div>';return;}if(u===CU.username){resultEl.innerHTML='<div class="search-msg">that\'s you!</div>';return;}const ud=await dbGet('user:'+u);if(!ud){resultEl.innerHTML='<div class="search-msg">no user found with that username.</div>';return;}const myData=await dbGet('user:'+CU.username);const alreadyFriends=(myData.friends||[]).includes(u);const pendingOut=(ud.pendingRequests||[]).includes(CU.username);if(alreadyFriends){resultEl.innerHTML=`<div class="search-result-card"><div class="avatar ${colClass(u)}">${initials(ud.name||u)}</div><div class="friend-info"><div class="friend-name">${escHtml(ud.name||u)}</div><div class="friend-handle">@${u}</div></div><span style="font-size:13px;color:var(--accent);margin-left:auto;">already friends</span></div>`;return;}if(pendingOut){resultEl.innerHTML=`<div class="search-result-card"><div class="avatar ${colClass(u)}">${initials(ud.name||u)}</div><div class="friend-info"><div class="friend-name">${escHtml(ud.name||u)}</div><div class="friend-handle">@${u}</div></div><span style="font-size:13px;color:var(--text-muted);margin-left:auto;">request sent</span></div>`;return;}resultEl.innerHTML=`<div class="search-result-card"><div class="avatar ${colClass(u)}">${initials(ud.name||u)}</div><div class="friend-info"><div class="friend-name">${escHtml(ud.name||u)}</div><div class="friend-handle">@${u}</div></div><button class="add-btn" id="add-btn-${u}" onclick="sendFriendRequest('${u}')">add friend</button></div>`;}
+async function sendFriendRequest(username){const btn=document.getElementById('add-btn-'+username);if(btn){btn.disabled=true;btn.textContent='sending...';}const ud=await dbGet('user:'+username);if(!ud){if(btn){btn.textContent='not found';}return;}if(!ud.pendingRequests)ud.pendingRequests=[];if(!ud.pendingRequests.includes(CU.username))ud.pendingRequests.push(CU.username);await dbSet('user:'+username,ud);if(btn){btn.textContent='request sent';btn.disabled=true;}}
+async function renderFriends(){const handle=window.location.origin+'?invite='+CU.username;document.getElementById('invite-link-display').textContent=handle;const userData=await dbGet('user:'+CU.username);if(!userData)return;CU={...CU,...userData};const pending=userData.pendingRequests||[];const pw=document.getElementById('pending-wrap');if(pending.length>0){const cards=await Promise.all(pending.map(async u=>{const ud=await dbGet('user:'+u)||{};return`<div class="pending-card"><div class="avatar ${colClass(u)}">${initials(ud.name||u)}</div><div class="friend-info"><div class="friend-name">${escHtml(ud.name||u)}</div><div class="friend-handle">@${u}</div></div><div class="pending-actions"><button class="accept-btn" onclick="acceptFriend('${u}')">accept</button><button class="decline-btn" onclick="declineFriend('${u}')">decline</button></div></div>`;}));pw.innerHTML='<div class="section-label" style="margin-top:4px;">friend requests</div>'+cards.join('');}else{pw.innerHTML='';}const fl=document.getElementById('friends-list');const friends=userData.friends||[];const favs=userData.favourites||[];if(friends.length===0){fl.innerHTML='<div style="font-size:14px;color:var(--text-muted);padding:8px 0;">no friends yet — share your invite link to get started.</div>';return;}const cards=await Promise.all(friends.map(async u=>{const ud=await dbGet('user:'+u)||{};const isFav=favs.includes(u);return`<div class="friend-card" style="cursor:pointer" onclick="openFriendProfile('${u}')"><div class="avatar ${colClass(u)}">${initials(ud.name||u)}</div><div class="friend-info"><div class="friend-name">${escHtml(ud.name||u)}</div><div class="friend-handle">@${u}</div></div><button class="icon-btn" onclick="event.stopPropagation();toggleFav('${u}')" title="${isFav?'remove from favourites':'add to favourites'}" style="color:${isFav?'#C0392B':'var(--text-faint)'}"><svg viewBox="0 0 24 24" style="width:20px;height:20px;${isFav?'fill:#C0392B;stroke:#C0392B':'stroke:currentColor;fill:none'}"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>`;}));fl.innerHTML=cards.join('');}
+async function toggleFav(username){const ud=await dbGet('user:'+CU.username);if(!ud)return;if(!ud.favourites)ud.favourites=[];const idx=ud.favourites.indexOf(username);if(idx>-1)ud.favourites.splice(idx,1);else ud.favourites.push(username);await dbSet('user:'+CU.username,ud);CU={...CU,...ud};renderFriends();}
+async function acceptFriend(username){const ud=await dbGet('user:'+CU.username);ud.pendingRequests=(ud.pendingRequests||[]).filter(u=>u!==username);if(!ud.friends.includes(username))ud.friends.push(username);const them=await dbGet('user:'+username);if(them&&!them.friends.includes(CU.username))them.friends.push(CU.username);await dbSet('user:'+CU.username,ud);if(them)await dbSet('user:'+username,them);CU={...CU,...ud};renderFriends();}
+async function declineFriend(username){const ud=await dbGet('user:'+CU.username);ud.pendingRequests=(ud.pendingRequests||[]).filter(u=>u!==username);await dbSet('user:'+CU.username,ud);renderFriends();}
+function copyInvite(){const link=document.getElementById('invite-link-display').textContent;navigator.clipboard.writeText(link).catch(()=>{});const btn=document.getElementById('copy-btn');btn.textContent='copied!';setTimeout(()=>btn.textContent='copy',2000);}
+async function renderProfile(){const ud=await dbGet('user:'+CU.username)||{};const postIdx=await dbGet('posts:index')||[];let myPosts=0;for(const pid of postIdx){const p=await dbGet('post:'+pid);if(p&&p.author===CU.username)myPosts++;}document.getElementById('profile-av').textContent=initials(ud.name||CU.username);document.getElementById('profile-av').className='profile-av '+colClass(CU.username);document.getElementById('profile-name-display').textContent=ud.name||CU.username;document.getElementById('profile-handle-display').textContent='@'+CU.username;document.getElementById('stat-posts').textContent=myPosts;document.getElementById('stat-friends').textContent=(ud.friends||[]).length;profileFriendsOpen=false;document.getElementById('profile-friends-section').style.display='none';}
+function toggleEditProfile(){const form=document.getElementById('profile-edit-form');const showing=form.style.display!=='none';if(!showing){document.getElementById('edit-name-input').value=CU.name||'';form.style.display='block';}else{form.style.display='none';}}
+function cancelEditProfile(){document.getElementById('profile-edit-form').style.display='none';}
+async function saveProfile(){const name=document.getElementById('edit-name-input').value.trim();if(!name)return;const ud=await dbGet('user:'+CU.username);if(!ud)return;ud.name=name;await dbSet('user:'+CU.username,ud);CU={...CU,name};document.getElementById('profile-edit-form').style.display='none';renderProfile();}
+let profileFriendsOpen=false;
+async function toggleProfileFriendsList(){profileFriendsOpen=!profileFriendsOpen;const section=document.getElementById('profile-friends-section');if(!profileFriendsOpen){section.style.display='none';return;}section.style.display='block';const list=document.getElementById('profile-friends-list');list.innerHTML='<div style="font-size:13px;color:var(--text-faint);padding:8px 0;">loading...</div>';const ud=await dbGet('user:'+CU.username)||{};const friends=ud.friends||[];if(friends.length===0){list.innerHTML='<div style="font-size:14px;color:var(--text-muted);padding:8px 0;">no friends yet.</div>';return;}const cards=await Promise.all(friends.map(async u=>{const fud=await dbGet('user:'+u)||{};return`<div class="profile-friend-row" onclick="openFriendProfile('${u}')"><div class="avatar ${colClass(u)}">${initials(fud.name||u)}</div><div class="friend-info"><div class="friend-name">${escHtml(fud.name||u)}</div><div class="friend-handle">@${u}</div></div><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--text-faint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg></div>`;}));list.innerHTML=cards.join('');}
+async function openFriendProfile(username){const overlay=document.getElementById('friend-profile-overlay');overlay.classList.add('open');overlay.scrollTop=0;document.getElementById('fp-posts-container').innerHTML='<div style="text-align:center;padding:40px;color:var(--text-faint);font-size:14px;">loading...</div>';const ud=await dbGet('user:'+username)||{};document.getElementById('fp-av').textContent=initials(ud.name||username);document.getElementById('fp-av').className='profile-av '+colClass(username);document.getElementById('fp-name').textContent=ud.name||username;document.getElementById('fp-handle').textContent='@'+username;document.getElementById('fp-stat-friends').textContent=(ud.friends||[]).length;const postIdx=await dbGet('posts:index')||[];const now=Date.now();const posts=[];for(const pid of postIdx){const p=await dbGet('post:'+pid);if(!p||p.author!==username)continue;if(p.durMs&&(p.ts+p.durMs)<now)continue;posts.push(p);}posts.sort((a,b)=>b.ts-a.ts);document.getElementById('fp-stat-posts').textContent=posts.length;const container=document.getElementById('fp-posts-container');if(posts.length===0){container.innerHTML='<div class="empty-state"><h3>no posts yet.</h3><p>nothing shared here.</p></div>';return;}container.innerHTML=posts.map(post=>renderPost(post)).join('');}
+function closeFriendProfile(){document.getElementById('friend-profile-overlay').classList.remove('open');}
+updateTimerLabel();
+function dmKey(a,b){return'dm:'+(a<b?a+':'+b:b+':'+a);}
+function markDMRead(u){localStorage.setItem('dmread:'+CU.username+':'+u,Date.now());}
+function getDMReadTs(u){return parseInt(localStorage.getItem('dmread:'+CU.username+':'+u)||'0');}
+function isConvoUnread(c){return!!(c.last&&c.last.from!==CU.username&&c.last.ts>getDMReadTs(c.username));}
+function updateBadge(n){const b=document.getElementById('msg-badge');if(!b)return;if(n>0){b.style.display='flex';b.textContent=n>9?'9+':String(n);}else{b.style.display='none';}}
+async function checkUnreadBadge(){if(!CU)return;const ud=await dbGet('user:'+CU.username);const friends=(ud&&ud.friends)||[];if(!friends.length){updateBadge(0);return;}const counts=await Promise.all(friends.map(async u=>{const msgs=await dbGet(dmKey(CU.username,u))||[];const last=msgs[msgs.length-1]||null;if(!last||last.from===CU.username)return 0;return last.ts>getDMReadTs(u)?1:0;}));updateBadge(counts.reduce((a,b)=>a+b,0));}
+let activeDMUser=null;let dmRefreshInterval=null;
+async function renderMessages(){
+  const ud=await dbGet('user:'+CU.username);
+  const friends=(ud&&ud.friends)||[];
+  const container=document.getElementById('dm-list-container');
+  closeDM();
+  if(friends.length===0){container.innerHTML='<div class="empty-state"><h3>no messages yet.</h3><p>add friends first, then send them a message.</p></div>';return;}
+  container.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-faint);font-size:14px;">loading...</div>';
+  const convos=await Promise.all(friends.map(async u=>{
+    const fud=await dbGet('user:'+u)||{};
+    const msgs=await dbGet(dmKey(CU.username,u))||[];
+    const last=msgs[msgs.length-1]||null;
+    return{username:u,name:fud.name||u,last,msgs};
+  }));
+  convos.sort((a,b)=>(b.last?b.last.ts:0)-(a.last?a.last.ts:0));
+  if(convos.length===0){container.innerHTML='<div class="empty-state"><h3>no messages yet.</h3><p>tap a friend to start a conversation.</p></div>';return;}
+  container.innerHTML=convos.map(c=>{
+    const preview=c.last?(c.last.from===CU.username?'you: ':'')+escHtml(c.last.text.slice(0,40))+(c.last.text.length>40?'…':''):'say hello...';
+    const t=c.last?timeAgo(c.last.ts):'';
+    const unread=isConvoUnread(c);
+    return`<div class="dm-list-item${unread?' dm-unread':''}" onclick="openDM('${c.username}')"><div class="avatar ${colClass(c.username)}">${initials(c.name)}</div><div class="dm-preview"><div class="dm-name">${escHtml(c.name)}</div><div class="dm-last">${preview}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">${t?`<div class="dm-time">${t}</div>`:''}${unread?'<div class="unread-dot"></div>':''}</div></div>`;
+  }).join('');
+}
+async function openDM(username){
+  activeDMUser=username;
+  clearInterval(dmRefreshInterval);
+  markDMRead(username);
+  const ud=await dbGet('user:'+username)||{};
+  document.getElementById('chat-title').textContent=escHtml(ud.name||username);
+  document.getElementById('dm-list-view').style.display='none';
+  document.getElementById('chat-view').classList.add('active');
+  await loadChatMessages(username);
+  document.getElementById('chat-input').focus();
+  dmRefreshInterval=setInterval(async()=>{if(activeDMUser){markDMRead(activeDMUser);await loadChatMessages(activeDMUser);checkUnreadBadge();}},10000);
+}
+function closeDM(){
+  activeDMUser=null;
+  clearInterval(dmRefreshInterval);dmRefreshInterval=null;
+  document.getElementById('dm-list-view').style.display='';
+  document.getElementById('chat-view').classList.remove('active');
+}
+async function loadChatMessages(username){
+  const msgs=await dbGet(dmKey(CU.username,username))||[];
+  const el=document.getElementById('chat-messages');
+  if(msgs.length===0){el.innerHTML='<div style="text-align:center;color:var(--text-faint);font-size:13px;padding:20px;">no messages yet — say hello!</div>';return;}
+  el.innerHTML=msgs.map(m=>{
+    const out=m.from===CU.username;
+    return`<div style="display:flex;flex-direction:column;align-items:${out?'flex-end':'flex-start'}"><div class="msg-bubble ${out?'msg-out':'msg-in'}">${escHtml(m.text)}</div><div class="msg-time" style="text-align:${out?'right':'left'};padding:0 4px">${timeAgo(m.ts)}</div></div>`;
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+async function sendDM(){
+  const input=document.getElementById('chat-input');
+  const text=input.value.trim();
+  if(!text||!activeDMUser)return;
+  input.value='';
+  const key=dmKey(CU.username,activeDMUser);
+  const msgs=await dbGet(key)||[];
+  msgs.push({from:CU.username,text,ts:Date.now()});
+  if(msgs.length>200)msgs.splice(0,msgs.length-200);
+  await dbSet(key,msgs);
+  await loadChatMessages(activeDMUser);
+}
+async function boot(){loading(true);const params=new URLSearchParams(window.location.search);const inviter=params.get('invite');const session=getSession();if(session){const ud=await dbGet('user:'+session);if(ud){CU={username:session,...ud};loading(false);enterApp();return;}}loading(false);document.getElementById('auth-screen').classList.add('active');if(inviter){switchAuth('signup');setMsg(`you've been invited by @${inviter} — create an account to join.`,'success');}}
+boot();
+</script>
+</body>
+</html>
