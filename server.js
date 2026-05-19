@@ -21,9 +21,11 @@ async function dbGet(key) {
 }
 
 async function dbSet(key, value) {
-  await supabase
+  console.log('dbSet called:', key);
+  const { error } = await supabase
     .from('store')
     .upsert({ key, value });
+  if (error) console.log('dbSet error:', error.message);
 }
 
 async function dbDel(key) {
