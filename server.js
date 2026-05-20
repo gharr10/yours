@@ -3,13 +3,15 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const { createClient } = require('@supabase/supabase-js');
+const { Resend } = require('resend');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const APP_URL = process.env.APP_URL || 'https://yours-4nh3.onrender.com';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-console.log('Full URL:', SUPABASE_URL);
+const resend = new Resend(RESEND_API_KEY);
 
 async function dbGet(key) {
   const { data } = await supabase
@@ -21,11 +23,9 @@ async function dbGet(key) {
 }
 
 async function dbSet(key, value) {
-  console.log('dbSet called:', key);
-  const { error } = await supabase
+  await supabase
     .from('store')
     .upsert({ key, value });
-  if (error) console.log('dbSet error:', error.message);
 }
 
 async function dbDel(key) {
@@ -75,6 +75,116 @@ const server = http.createServer(async (req, res) => {
     const key = parsed.query.key;
     if (key) await dbDel(key);
     res.writeHead(200); res.end('ok');
+    return;
+  }
+
+  if (pathname === '/forgot-password' && req.method === 'POST') {
+    const body = await readBody(req);
+    let data;
+    try { data = JSON.parse(body); } catch { res.writeHead(400); res.end('bad json'); return; }
+    const email = (data.email || '').toLowerCase().trim();
+    if (!email) { res.writeHead(400); res.end('missing email'); return; }
+    const users = await dbGet('users:by:email') || {};
+    const username = users[email];
+    if (!username) {
+      res.writeHead(200); res.end('ok');
+      return;
+    }
+    const token = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+    const expires = Date.now() + 3600000;
+    await dbSet('reset:' + token, JSON.stringify({ username, expires }));
+    await resend.emails.send({
+      from: 'yours. <onboarding@resend.dev>',
+      to: email,
+      subject: 'Reset your yours. password',
+      html: `
+        <div style="font-family:sans-serif;max-width:400px;margin:0 auto;padding:40px 20px;">
+          <h2 style="font-family:Georgia,serif;font-size:32px;margin-bottom:8px;">yours.</h2>
+          <p style="color:#888;margin-bottom:32px;">share with the people who actually matter.</p>
+          <p>Someone requested a password reset for your account <strong>@${username}</strong>.</p>
+          <p>Click the link below to reset your password. This link expires in 1 hour.</p>
+          <a href="${APP_URL}/reset-password?token=${token}" 
+             style="display:inline-block;margin:24px 0;padding:12px 24px;background:#1A1917;color:white;text-decoration:none;border-radius:8px;">
+            Reset Password
+          </a>
+          <p style="color:#888;font-size:13px;">If you didn't request this, ignore this email.</p>
+        </div>
+      `
+    });
+    res.writeHead(200); res.end('ok');
+    return;
+  }
+
+  if (pathname === '/reset-password' && req.method === 'POST') {
+    const body = await readBody(req);
+    let data;
+    try { data = JSON.parse(body); } catch { res.writeHead(400); res.end('bad json'); return; }
+    const { token, password } = data;
+    if (!token || !password) { res.writeHead(400); res.end('missing fields'); return; }
+    const resetData = await dbGet('reset:' + token);
+    if (!resetData) { res.writeHead(400); res.end('invalid token'); return; }
+    let parsed3;
+    try { parsed3 = JSON.parse(resetData); } catch { res.writeHead(400); res.end('bad token'); return; }
+    if (Date.now() > parsed3.expires) { res.writeHead(400); res.end('expired'); return; }
+    const ud = await dbGet('user:' + parsed3.username);
+    if (!ud) { res.writeHead(400); res.end('user not found'); return; }
+    const salt = Math.random().toString(36);
+    const enc = new TextEncoder();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', enc.encode(salt + ':' + password));
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashedPwd = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    ud.password = hashedPwd;
+    ud.salt = salt;
+    await dbSet('user:' + parsed3.username, ud);
+    await dbDel('reset:' + token);
+    res.writeHead(200); res.end('ok');
+    return;
+  }
+
+  if (pathname === '/reset-password') {
+    const token = parsed.query.token;
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reset Password — yours.</title>
+<style>
+body{font-family:'Georgia',serif;background:#FAF9F7;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;}
+.box{width:100%;max-width:360px;padding:2rem;}
+h1{font-size:36px;margin-bottom:6px;}
+p{color:#888;font-size:14px;margin-bottom:32px;}
+input{width:100%;padding:11px 14px;border:1px solid #E8E6E1;border-radius:8px;font-size:14px;margin-bottom:14px;box-sizing:border-box;font-family:sans-serif;}
+button{width:100%;padding:13px;background:#1A1917;color:white;border:none;border-radius:8px;font-size:15px;cursor:pointer;}
+.msg{font-size:13px;margin-top:10px;text-align:center;color:#C0392B;}
+.msg.success{color:#2D5A27;}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>yours.</h1>
+  <p>choose a new password.</p>
+  <input type="password" id="pwd" placeholder="new password" minlength="4">
+  <input type="password" id="pwd2" placeholder="confirm password">
+  <button onclick="reset()">reset password</button>
+  <div class="msg" id="msg"></div>
+</div>
+<script>
+async function reset(){
+  const p=document.getElementById('pwd').value;
+  const p2=document.getElementById('pwd2').value;
+  const msg=document.getElementById('msg');
+  if(p.length<4){msg.textContent='password must be at least 4 characters';return;}
+  if(p!==p2){msg.textContent='passwords do not match';return;}
+  const r=await fetch('/reset-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:'${token}',password:p})});
+  if(r.ok){msg.className='msg success';msg.textContent='password reset — you can now sign in.'}
+  else{msg.textContent='this link has expired. please request a new one.';}
+}
+</script>
+</body>
+</html>`;
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(html);
     return;
   }
 

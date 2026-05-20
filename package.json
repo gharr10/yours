@@ -6,7 +6,8 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.106.0"
+    "@supabase/supabase-js": "^2.106.0",
+    "resend": "^6.12.3"
   },
   "engines": {
     "node": ">=18"
