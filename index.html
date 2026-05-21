@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>yours.</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#FAF9F7;--surface:#FFFFFF;--border:#E8E6E1;--border-light:#F0EEE9;--text:#1A1917;--text-muted:#888580;--text-faint:#B8B5AF;--accent:#2D5A27;--accent-light:#EAF3E8;--danger:#C0392B;--radius:14px;--radius-sm:8px;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;-webkit-text-size-adjust:100%;}
+input,textarea,button{font-family:inherit;}
 .screen{display:none;min-height:100vh;}
 .screen.active{display:flex;flex-direction:column;}
 #auth-screen{align-items:center;justify-content:center;padding:2rem;}
@@ -16,14 +17,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .auth-logo{font-family:'DM Serif Display',serif;font-size:42px;color:var(--text);margin-bottom:6px;}
 .auth-tagline{font-size:14px;color:var(--text-muted);margin-bottom:40px;font-weight:300;}
 .auth-tabs{display:flex;margin-bottom:24px;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;}
-.auth-tab{flex:1;padding:10px;text-align:center;font-size:14px;cursor:pointer;background:transparent;border:none;color:var(--text-muted);font-family:inherit;transition:all 0.2s;}
+.auth-tab{flex:1;padding:10px;text-align:center;font-size:14px;cursor:pointer;background:transparent;border:none;color:var(--text-muted);transition:all 0.2s;}
 .auth-tab.active{background:var(--text);color:white;}
 .field{margin-bottom:14px;}
 .field label{display:block;font-size:12px;color:var(--text-muted);margin-bottom:6px;font-weight:500;letter-spacing:0.3px;}
-.field input{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;background:var(--surface);color:var(--text);outline:none;transition:border-color 0.2s;}
+.field input{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);color:var(--text);outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
 .field input:focus{border-color:var(--accent);}
-.btn-primary{width:100%;padding:13px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer;transition:opacity 0.2s;margin-top:4px;}
-.btn-primary:hover{opacity:0.85;}
+.btn-primary{width:100%;padding:13px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:500;cursor:pointer;transition:opacity 0.2s;margin-top:4px;}
+.btn-primary:active{opacity:0.8;}
 .btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
 .auth-msg{font-size:13px;margin-top:10px;text-align:center;min-height:18px;}
 .auth-msg.error{color:var(--danger);}
@@ -31,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .forgot-link{text-align:center;margin-top:12px;font-size:13px;color:var(--text-muted);cursor:pointer;text-decoration:underline;}
 .terms-link{text-align:center;margin-top:16px;font-size:12px;color:var(--text-faint);}
 .terms-link a{color:var(--text-faint);text-decoration:underline;cursor:pointer;}
+/* LOADING */
 .loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:12px;}
 .loading-logo{font-family:'DM Serif Display',serif;font-size:36px;color:var(--text);}
 .loading-dot{display:flex;gap:6px;}
@@ -38,6 +40,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .loading-dot span:nth-child(2){animation-delay:0.2s;}
 .loading-dot span:nth-child(3){animation-delay:0.4s;}
 @keyframes pulse{0%,80%,100%{opacity:0.3;}40%{opacity:1;}}
+/* SKELETON */
+.skeleton{background:linear-gradient(90deg,var(--border-light) 25%,var(--border) 50%,var(--border-light) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+.skeleton-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
 /* ONBOARDING */
 #onboarding-screen{align-items:center;justify-content:center;padding:2rem;text-align:center;}
 .onboard-inner{width:100%;max-width:360px;}
@@ -46,21 +52,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .onboard-points{text-align:left;margin-bottom:40px;}
 .onboard-point{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;font-size:14px;line-height:1.5;}
 .onboard-icon{width:32px;height:32px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}
+/* APP */
 #app-screen{background:var(--bg);}
 .app-nav{background:var(--surface);border-bottom:1px solid var(--border-light);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
 .app-logo{font-family:'DM Serif Display',serif;font-size:26px;color:var(--text);}
-.icon-btn{background:none;border:none;cursor:pointer;padding:8px;color:var(--text-muted);border-radius:var(--radius-sm);transition:all 0.15s;display:flex;align-items:center;justify-content:center;}
-.icon-btn:hover{background:var(--bg);color:var(--text);}
+.icon-btn{background:none;border:none;cursor:pointer;padding:8px;color:var(--text-muted);border-radius:var(--radius-sm);transition:all 0.15s;display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;}
 .icon-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .feed-tabs{display:flex;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--border-light);}
 .feed-tab{font-size:13px;padding:12px 0;margin-right:20px;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;}
 .feed-tab.active{color:var(--text);border-bottom-color:var(--text);font-weight:500;}
-.panel{display:none;max-width:520px;margin:0 auto;padding:16px 16px 80px;width:100%;}
+.panel{display:none;max-width:520px;margin:0 auto;padding:16px 16px 90px;width:100%;}
 .panel.active{display:block;}
 .panel-title{font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:20px;}
 #feed-panel{max-width:100%;}
-/* PULL TO REFRESH */
-.ptr-indicator{text-align:center;padding:12px;font-size:13px;color:var(--text-faint);height:44px;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:height 0.2s;}
+/* PTR */
+.ptr-indicator{text-align:center;padding:12px;font-size:13px;color:var(--text-faint);height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:height 0.2s;}
+/* POSTS */
 .post-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;}
 .post-header{display:flex;align-items:center;padding:14px 16px 10px;gap:10px;}
 .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0;overflow:hidden;background:var(--bg);}
@@ -68,111 +75,117 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .post-meta{flex:1;}
 .post-username{font-size:14px;font-weight:500;color:var(--text);}
 .post-time{font-size:12px;color:var(--text-faint);}
-/* MULTI PHOTO */
 .post-images-wrap{display:grid;gap:2px;}
 .post-images-wrap.count-1{grid-template-columns:1fr;}
 .post-images-wrap.count-2{grid-template-columns:1fr 1fr;}
-.post-images-wrap.count-3{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;}
+.post-images-wrap.count-3{grid-template-columns:1fr 1fr;}
 .post-images-wrap.count-4{grid-template-columns:1fr 1fr;}
 .post-images-wrap.count-3 .post-img:first-child{grid-column:1/-1;}
 .post-img{width:100%;object-fit:cover;display:block;max-height:400px;}
 .post-images-wrap.count-2 .post-img,.post-images-wrap.count-3 .post-img:not(:first-child),.post-images-wrap.count-4 .post-img{max-height:200px;}
 .post-body{padding:12px 16px 14px;}
-.post-text{font-size:14px;line-height:1.55;color:var(--text);margin-bottom:12px;}
+.post-text{font-size:14px;line-height:1.55;color:var(--text);margin-bottom:12px;word-break:break-word;}
 .post-footer{display:flex;align-items:center;gap:12px;}
-.post-action{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text-muted);font-family:inherit;padding:0;transition:color 0.15s;}
-.post-action:hover{color:var(--text);}
+.post-action{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text-muted);padding:8px 0;min-height:44px;transition:color 0.15s;}
+.post-action:active{color:var(--text);}
 .post-action.liked{color:#C0392B;}
 .post-action svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .post-action.liked svg{fill:#C0392B;stroke:#C0392B;}
 .timer-pill{margin-left:auto;font-size:11px;color:var(--text-faint);background:var(--bg);border:1px solid var(--border-light);padding:3px 9px;border-radius:20px;}
+.circle-pill{font-size:11px;color:var(--accent);background:var(--accent-light);border:1px solid #C8DFC5;padding:3px 9px;border-radius:20px;margin-right:4px;}
+/* COMMENTS */
 .comments-section{border-top:1px solid var(--border-light);padding:10px 16px 14px;}
-.comment{display:flex;gap:8px;margin-bottom:8px;}
-.comment-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;overflow:hidden;}
+.comment{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start;}
+.comment-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;overflow:hidden;}
 .comment-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.comment-user{font-size:12px;font-weight:500;color:var(--text);}
-.comment-text{font-size:13px;color:var(--text-muted);line-height:1.4;}
-.comment-input-row{display:flex;gap:8px;margin-top:8px;}
-.comment-input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:20px;font-family:inherit;font-size:13px;background:var(--bg);color:var(--text);outline:none;}
+.comment-bubble{background:var(--bg);border-radius:12px;padding:8px 12px;flex:1;}
+.comment-user{font-size:12px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.comment-text{font-size:13px;color:var(--text-muted);line-height:1.4;word-break:break-word;}
+.comment-input-row{display:flex;gap:8px;margin-top:10px;align-items:center;}
+.comment-input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:22px;font-size:13px;background:var(--bg);color:var(--text);outline:none;-webkit-appearance:none;}
 .comment-input:focus{border-color:var(--accent);}
-.comment-send{background:var(--text);color:white;border:none;border-radius:20px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
+.comment-send{background:var(--text);color:white;border:none;border-radius:22px;padding:10px 16px;font-size:13px;cursor:pointer;min-height:44px;white-space:nowrap;}
+/* EMPTY */
 .empty-state{text-align:center;padding:60px 20px;}
 .empty-state h3{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:8px;}
 .empty-state p{font-size:14px;color:var(--text-muted);line-height:1.5;margin-bottom:20px;}
-.empty-state button{padding:10px 20px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:14px;cursor:pointer;}
+.empty-state button{padding:12px 24px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-size:14px;cursor:pointer;min-height:44px;}
 /* COMPOSER */
 .composer{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
-.composer textarea{width:100%;border:none;outline:none;font-family:inherit;font-size:15px;color:var(--text);background:transparent;resize:none;line-height:1.6;min-height:80px;}
+.composer textarea{width:100%;border:none;outline:none;font-size:15px;color:var(--text);background:transparent;resize:none;line-height:1.6;min-height:80px;-webkit-appearance:none;}
 .composer textarea::placeholder{color:var(--text-faint);}
+.char-count{font-size:12px;text-align:right;color:var(--text-faint);margin-top:4px;}
+.char-count.warn{color:#E67E22;}
+.char-count.over{color:var(--danger);}
 .composer-footer{display:flex;align-items:center;gap:10px;margin-top:12px;border-top:1px solid var(--border-light);padding-top:12px;flex-wrap:wrap;}
-.img-upload-btn{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);cursor:pointer;padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);transition:all 0.15s;}
-.img-upload-btn:hover{border-color:var(--accent);color:var(--accent);}
+.img-upload-btn{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);cursor:pointer;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);transition:all 0.15s;min-height:44px;}
 .img-upload-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-#img-file{display:none;}
-#avatar-file{display:none;}
+#img-file,#avatar-file{display:none;}
 .timer-control{display:flex;align-items:center;gap:8px;flex:1;min-width:160px;}
 .timer-control label{font-size:12px;color:var(--text-muted);white-space:nowrap;}
 .timer-control input[type=range]{flex:1;accent-color:var(--accent);}
 .timer-val{font-size:12px;color:var(--text);font-weight:500;white-space:nowrap;min-width:60px;}
-.post-btn{background:var(--text);color:white;border:none;border-radius:var(--radius-sm);padding:9px 20px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:opacity 0.2s;margin-left:auto;}
-.post-btn:hover{opacity:0.82;}
+.post-btn{background:var(--text);color:white;border:none;border-radius:var(--radius-sm);padding:12px 20px;font-size:14px;font-weight:500;cursor:pointer;transition:opacity 0.2s;margin-left:auto;min-height:44px;}
 .post-btn:disabled{opacity:0.4;cursor:not-allowed;}
 .img-previews{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
-.img-preview-item{position:relative;display:inline-block;}
-.img-preview-item img{width:80px;height:80px;object-fit:cover;border-radius:var(--radius-sm);display:block;}
-.img-preview-remove{position:absolute;top:-6px;right:-6px;background:var(--text);color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
-.photo-count{font-size:12px;color:var(--text-faint);margin-top:6px;}
+.img-preview-item{position:relative;}
+.img-preview-item img{width:72px;height:72px;object-fit:cover;border-radius:var(--radius-sm);display:block;}
+.img-preview-remove{position:absolute;top:-6px;right:-6px;background:var(--text);color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+/* CIRCLES */
+.circles-select{margin-top:10px;border-top:1px solid var(--border-light);padding-top:10px;}
+.circles-select label{font-size:12px;color:var(--text-muted);display:block;margin-bottom:8px;}
+.circle-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.circle-chip{padding:6px 12px;border:1px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;background:var(--bg);color:var(--text-muted);transition:all 0.15s;min-height:36px;display:flex;align-items:center;}
+.circle-chip.selected{background:var(--text);color:white;border-color:var(--text);}
+.circle-chip.everyone{border-color:var(--accent);color:var(--accent);}
+.circle-chip.everyone.selected{background:var(--accent);color:white;border-color:var(--accent);}
 /* FRIENDS */
 .section-label{font-size:11px;font-weight:500;letter-spacing:0.5px;color:var(--text-faint);text-transform:uppercase;margin-bottom:10px;margin-top:4px;}
 .friend-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.friend-info{flex:1;}
-.friend-name{font-size:14px;font-weight:500;}
+.friend-info{flex:1;min-width:0;}
+.friend-name{font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .friend-handle{font-size:12px;color:var(--text-muted);}
-.invite-box{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
-.invite-box h3{font-size:15px;font-weight:500;margin-bottom:6px;}
-.invite-box p{font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;}
-.search-box{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
-.search-box h3{font-size:15px;font-weight:500;margin-bottom:6px;}
-.search-box p{font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;}
+.invite-box,.search-box{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
+.invite-box h3,.search-box h3{font-size:15px;font-weight:500;margin-bottom:6px;}
+.invite-box p,.search-box p{font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;}
 .search-row{display:flex;gap:8px;}
-.search-input{flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;background:var(--bg);color:var(--text);outline:none;}
+.search-input{flex:1;padding:11px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--bg);color:var(--text);outline:none;-webkit-appearance:none;min-height:44px;}
 .search-input:focus{border-color:var(--accent);}
-.search-btn{background:var(--text);color:white;border:none;border-radius:var(--radius-sm);padding:9px 14px;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.search-btn{background:var(--text);color:white;border:none;border-radius:var(--radius-sm);padding:0 16px;font-size:13px;cursor:pointer;white-space:nowrap;min-height:44px;}
 .search-result{margin-top:12px;display:none;}
 .search-msg{font-size:13px;color:var(--text-muted);padding:4px 0;}
 .search-result-card{display:flex;align-items:center;gap:12px;padding:10px 0;}
-.add-btn{background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);padding:7px 14px;font-size:13px;cursor:pointer;font-family:inherit;margin-left:auto;}
-.add-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.add-btn{background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-size:13px;cursor:pointer;margin-left:auto;min-height:44px;}
+.add-btn:disabled{opacity:0.5;}
 /* MESSAGES */
-.dm-list-item{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;transition:border-color 0.15s;}
-.dm-list-item:hover{border-color:var(--border);}
+.dm-list-item{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;min-height:64px;}
 .dm-preview{flex:1;min-width:0;}
 .dm-name{font-size:14px;font-weight:500;color:var(--text);}
 .dm-last{font-size:12px;color:var(--text-muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .dm-time{font-size:11px;color:var(--text-faint);flex-shrink:0;}
-.chat-view{display:none;flex-direction:column;height:calc(100vh - 108px);}
+.chat-view{display:none;flex-direction:column;height:calc(100dvh - 108px);}
 .chat-view.active{display:flex;}
 .chat-header{display:flex;align-items:center;gap:10px;padding:0 0 14px;border-bottom:1px solid var(--border-light);margin-bottom:12px;flex-shrink:0;}
-.chat-back{background:none;border:none;cursor:pointer;padding:4px 8px 4px 0;color:var(--text-muted);font-family:inherit;font-size:13px;display:flex;align-items:center;gap:4px;}
+.chat-back{background:none;border:none;cursor:pointer;padding:4px 8px 4px 0;color:var(--text-muted);font-size:13px;display:flex;align-items:center;gap:4px;min-height:44px;}
 .chat-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .chat-title{font-size:16px;font-weight:500;color:var(--text);}
-.chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-bottom:8px;}
-.msg-bubble{max-width:72%;padding:9px 13px;border-radius:18px;font-size:14px;line-height:1.45;word-break:break-word;}
+.chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-bottom:8px;-webkit-overflow-scrolling:touch;}
+.msg-bubble{max-width:75%;padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.45;word-break:break-word;}
 .msg-out{align-self:flex-end;background:var(--text);color:white;border-bottom-right-radius:5px;}
 .msg-in{align-self:flex-start;background:var(--surface);border:1px solid var(--border-light);color:var(--text);border-bottom-left-radius:5px;}
 .msg-time{font-size:10px;opacity:0.6;margin-top:3px;}
-.chat-input-row{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border-light);flex-shrink:0;}
-.chat-input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:22px;font-family:inherit;font-size:14px;background:var(--bg);color:var(--text);outline:none;}
+.chat-input-row{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border-light);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0);}
+.chat-input{flex:1;padding:12px 16px;border:1px solid var(--border);border-radius:22px;font-size:14px;background:var(--bg);color:var(--text);outline:none;-webkit-appearance:none;min-height:44px;}
 .chat-input:focus{border-color:var(--accent);}
-.chat-send{background:var(--text);color:white;border:none;border-radius:22px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit;}
+.chat-send{background:var(--text);color:white;border:none;border-radius:22px;padding:0 20px;font-size:14px;cursor:pointer;min-height:44px;}
 .unread-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
 .invite-link-row{display:flex;gap:8px;}
-.invite-link{flex:1;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.copy-btn{background:var(--text);color:white;border:none;border-radius:var(--radius-sm);padding:9px 14px;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.invite-link{flex:1;padding:11px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.copy-btn{background:var(--text);color:white;border:none;border-radius:var(--radius-sm);padding:0 16px;font-size:13px;cursor:pointer;white-space:nowrap;min-height:44px;}
 .pending-card{background:var(--accent-light);border:1px solid #C8DFC5;border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px;}
 .pending-actions{display:flex;gap:6px;margin-left:auto;}
-.accept-btn{background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;}
-.decline-btn{background:none;border:1px solid var(--border);color:var(--text-muted);border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;}
+.accept-btn{background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;cursor:pointer;min-height:40px;}
+.decline-btn{background:none;border:1px solid var(--border);color:var(--text-muted);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;cursor:pointer;min-height:40px;}
 /* PROFILE */
 .profile-header{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:20px;margin-bottom:16px;text-align:center;}
 .profile-av{width:64px;height:64px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:500;overflow:hidden;background:var(--bg);}
@@ -184,57 +197,74 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .stat-num{font-size:18px;font-weight:500;}
 .stat-label{font-size:11px;color:var(--text-muted);margin-top:2px;}
 .stat-btn{cursor:pointer;border-radius:8px;padding:4px 8px;margin:-4px -8px;transition:background 0.15s;}
-.stat-btn:hover,.stat-btn:active{background:var(--bg);}
-.logout-btn{width:100%;padding:12px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;color:var(--text-muted);cursor:pointer;margin-top:16px;transition:all 0.15s;}
-.logout-btn:hover{border-color:var(--danger);color:var(--danger);}
-.delete-account-btn{width:100%;padding:12px;background:none;border:1px solid var(--danger);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;color:var(--danger);cursor:pointer;margin-top:8px;transition:all 0.15s;}
-.delete-account-btn:hover{background:var(--danger);color:white;}
+.stat-btn:active{background:var(--bg);}
+.profile-btn{width:100%;padding:13px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text-muted);cursor:pointer;margin-top:10px;transition:all 0.15s;min-height:48px;}
+.profile-btn:active{border-color:var(--text);color:var(--text);}
+.danger-btn{border-color:var(--danger);color:var(--danger);}
+.danger-btn:active{background:var(--danger);color:white;}
 /* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border-light);display:flex;justify-content:space-around;padding:10px 0 14px;z-index:100;}
-.bn-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 16px;color:var(--text-faint);transition:color 0.15s;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border-light);display:flex;justify-content:space-around;padding:10px 0;padding-bottom:calc(10px + env(safe-area-inset-bottom,0));z-index:100;}
+.bn-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 12px;color:var(--text-faint);transition:color 0.15s;min-width:48px;min-height:48px;justify-content:center;position:relative;}
 .bn-btn.active{color:var(--text);}
 .bn-btn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
 .bn-dot{width:4px;height:4px;border-radius:50%;background:var(--text);opacity:0;transition:opacity 0.15s;}
 .bn-btn.active .bn-dot{opacity:1;}
-#bn-messages{position:relative;}
-.nav-badge{position:absolute;top:1px;right:6px;background:#C0392B;color:white;font-size:10px;font-weight:600;border-radius:10px;min-width:16px;height:16px;padding:0 4px;display:flex;align-items:center;justify-content:center;pointer-events:none;line-height:1;}
+.nav-badge{position:absolute;top:4px;right:4px;background:#C0392B;color:white;font-size:10px;font-weight:600;border-radius:10px;min-width:16px;height:16px;padding:0 4px;display:flex;align-items:center;justify-content:center;pointer-events:none;line-height:1;}
+.pending-badge{position:absolute;top:4px;right:4px;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;}
 .c0{background:#EAF3E8;color:#2D5A27;}
 .c1{background:#EEEDFE;color:#3C3489;}
 .c2{background:#FAECE7;color:#712B13;}
 .c3{background:#E6F1FB;color:#0C447C;}
 .c4{background:#FAEEDA;color:#633806;}
 /* OVERLAYS */
-.fp-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;overflow-y:auto;transform:translateX(100%);transition:transform 0.25s cubic-bezier(.4,0,.2,1);}
+.fp-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;overflow-y:auto;transform:translateX(100%);transition:transform 0.25s cubic-bezier(.4,0,.2,1);-webkit-overflow-scrolling:touch;}
 .fp-overlay.open{transform:translateX(0);}
-.fp-back{background:none;border:none;cursor:pointer;padding:4px 0 14px;color:var(--text-muted);font-family:inherit;font-size:13px;display:flex;align-items:center;gap:6px;width:100%;}
+.fp-back{background:none;border:none;cursor:pointer;padding:4px 0 14px;color:var(--text-muted);font-size:13px;display:flex;align-items:center;gap:6px;width:100%;min-height:44px;}
 .fp-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.profile-friend-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:8px;cursor:pointer;transition:border-color 0.15s;}
-.profile-friend-row:hover{border-color:var(--border);}
 .avatar-upload-wrap{position:relative;width:64px;margin:0 auto 10px;cursor:pointer;}
-.avatar-upload-wrap:hover .avatar-overlay{opacity:1;}
 .avatar-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;}
+.avatar-upload-wrap:active .avatar-overlay{opacity:1;}
 .avatar-overlay svg{width:20px;height:20px;stroke:white;fill:none;stroke-width:2;}
-/* REPORT MODAL */
+.profile-friend-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:8px;cursor:pointer;min-height:56px;}
+/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
-.modal-sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:24px 20px 40px;width:100%;max-width:520px;}
-.modal-title{font-size:16px;font-weight:500;margin-bottom:16px;color:var(--text);}
-.modal-option{width:100%;padding:14px 0;background:none;border:none;border-bottom:1px solid var(--border-light);font-family:inherit;font-size:15px;color:var(--text);cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;}
-.modal-option:last-child{border-bottom:none;}
+.modal-sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:24px 20px;padding-bottom:calc(24px + env(safe-area-inset-bottom,0));width:100%;max-width:520px;}
+.modal-title{font-size:16px;font-weight:500;margin-bottom:4px;color:var(--text);}
+.modal-subtitle{font-size:13px;color:var(--text-muted);margin-bottom:16px;}
+.modal-option{width:100%;padding:16px 0;background:none;border:none;border-bottom:1px solid var(--border-light);font-size:15px;color:var(--text);cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;min-height:52px;}
+.modal-option:last-of-type{border-bottom:none;}
 .modal-option.danger{color:var(--danger);}
-.modal-cancel{width:100%;padding:14px;background:var(--bg);border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:15px;color:var(--text-muted);cursor:pointer;margin-top:12px;}
+.modal-cancel{width:100%;padding:14px;background:var(--bg);border:none;border-radius:var(--radius-sm);font-size:15px;color:var(--text-muted);cursor:pointer;margin-top:12px;min-height:48px;}
+/* CIRCLES MANAGER */
+.circles-manager{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
+.circles-manager h3{font-size:15px;font-weight:500;margin-bottom:6px;}
+.circles-manager p{font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;}
+.circle-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border-light);}
+.circle-row:last-child{border-bottom:none;}
+.circle-name-input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--bg);color:var(--text);outline:none;min-height:40px;}
+.create-circle-btn{background:var(--text);color:white;border:none;border-radius:var(--radius-sm);padding:0 14px;font-size:13px;cursor:pointer;white-space:nowrap;min-height:40px;}
+.delete-circle-btn{background:none;border:1px solid var(--border);color:var(--danger);border-radius:var(--radius-sm);padding:0 10px;font-size:13px;cursor:pointer;min-height:36px;}
 /* TERMS */
-.terms-overlay{position:fixed;inset:0;background:var(--bg);z-index:400;overflow-y:auto;transform:translateY(100%);transition:transform 0.3s cubic-bezier(.4,0,.2,1);}
+.terms-overlay{position:fixed;inset:0;background:var(--bg);z-index:400;overflow-y:auto;transform:translateY(100%);transition:transform 0.3s cubic-bezier(.4,0,.2,1);-webkit-overflow-scrolling:touch;}
 .terms-overlay.open{transform:translateY(0);}
 .terms-inner{max-width:520px;margin:0 auto;padding:24px 20px 60px;}
-.terms-close{background:none;border:none;cursor:pointer;font-family:inherit;font-size:14px;color:var(--text-muted);padding:0 0 20px;display:flex;align-items:center;gap:6px;}
+.terms-close{background:none;border:none;cursor:pointer;font-size:14px;color:var(--text-muted);padding:0 0 20px;display:flex;align-items:center;gap:6px;min-height:44px;}
 .terms-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
 .terms-inner h1{font-family:'DM Serif Display',serif;font-size:32px;margin-bottom:4px;}
 .terms-inner h2{font-size:16px;font-weight:500;margin:24px 0 8px;}
 .terms-inner p{font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:10px;}
 .terms-inner .badge{display:inline-block;font-size:11px;color:var(--text-faint);border:1px solid var(--border);border-radius:20px;padding:2px 10px;margin-bottom:24px;}
+/* ADMIN */
+.admin-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.admin-stat-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;text-align:center;}
+.admin-stat-num{font-size:28px;font-weight:500;font-family:'DM Serif Display',serif;}
+.admin-stat-label{font-size:12px;color:var(--text-muted);margin-top:4px;}
+.admin-report-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;}
+.admin-user-row{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
 </style>
 </head>
 <body>
+
 <div class="loading-overlay" id="loading" style="display:none;">
   <div class="loading-logo">yours.</div>
   <div class="loading-dot"><span></span><span></span><span></span></div>
@@ -264,21 +294,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <button class="auth-tab" onclick="switchAuth('signup')">join</button>
     </div>
     <div id="login-form">
-      <div class="field"><label>username</label><input type="text" id="login-user" placeholder="username" autocomplete="username"></div>
+      <div class="field"><label>username</label><input type="text" id="login-user" placeholder="username" autocomplete="username" autocapitalize="none"></div>
       <div class="field"><label>password</label><input type="password" id="login-pass" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"></div>
       <button class="btn-primary" id="login-btn" onclick="login()">sign in</button>
       <div class="forgot-link" onclick="switchAuth('forgot')">forgot password?</div>
     </div>
     <div id="signup-form" style="display:none">
-      <div class="field"><label>name</label><input type="text" id="signup-name" placeholder="your name"></div>
-      <div class="field"><label>username</label><input type="text" id="signup-user" placeholder="choose a username" autocomplete="username"></div>
-      <div class="field"><label>email</label><input type="email" id="signup-email" placeholder="your email"></div>
+      <div class="field"><label>name</label><input type="text" id="signup-name" placeholder="your name" autocomplete="name"></div>
+      <div class="field"><label>username</label><input type="text" id="signup-user" placeholder="choose a username" autocomplete="username" autocapitalize="none"></div>
+      <div class="field"><label>email</label><input type="email" id="signup-email" placeholder="your email" autocomplete="email"></div>
       <div class="field"><label>password</label><input type="password" id="signup-pass" placeholder="choose a password" autocomplete="new-password" onkeydown="if(event.key==='Enter')signup()"></div>
       <button class="btn-primary" id="signup-btn" onclick="signup()">create account</button>
     </div>
     <div id="forgot-form" style="display:none">
       <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;line-height:1.5;">enter your email and we'll send you a reset link.</p>
-      <div class="field"><label>email</label><input type="email" id="forgot-email" placeholder="your email" onkeydown="if(event.key==='Enter')forgotPassword()"></div>
+      <div class="field"><label>email</label><input type="email" id="forgot-email" placeholder="your email" autocomplete="email" onkeydown="if(event.key==='Enter')forgotPassword()"></div>
       <button class="btn-primary" id="forgot-btn" onclick="forgotPassword()">send reset link</button>
       <div class="forgot-link" onclick="switchAuth('login')">back to sign in</div>
     </div>
@@ -292,21 +322,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <nav class="app-nav">
     <span class="app-logo">yours.</span>
   </nav>
+
+  <!-- FEED -->
   <div id="feed-panel" style="display:none;flex-direction:column;">
     <div class="feed-tabs">
       <div class="feed-tab active" onclick="switchFeed('friends',this)">friends</div>
       <div class="feed-tab" onclick="switchFeed('favourites',this)">favourites</div>
     </div>
     <div id="ptr-indicator" class="ptr-indicator" style="height:0;"></div>
-    <div class="feed-inner" id="feed-scroll-area" style="max-width:520px;margin:0 auto;padding:16px 16px 80px;width:100%;">
+    <div id="feed-scroll-area" style="max-width:520px;margin:0 auto;padding:16px 16px 90px;width:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;">
       <div id="feed-container"></div>
     </div>
   </div>
+
+  <!-- POST -->
   <div id="post-panel" class="panel">
     <div class="panel-title">share something.</div>
     <div class="composer">
-      <textarea id="post-text" placeholder="what's on your mind?" rows="4" oninput="updatePostBtn()"></textarea>
+      <textarea id="post-text" placeholder="what's on your mind?" rows="4" oninput="updatePostBtn();updateCharCount()"></textarea>
+      <div class="char-count" id="char-count">0 / 500</div>
       <div id="img-previews-wrap"></div>
+      <div class="circles-select" id="circles-select-wrap" style="display:none;">
+        <label>share with</label>
+        <div class="circle-chips" id="circle-chips"></div>
+      </div>
       <div class="composer-footer">
         <label class="img-upload-btn" for="img-file">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
@@ -324,13 +363,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       </div>
     </div>
   </div>
+
+  <!-- FRIENDS -->
   <div id="friends-panel" class="panel">
     <div class="panel-title">friends.</div>
     <div class="search-box">
       <h3>find someone</h3>
       <p>search by username to send a friend request.</p>
       <div class="search-row">
-        <input class="search-input" id="friend-search-input" type="text" placeholder="username" autocomplete="off" onkeydown="if(event.key==='Enter')searchUser()">
+        <input class="search-input" id="friend-search-input" type="text" placeholder="username" autocomplete="off" autocapitalize="none" onkeydown="if(event.key==='Enter')searchUser()">
         <button class="search-btn" onclick="searchUser()">search</button>
       </div>
       <div class="search-result" id="search-result"></div>
@@ -343,44 +384,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <button class="copy-btn" id="copy-btn" onclick="copyInvite()">copy</button>
       </div>
     </div>
+    <div class="circles-manager" id="circles-manager">
+      <h3>your circles</h3>
+      <p>create named groups to share posts with specific friends.</p>
+      <div id="circles-list"></div>
+      <div class="circle-row" style="border:none;padding-top:10px;">
+        <input class="circle-name-input" id="new-circle-input" placeholder="new circle name" maxlength="30" onkeydown="if(event.key==='Enter')createCircle()">
+        <button class="create-circle-btn" onclick="createCircle()">create</button>
+      </div>
+    </div>
     <div id="pending-wrap"></div>
     <div class="section-label">your friends</div>
     <div id="friends-list"></div>
   </div>
-  <div id="profile-panel" class="panel">
-    <div class="panel-title">you.</div>
-    <div class="profile-header">
-      <div class="avatar-upload-wrap" onclick="document.getElementById('avatar-file').click()">
-        <div class="profile-av" id="profile-av"></div>
-        <div class="avatar-overlay"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
-      </div>
-      <input type="file" id="avatar-file" accept="image/*" onchange="uploadAvatar(this)" style="display:none">
-      <div class="profile-name" id="profile-name-display"></div>
-      <div class="profile-handle" id="profile-handle-display"></div>
-      <div class="profile-stats">
-        <div class="stat stat-btn" onclick="scrollToMyPosts()"><div class="stat-num" id="stat-posts">0</div><div class="stat-label">posts</div></div>
-        <div class="stat stat-btn" onclick="toggleProfileFriendsList()"><div class="stat-num" id="stat-friends">0</div><div class="stat-label">friends</div></div>
-      </div>
-    </div>
-    <div id="profile-friends-section" style="display:none;margin-bottom:16px;">
-      <div class="section-label">friends</div>
-      <div id="profile-friends-list"></div>
-    </div>
-    <div id="profile-edit-form" style="display:none;background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:12px;">
-      <div class="section-label" style="margin-bottom:10px;">edit profile</div>
-      <div class="field"><label>display name</label><input type="text" id="edit-name-input" placeholder="your name"></div>
-      <div style="display:flex;gap:8px;margin-top:4px;">
-        <button class="btn-primary" style="flex:1;padding:10px;margin:0;" onclick="saveProfile()">save</button>
-        <button class="logout-btn" style="flex:1;margin:0;padding:10px;" onclick="cancelEditProfile()">cancel</button>
-      </div>
-    </div>
-    <div class="section-label" style="margin-top:8px;" id="my-posts-label">your posts</div>
-    <div id="my-posts-container"></div>
-    <button class="logout-btn" style="margin-top:16px;margin-bottom:8px;" onclick="toggleEditProfile()">edit profile</button>
-    <button class="logout-btn" onclick="logout()">sign out</button>
-    <button class="delete-account-btn" onclick="confirmDeleteAccount()">delete account</button>
-    <div style="text-align:center;margin-top:16px;"><a onclick="openTerms()" style="font-size:12px;color:var(--text-faint);text-decoration:underline;cursor:pointer;">terms & privacy</a></div>
-  </div>
+
+  <!-- MESSAGES -->
   <div id="messages-panel" class="panel">
     <div id="dm-list-view">
       <div class="panel-title">messages.</div>
@@ -398,6 +416,48 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       </div>
     </div>
   </div>
+
+  <!-- PROFILE -->
+  <div id="profile-panel" class="panel">
+    <div class="panel-title">you.</div>
+    <div class="profile-header">
+      <div class="avatar-upload-wrap" onclick="document.getElementById('avatar-file').click()">
+        <div class="profile-av" id="profile-av"></div>
+        <div class="avatar-overlay"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      </div>
+      <input type="file" id="avatar-file" accept="image/*" onchange="uploadAvatar(this)">
+      <div class="profile-name" id="profile-name-display"></div>
+      <div class="profile-handle" id="profile-handle-display"></div>
+      <div class="profile-stats">
+        <div class="stat stat-btn" onclick="scrollToMyPosts()"><div class="stat-num" id="stat-posts">0</div><div class="stat-label">posts</div></div>
+        <div class="stat stat-btn" onclick="toggleProfileFriendsList()"><div class="stat-num" id="stat-friends">0</div><div class="stat-label">friends</div></div>
+      </div>
+    </div>
+    <div id="profile-friends-section" style="display:none;margin-bottom:16px;">
+      <div class="section-label">friends</div>
+      <div id="profile-friends-list"></div>
+    </div>
+    <div id="profile-edit-form" style="display:none;background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:12px;">
+      <div class="section-label" style="margin-bottom:10px;">edit profile</div>
+      <div class="field"><label>display name</label><input type="text" id="edit-name-input" placeholder="your name"></div>
+      <div class="field"><label>new email</label><input type="email" id="edit-email-input" placeholder="leave blank to keep current"></div>
+      <div class="field"><label>new password</label><input type="password" id="edit-pass-new" placeholder="leave blank to keep current"></div>
+      <div class="field"><label>current password (required to save)</label><input type="password" id="edit-pass-current" placeholder="your current password"></div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn-primary" style="flex:1;padding:12px;margin:0;" onclick="saveProfile()">save</button>
+        <button class="profile-btn" style="flex:1;margin:0;padding:12px;" onclick="cancelEditProfile()">cancel</button>
+      </div>
+      <div class="auth-msg" id="profile-edit-msg" style="margin-top:8px;"></div>
+    </div>
+    <div class="section-label" style="margin-top:8px;" id="my-posts-label">your posts</div>
+    <div id="my-posts-container"></div>
+    <button class="profile-btn" style="margin-top:16px;" onclick="toggleEditProfile()">edit profile</button>
+    <button class="profile-btn" onclick="logout()">sign out</button>
+    <button class="profile-btn danger-btn" onclick="confirmDeleteAccount()">delete account</button>
+    <div style="text-align:center;margin-top:16px;"><a onclick="openTerms()" style="font-size:12px;color:var(--text-faint);text-decoration:underline;cursor:pointer;">terms & privacy</a></div>
+  </div>
+
+  <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
     <button class="bn-btn active" id="bn-feed" onclick="showPanel('feed')">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -415,14 +475,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <button class="bn-btn" id="bn-friends" onclick="showPanel('friends')">
       <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <div class="bn-dot"></div>
+      <span class="pending-badge" id="pending-badge" style="display:none"></span>
     </button>
     <button class="bn-btn" id="bn-profile" onclick="showPanel('profile')">
       <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <div class="bn-dot"></div>
     </button>
   </nav>
+
+  <!-- FRIEND PROFILE OVERLAY -->
   <div id="friend-profile-overlay" class="fp-overlay">
-    <div style="max-width:520px;margin:0 auto;padding:16px 16px 80px;">
+    <div style="max-width:520px;margin:0 auto;padding:16px 16px 90px;">
       <button class="fp-back" onclick="closeFriendProfile()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> back</button>
       <div class="profile-header">
         <div class="profile-av" id="fp-av"></div>
@@ -433,7 +496,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
           <div class="stat"><div class="stat-num" id="fp-stat-friends">0</div><div class="stat-label">friends</div></div>
         </div>
       </div>
-      <div class="section-label" style="margin-top:4px;">posts</div>
+      <div id="fp-actions" style="display:flex;gap:8px;margin-bottom:16px;"></div>
+      <div class="section-label">posts</div>
       <div id="fp-posts-container"></div>
     </div>
   </div>
@@ -443,6 +507,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <div id="report-modal" class="modal-overlay" style="display:none;" onclick="closeReportModal()">
   <div class="modal-sheet" onclick="event.stopPropagation()">
     <div class="modal-title">report post</div>
+    <div class="modal-subtitle">what's the issue?</div>
     <button class="modal-option" onclick="submitReport('spam')">🚫 spam or misleading</button>
     <button class="modal-option" onclick="submitReport('inappropriate')">⚠️ inappropriate content</button>
     <button class="modal-option" onclick="submitReport('harassment')">💬 harassment or bullying</button>
@@ -451,7 +516,32 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
-<!-- TERMS OVERLAY -->
+<!-- FRIEND ACTION MODAL -->
+<div id="friend-action-modal" class="modal-overlay" style="display:none;" onclick="closeFriendActionModal()">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-title" id="fam-title"></div>
+    <div class="modal-subtitle" id="fam-handle"></div>
+    <button class="modal-option" id="fam-message" onclick="fam_message()">💬 send a message</button>
+    <button class="modal-option danger" id="fam-remove" onclick="fam_remove()">👋 remove friend</button>
+    <button class="modal-option danger" id="fam-block" onclick="fam_block()">🚫 block user</button>
+    <button class="modal-cancel" onclick="closeFriendActionModal()">cancel</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel" class="fp-overlay" style="z-index:250;">
+  <div style="max-width:520px;margin:0 auto;padding:16px 16px 90px;">
+    <button class="fp-back" onclick="closeAdmin()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> back</button>
+    <div style="font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:20px;">admin.</div>
+    <div class="admin-stat-grid" id="admin-stats"></div>
+    <div class="section-label">reported posts</div>
+    <div id="admin-reports"></div>
+    <div class="section-label" style="margin-top:16px;">all users</div>
+    <div id="admin-users"></div>
+  </div>
+</div>
+
+<!-- TERMS -->
 <div id="terms-overlay" class="terms-overlay">
   <div class="terms-inner">
     <button class="terms-close" onclick="closeTerms()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> back</button>
@@ -464,24 +554,33 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <h2>3. What Data We Collect</h2>
     <p>When you create an account, we collect your name, username, and email address, as well as posts, photos, and comments you choose to share, and friend connections you make on the platform. We do not collect your location, browsing behaviour, or any data beyond what you choose to share.</p>
     <h2>4. How We Use Your Data</h2>
-    <p>Your data is used solely to operate the platform. Your name and username identify you to your confirmed friends. Your email is used for account recovery only. Your posts are visible only to your confirmed friends.</p>
-    <h2>5. What We Will Never Do</h2>
-    <p>We will never sell your data to any third party, share your personal information with advertisers or corporations, use algorithms to manipulate what you see, or show you content from people you have not chosen to connect with.</p>
+    <p>Your data is used solely to operate the platform. Your name and username identify you to your confirmed friends. Your email is used for account recovery only. Your posts are visible only to your confirmed friends or chosen circles.</p>
+    <h2>5. Our Commitments</h2>
+    <p>We do not sell your personal data to any third party. We do not share personal data with advertisers or third parties for advertising purposes. We do not use engagement-optimised recommendation algorithms. We do not show you content from people you have not chosen to connect with.</p>
     <h2>6. Your Rights Under UK GDPR</h2>
-    <p>You have the right to access, delete, correct, and export your data at any time. To exercise these rights, contact us through the platform.</p>
+    <p>You have the right to access, delete, correct, and export your data at any time. To exercise these rights, contact us through the platform or delete your account directly from your profile.</p>
     <h2>7. Content Rules</h2>
-    <p>By using yours., you agree not to post content that is illegal, intended to harm another person, sexual or violent in nature, or deliberately false.</p>
-    <h2>8. Testing Phase Notice</h2>
+    <p>By using yours., you agree not to post content that is illegal, intended to harm another person, sexual or violent in nature, or deliberately false. We reserve the right to remove content or suspend accounts that violate these rules or threaten the safety of the platform or its users.</p>
+    <h2>8. Data Security</h2>
+    <p>We take reasonable technical and organisational measures to protect your data. However, no system is completely secure and we cannot guarantee absolute security.</p>
+    <h2>9. Testing Phase Notice</h2>
     <p>yours. is in a private testing phase. The platform may experience downtime or data loss. By participating you acknowledge these limitations.</p>
     <p style="margin-top:24px;font-size:12px;color:var(--text-faint);text-align:center;">yours. — share with the people who actually matter.<br>Private Beta — not for public distribution.</p>
   </div>
 </div>
 
 <script>
+const ADMIN_USER='admin';
+const MAX_POST_CHARS=500;
+const MAX_IMAGES=4;
+const MAX_IMAGE_PX=900;
+const JPEG_QUALITY=0.65;
+const MAX_AVATAR_PX=200;
+
 async function dbGet(k){try{const r=await fetch('/db/get?key='+encodeURIComponent(k));if(!r.ok)return null;const t=await r.text();return t?JSON.parse(t):null;}catch{return null;}}
 async function dbSet(k,v){try{await fetch('/db/set',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k,value:JSON.stringify(v)})});}catch{}}
 async function dbDel(k){try{await fetch('/db/del?key='+encodeURIComponent(k),{method:'DELETE'});}catch{}}
-function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function initials(n){return(n||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);}
 function colClass(n){return'c'+(Math.abs([...(n||'')].reduce((a,c)=>a+c.charCodeAt(0),0))%5);}
 function timeAgo(ts){const d=Date.now()-ts;if(d<60000)return'just now';if(d<3600000)return Math.floor(d/60000)+'m ago';if(d<86400000)return Math.floor(d/3600000)+'h ago';return Math.floor(d/86400000)+'d ago';}
@@ -517,6 +616,7 @@ async function login(){
   const btn=document.getElementById('login-btn');btn.disabled=true;btn.textContent='signing in...';
   const user=await dbGet('user:'+u);
   if(!user){setMsg('username or password incorrect');btn.disabled=false;btn.textContent='sign in';return;}
+  if(user.blocked){setMsg('this account has been suspended');btn.disabled=false;btn.textContent='sign in';return;}
   let valid=false;
   if(user.salt){valid=(await hashPwd(p,user.salt))===user.password;}
   else{valid=user.password===btoa(p);if(valid){const salt=crypto.randomUUID();user.salt=salt;user.password=await hashPwd(p,salt);await dbSet('user:'+u,user);}}
@@ -541,7 +641,7 @@ async function signup(){
   const invitedBy=params.get('invite')||null;
   const salt=crypto.randomUUID();
   const hashedPwd=await hashPwd(p,salt);
-  const userData={name,email,password:hashedPwd,salt,friends:[],favourites:[],colour:Math.abs([...u].reduce((a,c)=>a+c.charCodeAt(0),0))%5,invitedBy,joined:Date.now(),avatar:null};
+  const userData={name,email,password:hashedPwd,salt,friends:[],favourites:[],circles:[],colour:Math.abs([...u].reduce((a,c)=>a+c.charCodeAt(0),0))%5,invitedBy,joined:Date.now(),avatar:null};
   await dbSet('user:'+u,userData);
   const emailIndex=await dbGet('users:by:email')||{};
   emailIndex[email]=u;await dbSet('users:by:email',emailIndex);
@@ -560,7 +660,14 @@ async function forgotPassword(){
   btn.disabled=false;btn.textContent='send reset link';
 }
 
-async function logout(){CU=null;clearSession();document.getElementById('app-screen').classList.remove('active');document.getElementById('auth-screen').classList.add('active');document.getElementById('login-user').value='';document.getElementById('login-pass').value='';setMsg('');}
+async function logout(){
+  CU=null;clearSession();
+  document.getElementById('app-screen').classList.remove('active');
+  document.getElementById('auth-screen').classList.add('active');
+  document.getElementById('login-user').value='';
+  document.getElementById('login-pass').value='';
+  setMsg('');
+}
 
 async function confirmDeleteAccount(){
   if(!confirm('Are you sure you want to delete your account? This cannot be undone.'))return;
@@ -569,7 +676,7 @@ async function confirmDeleteAccount(){
   const friends=(ud&&ud.friends)||[];
   for(const f of friends){const fud=await dbGet('user:'+f);if(fud){fud.friends=(fud.friends||[]).filter(x=>x!==CU.username);await dbSet('user:'+f,fud);}}
   const postIdx=await dbGet('posts:index')||[];const newIdx=[];
-  for(const pid of postIdx){const p=await dbGet('post:'+pid);if(p&&p.author===CU.username){await dbDel('post:'+pid);}else{newIdx.push(pid);}}
+  for(const pid of postIdx){const p=await dbGet('post:'+pid);if(p&&p.author===CU.username)await dbDel('post:'+pid);else newIdx.push(pid);}
   await dbSet('posts:index',newIdx);await dbDel('user:'+CU.username);await logout();
 }
 
@@ -577,8 +684,8 @@ function enterApp(){
   document.getElementById('auth-screen').classList.remove('active');
   document.getElementById('app-screen').classList.add('active');
   showPanel('feed');
-  setTimeout(checkUnreadBadge,800);
-  if(!window._badgeTimer)window._badgeTimer=setInterval(checkUnreadBadge,30000);
+  setTimeout(()=>{checkUnreadBadge();checkPendingBadge();},800);
+  if(!window._badgeTimer)window._badgeTimer=setInterval(()=>{checkUnreadBadge();checkPendingBadge();},30000);
 }
 
 function showPanel(name){
@@ -591,7 +698,7 @@ function showPanel(name){
   if(name==='feed')renderFeed();
   if(name==='friends')renderFriends();
   if(name==='profile')renderProfile();
-  if(name==='post'){updateTimerLabel();updatePostBtn();}
+  if(name==='post'){updateTimerLabel();updatePostBtn();loadCirclesForPost();}
   if(name==='messages')renderMessages();
 }
 
@@ -610,106 +717,168 @@ let feedMode='friends';
 function switchFeed(mode,el){feedMode=mode;document.querySelectorAll('.feed-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderFeed();}
 
 function avatarHtml(username,ud,size=36){
-  const sz=`width:${size}px;height:${size}px;font-size:${Math.round(size*0.36)}px;`;
-  if(ud&&ud.avatar){return`<div class="avatar" style="${sz}"><img src="${ud.avatar}" alt=""></div>`;}
+  const sz=`width:${size}px;height:${size}px;font-size:${Math.round(size*0.36)}px;flex-shrink:0;`;
+  if(ud&&ud.avatar)return`<div class="avatar" style="${sz}"><img src="${ud.avatar}" alt=""></div>`;
   return`<div class="avatar ${colClass(username)}" style="${sz}">${initials((ud&&ud.name)||username)}</div>`;
+}
+
+function showSkeletons(){
+  return[1,2,3].map(()=>`<div class="skeleton-card"><div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;"><div class="skeleton" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;"></div><div style="flex:1;"><div class="skeleton" style="height:14px;width:60%;margin-bottom:6px;"></div><div class="skeleton" style="height:11px;width:40%;"></div></div></div><div class="skeleton" style="height:14px;width:100%;margin-bottom:6px;"></div><div class="skeleton" style="height:14px;width:75%;"></div></div>`).join('');
 }
 
 async function renderFeed(){
   const container=document.getElementById('feed-container');
-  container.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-faint);font-size:14px;">loading...</div>';
+  container.innerHTML=showSkeletons();
   const userData=await dbGet('user:'+CU.username);
   if(!userData){container.innerHTML='';return;}
   CU={...CU,...userData};
   const friends=userData.friends||[];
   const favs=userData.favourites||[];
-  const authors=feedMode==='favourites'?favs:[CU.username,...friends];
-  if(feedMode==='favourites'&&favs.length===0){
-    container.innerHTML=`<div class="empty-state"><h3>no favourites yet.</h3><p>heart a friend to see their posts first.</p></div>`;return;
-  }
+  const blocked=userData.blocked||[];
+  const authors=feedMode==='favourites'?favs.filter(f=>!blocked.includes(f)):[CU.username,...friends.filter(f=>!blocked.includes(f))];
+  if(feedMode==='favourites'&&favs.length===0){container.innerHTML=`<div class="empty-state"><h3>no favourites yet.</h3><p>heart a friend to see their posts here.</p></div>`;return;}
   const postIndex=(await dbGet('posts:index')||[]).slice(0,100);
   const now=Date.now();const posts=[];
-  for(const pid of postIndex){const p=await dbGet('post:'+pid);if(!p)continue;if(!authors.includes(p.author))continue;if(p.durMs&&(p.ts+p.durMs)<now)continue;posts.push(p);}
-  posts.sort((a,b)=>b.ts-a.ts);
-  if(posts.length===0){
-    container.innerHTML=`<div class="empty-state"><h3>nothing here yet.</h3><p>invite a friend to get started.</p><button onclick="showPanel('friends')">invite friends</button></div>`;return;
+  for(const pid of postIndex){
+    const p=await dbGet('post:'+pid);if(!p)continue;
+    if(!authors.includes(p.author))continue;
+    if(p.durMs&&(p.ts+p.durMs)<now)continue;
+    if(p.circle){const circles=userData.circles||[];const myCircle=circles.find(c=>c.id===p.circle);if(!myCircle||!myCircle.members.includes(CU.username)){if(p.author!==CU.username)continue;}}
+    posts.push(p);
   }
+  posts.sort((a,b)=>b.ts-a.ts);
+  if(posts.length===0){container.innerHTML=`<div class="empty-state"><h3>nothing here yet.</h3><p>invite a friend to get started.</p><button onclick="showPanel('friends')">invite friends</button></div>`;return;}
   const authorSet=[...new Set(posts.map(p=>p.author))];
-  const authorData={};for(const a of authorSet){authorData[a]=await dbGet('user:'+a)||{};}
+  const authorData={};for(const a of authorSet)authorData[a]=await dbGet('user:'+a)||{};
   container.innerHTML=posts.map(post=>renderPost(post,authorData[post.author])).join('');
+  initDoubleTap();
 }
 
-function renderPost(post,ud,showDelete){
+function renderPost(post,ud){
   const isLiked=(post.likes||[]).includes(CU.username);
   const likeCount=(post.likes||[]).length;
   const comments=post.comments||[];
   const tl=timeLeft(post.ts,post.durMs);
   const isOwn=post.author===CU.username;
-  const avHtml=avatarHtml(post.author,ud);
-  const images=post.images||( post.image?[post.image]:[]);
+  const images=post.images||(post.image?[post.image]:[]);
   const imgHtml=images.length>0?`<div class="post-images-wrap count-${Math.min(images.length,4)}">${images.slice(0,4).map(src=>`<img class="post-img" src="${src}" alt="" loading="lazy">`).join('')}</div>`:'';
+  const circlePill=post.circleName?`<span class="circle-pill">${escHtml(post.circleName)}</span>`:'';
   return`<div class="post-card" id="post-${post.id}">
     <div class="post-header">
-      ${avHtml}
+      ${avatarHtml(post.author,ud)}
       <div class="post-meta"><div class="post-username">${escHtml(post.authorName||post.author)}</div><div class="post-time">${timeAgo(post.ts)}</div></div>
-      <div style="display:flex;gap:4px;">
-        ${!isOwn?`<button class="icon-btn" onclick="openReportModal('${post.id}')" title="report" style="color:var(--text-faint)"><svg viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>`:''}
-        ${isOwn?`<button class="icon-btn" onclick="deletePost('${post.id}')" title="delete" style="color:var(--text-faint)"><svg viewBox="0 0 24 24" style="width:16px;height:16px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>`:''}
+      <div style="display:flex;gap:2px;">
+        ${!isOwn?`<button class="icon-btn" onclick="openReportModal('${post.id}')" style="color:var(--text-faint);min-width:36px;min-height:36px;"><svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>`:''}
+        ${isOwn?`<button class="icon-btn" onclick="deletePost('${post.id}')" style="color:var(--text-faint);min-width:36px;min-height:36px;"><svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>`:''}
       </div>
     </div>
     ${imgHtml}
     <div class="post-body">
       ${post.text?`<div class="post-text">${escHtml(post.text)}</div>`:''}
       <div class="post-footer">
-        <button class="post-action${isLiked?' liked':''}" onclick="toggleLike('${post.id}')">
+        <button class="post-action${isLiked?' liked':''}" id="like-btn-${post.id}" onclick="toggleLike('${post.id}')">
           <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          ${likeCount>0?likeCount:''}
+          <span id="like-count-${post.id}">${likeCount>0?likeCount:''}</span>
         </button>
-        <button class="post-action" onclick="focusCmt('${post.id}')">
+        <button class="post-action" onclick="toggleComments('${post.id}')">
           <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          ${comments.length>0?comments.length:''}
+          <span>${comments.length>0?comments.length:''}</span>
         </button>
+        ${circlePill}
         <div class="timer-pill">${tl}</div>
       </div>
     </div>
-    ${comments.length>0?`<div class="comments-section">
-      ${comments.slice(-3).map(c=>`<div class="comment"><div class="comment-av ${colClass(c.author)}">${initials(c.authorName||c.author)}</div><div><div class="comment-user">${escHtml(c.authorName||c.author)}</div><div class="comment-text">${escHtml(c.text)}</div></div></div>`).join('')}
-      <div class="comment-input-row"><input class="comment-input" id="ci-${post.id}" placeholder="add a comment..." onkeydown="if(event.key==='Enter')addComment('${post.id}')"><button class="comment-send" onclick="addComment('${post.id}')">send</button></div>
-    </div>`:''}
+    <div class="comments-section" id="comments-${post.id}" style="display:none;">
+      <div id="comments-list-${post.id}">
+        ${comments.map(c=>`<div class="comment"><div class="comment-av ${colClass(c.author)}">${initials(c.authorName||c.author)}</div><div class="comment-bubble"><div class="comment-user">${escHtml(c.authorName||c.author)}</div><div class="comment-text">${escHtml(c.text)}</div></div></div>`).join('')}
+      </div>
+      <div class="comment-input-row">
+        <input class="comment-input" id="ci-${post.id}" placeholder="add a comment..." onkeydown="if(event.key==='Enter'){event.preventDefault();addComment('${post.id}');}">
+        <button class="comment-send" onclick="addComment('${post.id}')">send</button>
+      </div>
+    </div>
   </div>`;
 }
 
-let reportingPostId=null;
-function openReportModal(postId){reportingPostId=postId;document.getElementById('report-modal').style.display='flex';}
-function closeReportModal(){document.getElementById('report-modal').style.display='none';reportingPostId=null;}
-async function submitReport(reason){
-  if(!reportingPostId)return;
-  const report={postId:reportingPostId,reason,reportedBy:CU.username,ts:Date.now()};
-  const reports=await dbGet('reports')||[];
-  reports.push(report);await dbSet('reports',reports);
-  closeReportModal();
-  alert('Thank you — this post has been reported and will be reviewed.');
+function toggleComments(postId){
+  const el=document.getElementById('comments-'+postId);
+  if(!el)return;
+  const showing=el.style.display!=='none';
+  el.style.display=showing?'none':'block';
+  if(!showing)setTimeout(()=>{const inp=document.getElementById('ci-'+postId);if(inp)inp.focus();},100);
 }
 
-async function toggleLike(postId){const post=await dbGet('post:'+postId);if(!post)return;if(!post.likes)post.likes=[];const idx=post.likes.indexOf(CU.username);if(idx>-1)post.likes.splice(idx,1);else post.likes.push(CU.username);await dbSet('post:'+postId,post);renderFeed();}
-async function addComment(postId){const input=document.getElementById('ci-'+postId);const text=input.value.trim();if(!text)return;const post=await dbGet('post:'+postId);if(!post)return;if(!post.comments)post.comments=[];post.comments.push({author:CU.username,authorName:CU.name,text,ts:Date.now()});await dbSet('post:'+postId,post);input.value='';renderFeed();}
-function focusCmt(postId){setTimeout(()=>{const el=document.getElementById('ci-'+postId);if(el)el.focus();},50);}
-async function deletePost(postId){if(!confirm('Delete this post?'))return;await dbDel('post:'+postId);let idx=await dbGet('posts:index')||[];idx=idx.filter(id=>id!==postId);await dbSet('posts:index',idx);renderFeed();renderProfile();}
+function initDoubleTap(){
+  let lastTap={};
+  document.querySelectorAll('.post-card').forEach(card=>{
+    card.addEventListener('touchend',e=>{
+      const postId=card.id.replace('post-','');
+      const now=Date.now();
+      if(lastTap[postId]&&now-lastTap[postId]<300){
+        e.preventDefault();toggleLike(postId);
+      }
+      lastTap[postId]=now;
+    });
+  });
+}
+
+async function toggleLike(postId){
+  const btn=document.getElementById('like-btn-'+postId);
+  const countEl=document.getElementById('like-count-'+postId);
+  const post=await dbGet('post:'+postId);if(!post)return;
+  if(!post.likes)post.likes=[];
+  const idx=post.likes.indexOf(CU.username);
+  if(idx>-1)post.likes.splice(idx,1);else post.likes.push(CU.username);
+  await dbSet('post:'+postId,post);
+  if(btn){btn.classList.toggle('liked',post.likes.includes(CU.username));}
+  if(countEl)countEl.textContent=post.likes.length>0?post.likes.length:'';
+}
+
+async function addComment(postId){
+  const input=document.getElementById('ci-'+postId);
+  const text=input.value.trim();if(!text)return;
+  input.value='';input.disabled=true;
+  const post=await dbGet('post:'+postId);if(!post)return;
+  if(!post.comments)post.comments=[];
+  post.comments.push({author:CU.username,authorName:CU.name,text,ts:Date.now()});
+  await dbSet('post:'+postId,post);
+  const listEl=document.getElementById('comments-list-'+postId);
+  if(listEl){
+    const newComment=document.createElement('div');
+    newComment.className='comment';
+    newComment.innerHTML=`<div class="comment-av ${colClass(CU.username)}">${initials(CU.name||CU.username)}</div><div class="comment-bubble"><div class="comment-user">${escHtml(CU.name||CU.username)}</div><div class="comment-text">${escHtml(text)}</div></div>`;
+    listEl.appendChild(newComment);
+  }
+  input.disabled=false;input.focus();
+  const countEls=document.querySelectorAll(`#post-${postId} .post-action:nth-child(2) span`);
+  countEls.forEach(el=>el.textContent=post.comments.length);
+}
+
+async function deletePost(postId){
+  if(!confirm('Delete this post?'))return;
+  await dbDel('post:'+postId);
+  let idx=await dbGet('posts:index')||[];
+  idx=idx.filter(id=>id!==postId);
+  await dbSet('posts:index',idx);
+  const el=document.getElementById('post-'+postId);
+  if(el)el.remove();
+}
 
 // MULTI PHOTO
 let selectedImages=[];
 function previewImages(input){
-  const files=Array.from(input.files).slice(0,4-selectedImages.length);
+  const remaining=MAX_IMAGES-selectedImages.length;
+  const files=Array.from(input.files).slice(0,remaining);
   files.forEach(file=>{
     const reader=new FileReader();
     reader.onload=e=>{
       const img=new Image();
       img.onload=()=>{
-        const MAX=900;let w=img.width,h=img.height;
+        const MAX=MAX_IMAGE_PX;let w=img.width,h=img.height;
         if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
         const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
         canvas.getContext('2d').drawImage(img,0,0,w,h);
-        selectedImages.push(canvas.toDataURL('image/jpeg',0.65));
+        selectedImages.push(canvas.toDataURL('image/jpeg',JPEG_QUALITY));
         renderImagePreviews();updatePostBtn();
       };img.src=e.target.result;
     };reader.readAsDataURL(file);
@@ -720,12 +889,21 @@ function renderImagePreviews(){
   const wrap=document.getElementById('img-previews-wrap');
   const label=document.getElementById('photo-count-label');
   if(selectedImages.length===0){wrap.innerHTML='';label.textContent='';return;}
-  label.textContent=`(${selectedImages.length}/4)`;
+  label.textContent=`(${selectedImages.length}/${MAX_IMAGES})`;
   wrap.innerHTML=`<div class="img-previews">${selectedImages.map((src,i)=>`<div class="img-preview-item"><img src="${src}" alt=""><button class="img-preview-remove" onclick="removeImage(${i})">×</button></div>`).join('')}</div>`;
 }
 function removeImage(i){selectedImages.splice(i,1);renderImagePreviews();updatePostBtn();}
 function updateTimerLabel(){document.getElementById('timer-label').textContent=timerLabel(parseInt(document.getElementById('timer-slider').value));}
-function updatePostBtn(){document.getElementById('post-btn').disabled=!document.getElementById('post-text').value.trim()&&selectedImages.length===0;}
+function updateCharCount(){
+  const len=document.getElementById('post-text').value.length;
+  const el=document.getElementById('char-count');
+  el.textContent=`${len} / ${MAX_POST_CHARS}`;
+  el.className='char-count'+(len>MAX_POST_CHARS?' over':len>MAX_POST_CHARS*0.8?' warn':'');
+}
+function updatePostBtn(){
+  const text=document.getElementById('post-text').value;
+  document.getElementById('post-btn').disabled=(!text.trim()&&selectedImages.length===0)||text.length>MAX_POST_CHARS;
+}
 
 async function uploadAvatar(input){
   const file=input.files[0];if(!file)return;
@@ -733,7 +911,7 @@ async function uploadAvatar(input){
   reader.onload=async e=>{
     const img=new Image();
     img.onload=async()=>{
-      const SIZE=200;const canvas=document.createElement('canvas');canvas.width=SIZE;canvas.height=SIZE;
+      const SIZE=MAX_AVATAR_PX;const canvas=document.createElement('canvas');canvas.width=SIZE;canvas.height=SIZE;
       const ctx=canvas.getContext('2d');const min=Math.min(img.width,img.height);
       const sx=(img.width-min)/2,sy=(img.height-min)/2;
       ctx.drawImage(img,sx,sy,min,min,0,0,SIZE,SIZE);
@@ -745,16 +923,107 @@ async function uploadAvatar(input){
   };reader.readAsDataURL(file);
 }
 
+// CIRCLES
+let selectedCircle='everyone';
+async function loadCirclesForPost(){
+  const ud=await dbGet('user:'+CU.username)||{};
+  const circles=ud.circles||[];
+  const wrap=document.getElementById('circles-select-wrap');
+  const chipsEl=document.getElementById('circle-chips');
+  if(circles.length===0){wrap.style.display='none';selectedCircle='everyone';return;}
+  wrap.style.display='block';
+  selectedCircle='everyone';
+  chipsEl.innerHTML=`<div class="circle-chip everyone selected" id="chip-everyone" onclick="selectCircle('everyone')" >everyone</div>`+
+    circles.map(c=>`<div class="circle-chip" id="chip-${c.id}" onclick="selectCircle('${c.id}')">${escHtml(c.name)}</div>`).join('');
+}
+function selectCircle(id){
+  selectedCircle=id;
+  document.querySelectorAll('.circle-chip').forEach(el=>{
+    el.classList.toggle('selected',el.id==='chip-'+id||(id==='everyone'&&el.id==='chip-everyone'));
+  });
+}
+
 async function submitPost(){
   const text=document.getElementById('post-text').value.trim();
+  if(text.length>MAX_POST_CHARS)return;
   const tv=parseInt(document.getElementById('timer-slider').value);
   const btn=document.getElementById('post-btn');btn.disabled=true;btn.textContent='posting...';
-  const post={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),author:CU.username,authorName:CU.name,text,images:selectedImages.length>0?[...selectedImages]:null,image:null,ts:Date.now(),durMs:timerMs(tv),likes:[],comments:[]};
+  const ud=await dbGet('user:'+CU.username)||{};
+  const circles=ud.circles||[];
+  let circleName=null;
+  if(selectedCircle!=='everyone'){const c=circles.find(x=>x.id===selectedCircle);if(c)circleName=c.name;}
+  const post={
+    id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+    author:CU.username,authorName:CU.name,text,
+    images:selectedImages.length>0?[...selectedImages]:null,
+    image:null,ts:Date.now(),durMs:timerMs(tv),likes:[],comments:[],
+    circle:selectedCircle==='everyone'?null:selectedCircle,
+    circleName
+  };
   await dbSet('post:'+post.id,post);
-  let idx=await dbGet('posts:index')||[];idx.unshift(post.id);if(idx.length>500)idx=idx.slice(0,500);await dbSet('posts:index',idx);
-  document.getElementById('post-text').value='';selectedImages=[];renderImagePreviews();
-  document.getElementById('timer-slider').value=4;updateTimerLabel();updatePostBtn();
-  btn.disabled=false;btn.textContent='post';showPanel('feed');
+  let idx=await dbGet('posts:index')||[];idx.unshift(post.id);
+  if(idx.length>500)idx=idx.slice(0,500);
+  await dbSet('posts:index',idx);
+  document.getElementById('post-text').value='';
+  selectedImages=[];renderImagePreviews();
+  document.getElementById('timer-slider').value=4;
+  updateTimerLabel();updatePostBtn();updateCharCount();
+  btn.disabled=false;btn.textContent='post';
+  showPanel('feed');
+}
+
+// CIRCLES MANAGER
+async function renderCircles(){
+  const ud=await dbGet('user:'+CU.username)||{};
+  const circles=ud.circles||[];
+  const friends=ud.friends||[];
+  const listEl=document.getElementById('circles-list');
+  if(circles.length===0){listEl.innerHTML='<div style="font-size:13px;color:var(--text-faint);padding:8px 0;">no circles yet.</div>';return;}
+  const friendsData={};
+  for(const f of friends)friendsData[f]=await dbGet('user:'+f)||{};
+  listEl.innerHTML=circles.map(c=>`
+    <div style="border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:14px;font-weight:500;flex:1;">${escHtml(c.name)}</span>
+        <button class="delete-circle-btn" onclick="deleteCircle('${c.id}')">delete</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${friends.map(f=>{
+          const inCircle=(c.members||[]).includes(f);
+          const fud=friendsData[f]||{};
+          return`<button onclick="toggleCircleMember('${c.id}','${f}')" style="padding:5px 10px;border-radius:20px;font-size:12px;border:1px solid ${inCircle?'var(--text)':'var(--border)'};background:${inCircle?'var(--text)':'transparent'};color:${inCircle?'white':'var(--text-muted)'};cursor:pointer;min-height:32px;">${escHtml(fud.name||f)}</button>`;
+        }).join('')}
+        ${friends.length===0?'<span style="font-size:12px;color:var(--text-faint);">add friends first</span>':''}
+      </div>
+    </div>
+  `).join('');
+}
+
+async function createCircle(){
+  const input=document.getElementById('new-circle-input');
+  const name=input.value.trim();if(!name)return;
+  const ud=await dbGet('user:'+CU.username)||{};
+  if(!ud.circles)ud.circles=[];
+  if(ud.circles.length>=10)return alert('Maximum 10 circles');
+  ud.circles.push({id:Date.now().toString(36),name,members:[]});
+  await dbSet('user:'+CU.username,ud);
+  CU={...CU,...ud};input.value='';renderCircles();
+}
+
+async function deleteCircle(circleId){
+  if(!confirm('Delete this circle?'))return;
+  const ud=await dbGet('user:'+CU.username)||{};
+  ud.circles=(ud.circles||[]).filter(c=>c.id!==circleId);
+  await dbSet('user:'+CU.username,ud);CU={...CU,...ud};renderCircles();
+}
+
+async function toggleCircleMember(circleId,friendUsername){
+  const ud=await dbGet('user:'+CU.username)||{};
+  const circle=(ud.circles||[]).find(c=>c.id===circleId);if(!circle)return;
+  if(!circle.members)circle.members=[];
+  const idx=circle.members.indexOf(friendUsername);
+  if(idx>-1)circle.members.splice(idx,1);else circle.members.push(friendUsername);
+  await dbSet('user:'+CU.username,ud);CU={...CU,...ud};renderCircles();
 }
 
 async function searchUser(){
@@ -764,6 +1033,8 @@ async function searchUser(){
   if(u===CU.username){resultEl.innerHTML='<div class="search-msg">that\'s you!</div>';return;}
   const ud=await dbGet('user:'+u);if(!ud){resultEl.innerHTML='<div class="search-msg">no user found.</div>';return;}
   const myData=await dbGet('user:'+CU.username);
+  const blocked=(myData.blocked||[]);
+  if(blocked.includes(u)){resultEl.innerHTML='<div class="search-msg">you have blocked this user.</div>';return;}
   const alreadyFriends=(myData.friends||[]).includes(u);
   const pendingOut=(ud.pendingRequests||[]).includes(CU.username);
   if(alreadyFriends){resultEl.innerHTML=`<div class="search-result-card">${avatarHtml(u,ud)}<div class="friend-info"><div class="friend-name">${escHtml(ud.name||u)}</div><div class="friend-handle">@${u}</div></div><span style="font-size:13px;color:var(--accent);margin-left:auto;">already friends</span></div>`;return;}
@@ -774,8 +1045,10 @@ async function searchUser(){
 async function sendFriendRequest(username){
   const btn=document.getElementById('add-btn-'+username);if(btn){btn.disabled=true;btn.textContent='sending...';}
   const ud=await dbGet('user:'+username);if(!ud){if(btn)btn.textContent='not found';return;}
-  if(!ud.pendingRequests)ud.pendingRequests=[];if(!ud.pendingRequests.includes(CU.username))ud.pendingRequests.push(CU.username);
-  await dbSet('user:'+username,ud);if(btn){btn.textContent='request sent';btn.disabled=true;}
+  if(!ud.pendingRequests)ud.pendingRequests=[];
+  if(!ud.pendingRequests.includes(CU.username))ud.pendingRequests.push(CU.username);
+  await dbSet('user:'+username,ud);
+  if(btn){btn.textContent='request sent';btn.disabled=true;}
 }
 
 async function renderFriends(){
@@ -792,20 +1065,66 @@ async function renderFriends(){
   if(friends.length===0){fl.innerHTML='<div style="font-size:14px;color:var(--text-muted);padding:8px 0;">no friends yet — share your invite link to get started.</div>';return;}
   const cards=await Promise.all(friends.map(async u=>{
     const ud=await dbGet('user:'+u)||{};const isFav=favs.includes(u);
-    return`<div class="friend-card" style="cursor:pointer" onclick="openFriendProfile('${u}')">${avatarHtml(u,ud)}<div class="friend-info"><div class="friend-name">${escHtml(ud.name||u)}</div><div class="friend-handle">@${u}</div></div><button class="icon-btn" onclick="event.stopPropagation();toggleFav('${u}')" title="${isFav?'remove from favourites':'add to favourites'}" style="color:${isFav?'#C0392B':'var(--text-faint)'}"><svg viewBox="0 0 24 24" style="width:20px;height:20px;${isFav?'fill:#C0392B;stroke:#C0392B':'stroke:currentColor;fill:none'}"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>`;
+    return`<div class="friend-card" style="cursor:pointer" onclick="openFriendProfile('${u}')">
+      ${avatarHtml(u,ud)}
+      <div class="friend-info"><div class="friend-name">${escHtml(ud.name||u)}</div><div class="friend-handle">@${u}</div></div>
+      <button class="icon-btn" onclick="event.stopPropagation();toggleFav('${u}')" style="color:${isFav?'#C0392B':'var(--text-faint)'}">
+        <svg viewBox="0 0 24 24" style="width:20px;height:20px;${isFav?'fill:#C0392B;stroke:#C0392B':'stroke:currentColor;fill:none'}"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+      <button class="icon-btn" onclick="event.stopPropagation();openFriendActionModal('${u}','${escHtml(ud.name||u)}')" style="color:var(--text-faint)">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+      </button>
+    </div>`;
   }));fl.innerHTML=cards.join('');
+  renderCircles();
 }
 
 async function toggleFav(u){const ud=await dbGet('user:'+CU.username);if(!ud)return;if(!ud.favourites)ud.favourites=[];const idx=ud.favourites.indexOf(u);if(idx>-1)ud.favourites.splice(idx,1);else ud.favourites.push(u);await dbSet('user:'+CU.username,ud);CU={...CU,...ud};renderFriends();}
-async function acceptFriend(u){const ud=await dbGet('user:'+CU.username);ud.pendingRequests=(ud.pendingRequests||[]).filter(x=>x!==u);if(!ud.friends.includes(u))ud.friends.push(u);const them=await dbGet('user:'+u);if(them&&!them.friends.includes(CU.username))them.friends.push(CU.username);await dbSet('user:'+CU.username,ud);if(them)await dbSet('user:'+u,them);CU={...CU,...ud};renderFriends();}
-async function declineFriend(u){const ud=await dbGet('user:'+CU.username);ud.pendingRequests=(ud.pendingRequests||[]).filter(x=>x!==u);await dbSet('user:'+CU.username,ud);renderFriends();}
+async function acceptFriend(u){const ud=await dbGet('user:'+CU.username);ud.pendingRequests=(ud.pendingRequests||[]).filter(x=>x!==u);if(!ud.friends.includes(u))ud.friends.push(u);const them=await dbGet('user:'+u);if(them&&!them.friends.includes(CU.username))them.friends.push(CU.username);await dbSet('user:'+CU.username,ud);if(them)await dbSet('user:'+u,them);CU={...CU,...ud};renderFriends();checkPendingBadge();}
+async function declineFriend(u){const ud=await dbGet('user:'+CU.username);ud.pendingRequests=(ud.pendingRequests||[]).filter(x=>x!==u);await dbSet('user:'+CU.username,ud);renderFriends();checkPendingBadge();}
 function copyInvite(){const link=document.getElementById('invite-link-display').textContent;navigator.clipboard.writeText(link).catch(()=>{});const btn=document.getElementById('copy-btn');btn.textContent='copied!';setTimeout(()=>btn.textContent='copy',2000);}
+
+// FRIEND ACTION MODAL
+let famUser=null;
+function openFriendActionModal(username,name){
+  famUser=username;
+  document.getElementById('fam-title').textContent=name;
+  document.getElementById('fam-handle').textContent='@'+username;
+  document.getElementById('friend-action-modal').style.display='flex';
+}
+function closeFriendActionModal(){document.getElementById('friend-action-modal').style.display='none';famUser=null;}
+function fam_message(){closeFriendActionModal();showPanel('messages');setTimeout(()=>openDM(famUser),300);}
+async function fam_remove(){
+  if(!famUser||!confirm('Remove this friend?'))return;
+  closeFriendActionModal();
+  const ud=await dbGet('user:'+CU.username);
+  ud.friends=(ud.friends||[]).filter(x=>x!==famUser);
+  ud.favourites=(ud.favourites||[]).filter(x=>x!==famUser);
+  ud.circles=(ud.circles||[]).map(c=>({...c,members:(c.members||[]).filter(x=>x!==famUser)}));
+  await dbSet('user:'+CU.username,ud);
+  const them=await dbGet('user:'+famUser);
+  if(them){them.friends=(them.friends||[]).filter(x=>x!==CU.username);await dbSet('user:'+famUser,them);}
+  CU={...CU,...ud};renderFriends();
+}
+async function fam_block(){
+  if(!famUser||!confirm('Block this user? They will be removed from your friends and will not be able to interact with you.'))return;
+  const u=famUser;closeFriendActionModal();
+  const ud=await dbGet('user:'+CU.username);
+  ud.friends=(ud.friends||[]).filter(x=>x!==u);
+  ud.favourites=(ud.favourites||[]).filter(x=>x!==u);
+  ud.circles=(ud.circles||[]).map(c=>({...c,members:(c.members||[]).filter(x=>x!==u)}));
+  if(!ud.blocked)ud.blocked=[];if(!ud.blocked.includes(u))ud.blocked.push(u);
+  await dbSet('user:'+CU.username,ud);
+  const them=await dbGet('user:'+u);
+  if(them){them.friends=(them.friends||[]).filter(x=>x!==CU.username);await dbSet('user:'+u,them);}
+  CU={...CU,...ud};renderFriends();
+}
 
 async function renderProfile(){
   const ud=await dbGet('user:'+CU.username)||{};
   const postIdx=await dbGet('posts:index')||[];
   const now=Date.now();const myPosts=[];
-  for(const pid of postIdx){const p=await dbGet('post:'+pid);if(p&&p.author===CU.username){if(!p.durMs||(p.ts+p.durMs)>now)myPosts.push(p);}}
+  for(const pid of postIdx){const p=await dbGet('post:'+pid);if(p&&p.author===CU.username&&(!p.durMs||(p.ts+p.durMs)>now))myPosts.push(p);}
   myPosts.sort((a,b)=>b.ts-a.ts);
   const avEl=document.getElementById('profile-av');
   if(ud.avatar){avEl.innerHTML=`<img src="${ud.avatar}" alt="">`;}
@@ -816,14 +1135,52 @@ async function renderProfile(){
   document.getElementById('stat-friends').textContent=(ud.friends||[]).length;
   profileFriendsOpen=false;document.getElementById('profile-friends-section').style.display='none';
   const container=document.getElementById('my-posts-container');
-  if(myPosts.length===0){container.innerHTML='<div style="font-size:14px;color:var(--text-muted);padding:8px 0;">no posts yet.</div>';return;}
-  container.innerHTML=myPosts.map(post=>renderPost(post,ud,true)).join('');
+  if(myPosts.length===0){container.innerHTML='<div style="font-size:14px;color:var(--text-muted);padding:8px 0 16px;">no posts yet.</div>';return;}
+  container.innerHTML=myPosts.map(post=>renderPost(post,ud)).join('');
+  initDoubleTap();
+  if(CU.username===ADMIN_USER){
+    const existing=document.getElementById('admin-btn');
+    if(!existing){
+      const adminBtn=document.createElement('button');
+      adminBtn.id='admin-btn';adminBtn.className='profile-btn';adminBtn.textContent='admin panel';adminBtn.style.marginTop='16px';
+      adminBtn.onclick=openAdmin;
+      document.getElementById('profile-panel').insertBefore(adminBtn,document.querySelector('.profile-btn'));
+    }
+  }
 }
 
 function scrollToMyPosts(){document.getElementById('my-posts-label').scrollIntoView({behavior:'smooth'});}
-function toggleEditProfile(){const form=document.getElementById('profile-edit-form');const showing=form.style.display!=='none';if(!showing){document.getElementById('edit-name-input').value=CU.name||'';form.style.display='block';}else{form.style.display='none';}}
+function toggleEditProfile(){const form=document.getElementById('profile-edit-form');const showing=form.style.display!=='none';if(!showing){document.getElementById('edit-name-input').value=CU.name||'';document.getElementById('edit-email-input').value='';document.getElementById('edit-pass-new').value='';document.getElementById('edit-pass-current').value='';form.style.display='block';}else{form.style.display='none';}}
 function cancelEditProfile(){document.getElementById('profile-edit-form').style.display='none';}
-async function saveProfile(){const name=document.getElementById('edit-name-input').value.trim();if(!name)return;const ud=await dbGet('user:'+CU.username);if(!ud)return;ud.name=name;await dbSet('user:'+CU.username,ud);CU={...CU,name};document.getElementById('profile-edit-form').style.display='none';renderProfile();}
+
+async function saveProfile(){
+  const name=document.getElementById('edit-name-input').value.trim();
+  const newEmail=document.getElementById('edit-email-input').value.trim().toLowerCase();
+  const newPass=document.getElementById('edit-pass-new').value;
+  const currentPass=document.getElementById('edit-pass-current').value;
+  const msgEl=document.getElementById('profile-edit-msg');
+  if(!name){msgEl.textContent='name cannot be empty';msgEl.className='auth-msg error';return;}
+  if(!currentPass){msgEl.textContent='enter your current password to save changes';msgEl.className='auth-msg error';return;}
+  const ud=await dbGet('user:'+CU.username);if(!ud)return;
+  let valid=false;
+  if(ud.salt){valid=(await hashPwd(currentPass,ud.salt))===ud.password;}
+  else{valid=ud.password===btoa(currentPass);}
+  if(!valid){msgEl.textContent='current password incorrect';msgEl.className='auth-msg error';return;}
+  ud.name=name;
+  if(newEmail&&newEmail!==ud.email){
+    if(!newEmail.includes('@')){msgEl.textContent='invalid email';msgEl.className='auth-msg error';return;}
+    const emailIndex=await dbGet('users:by:email')||{};
+    delete emailIndex[ud.email];emailIndex[newEmail]=CU.username;
+    await dbSet('users:by:email',emailIndex);ud.email=newEmail;
+  }
+  if(newPass){
+    if(newPass.length<4){msgEl.textContent='new password must be at least 4 characters';msgEl.className='auth-msg error';return;}
+    const salt=crypto.randomUUID();ud.salt=salt;ud.password=await hashPwd(newPass,salt);
+  }
+  await dbSet('user:'+CU.username,ud);CU={...CU,...ud};
+  msgEl.textContent='saved!';msgEl.className='auth-msg success';
+  setTimeout(()=>{document.getElementById('profile-edit-form').style.display='none';renderProfile();},1000);
+}
 
 let profileFriendsOpen=false;
 async function toggleProfileFriendsList(){
@@ -833,7 +1190,7 @@ async function toggleProfileFriendsList(){
   list.innerHTML='<div style="font-size:13px;color:var(--text-faint);padding:8px 0;">loading...</div>';
   const ud=await dbGet('user:'+CU.username)||{};const friends=ud.friends||[];
   if(friends.length===0){list.innerHTML='<div style="font-size:14px;color:var(--text-muted);padding:8px 0;">no friends yet.</div>';return;}
-  const cards=await Promise.all(friends.map(async u=>{const fud=await dbGet('user:'+u)||{};return`<div class="profile-friend-row" onclick="openFriendProfile('${u}')">${avatarHtml(u,fud)}<div class="friend-info"><div class="friend-name">${escHtml(fud.name||u)}</div><div class="friend-handle">@${u}</div></div><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--text-faint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg></div>`;}));
+  const cards=await Promise.all(friends.map(async u=>{const fud=await dbGet('user:'+u)||{};return`<div class="profile-friend-row" onclick="openFriendProfile('${u}')">${avatarHtml(u,fud)}<div class="friend-info"><div class="friend-name">${escHtml(fud.name||u)}</div><div class="friend-handle">@${u}</div></div><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--text-faint);fill:none;stroke-width:1.8;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg></div>`;}));
   list.innerHTML=cards.join('');
 }
 
@@ -847,6 +1204,12 @@ async function openFriendProfile(username){
   document.getElementById('fp-name').textContent=ud.name||username;
   document.getElementById('fp-handle').textContent='@'+username;
   document.getElementById('fp-stat-friends').textContent=(ud.friends||[]).length;
+  const myData=await dbGet('user:'+CU.username)||{};
+  const isFriend=(myData.friends||[]).includes(username);
+  const actionsEl=document.getElementById('fp-actions');
+  if(isFriend){
+    actionsEl.innerHTML=`<button onclick="openFriendActionModal('${username}','${escHtml(ud.name||username)}')" style="flex:1;padding:10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:none;font-size:13px;cursor:pointer;color:var(--text-muted);min-height:44px;">more options</button>`;
+  }else{actionsEl.innerHTML='';}
   const postIdx=await dbGet('posts:index')||[];const now=Date.now();const posts=[];
   for(const pid of postIdx){const p=await dbGet('post:'+pid);if(!p||p.author!==username)continue;if(p.durMs&&(p.ts+p.durMs)<now)continue;posts.push(p);}
   posts.sort((a,b)=>b.ts-a.ts);
@@ -854,28 +1217,45 @@ async function openFriendProfile(username){
   const container=document.getElementById('fp-posts-container');
   if(posts.length===0){container.innerHTML='<div class="empty-state"><h3>no posts yet.</h3><p>nothing shared here.</p></div>';return;}
   container.innerHTML=posts.map(post=>renderPost(post,ud)).join('');
+  initDoubleTap();
 }
 function closeFriendProfile(){document.getElementById('friend-profile-overlay').classList.remove('open');}
 
+// REPORT
+let reportingPostId=null;
+function openReportModal(postId){reportingPostId=postId;document.getElementById('report-modal').style.display='flex';}
+function closeReportModal(){document.getElementById('report-modal').style.display='none';reportingPostId=null;}
+async function submitReport(reason){
+  if(!reportingPostId)return;
+  const reports=await dbGet('reports')||[];
+  reports.push({postId:reportingPostId,reason,reportedBy:CU.username,ts:Date.now()});
+  await dbSet('reports',reports);closeReportModal();
+  alert('Thank you — this post has been reported.');
+}
+
+// MESSAGES
 function dmKey(a,b){return'dm:'+(a<b?a+':'+b:b+':'+a);}
 function markDMRead(u){localStorage.setItem('dmread:'+CU.username+':'+u,Date.now());}
 function getDMReadTs(u){return parseInt(localStorage.getItem('dmread:'+CU.username+':'+u)||'0');}
 function isConvoUnread(c){return!!(c.last&&c.last.from!==CU.username&&c.last.ts>getDMReadTs(c.username));}
-function updateBadge(n){const b=document.getElementById('msg-badge');if(!b)return;if(n>0){b.style.display='flex';b.textContent=n>9?'9+':String(n);}else{b.style.display='none';}}
+function updateBadge(n){const b=document.getElementById('msg-badge');if(!b)return;if(n>0){b.style.display='flex';b.textContent=n>9?'9+':String(n);}else b.style.display='none';}
 async function checkUnreadBadge(){if(!CU)return;const ud=await dbGet('user:'+CU.username);const friends=(ud&&ud.friends)||[];if(!friends.length){updateBadge(0);return;}const counts=await Promise.all(friends.map(async u=>{const msgs=await dbGet(dmKey(CU.username,u))||[];const last=msgs[msgs.length-1]||null;if(!last||last.from===CU.username)return 0;return last.ts>getDMReadTs(u)?1:0;}));updateBadge(counts.reduce((a,b)=>a+b,0));}
+async function checkPendingBadge(){if(!CU)return;const ud=await dbGet('user:'+CU.username);const pending=(ud&&ud.pendingRequests)||[];document.getElementById('pending-badge').style.display=pending.length>0?'block':'none';}
 
 let activeDMUser=null,dmRefreshInterval=null;
 async function renderMessages(){
   const ud=await dbGet('user:'+CU.username);const friends=(ud&&ud.friends)||[];
   const container=document.getElementById('dm-list-container');closeDM();
-  if(friends.length===0){container.innerHTML='<div class="empty-state"><h3>no messages yet.</h3><p>add friends first.</p></div>';return;}
+  if(friends.length===0){
+    container.innerHTML=`<div class="empty-state"><h3>no messages yet.</h3><p>start a conversation with a friend.</p><button onclick="showPanel('friends')">go to friends</button></div>`;return;
+  }
   container.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-faint);font-size:14px;">loading...</div>';
-  const convos=await Promise.all(friends.map(async u=>{const fud=await dbGet('user:'+u)||{};const msgs=await dbGet(dmKey(CU.username,u))||[];const last=msgs[msgs.length-1]||null;return{username:u,name:fud.name||u,ud:fud,last,msgs};}));
+  const convos=await Promise.all(friends.map(async u=>{const fud=await dbGet('user:'+u)||{};const msgs=await dbGet(dmKey(CU.username,u))||[];const last=msgs[msgs.length-1]||null;return{username:u,name:fud.name||u,ud:fud,last};}));
   convos.sort((a,b)=>(b.last?b.last.ts:0)-(a.last?a.last.ts:0));
   container.innerHTML=convos.map(c=>{
     const preview=c.last?(c.last.from===CU.username?'you: ':'')+escHtml(c.last.text.slice(0,40))+(c.last.text.length>40?'…':''):'say hello...';
     const t=c.last?timeAgo(c.last.ts):'';const unread=isConvoUnread(c);
-    return`<div class="dm-list-item${unread?' dm-unread':''}" onclick="openDM('${c.username}')">${avatarHtml(c.username,c.ud)}<div class="dm-preview"><div class="dm-name">${escHtml(c.name)}</div><div class="dm-last">${preview}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">${t?`<div class="dm-time">${t}</div>`:''}${unread?'<div class="unread-dot"></div>':''}</div></div>`;
+    return`<div class="dm-list-item" onclick="openDM('${c.username}')">${avatarHtml(c.username,c.ud)}<div class="dm-preview"><div class="dm-name" style="${unread?'font-weight:600;':''}">${escHtml(c.name)}</div><div class="dm-last">${preview}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">${t?`<div class="dm-time">${t}</div>`:''}${unread?'<div class="unread-dot"></div>':''}</div></div>`;
   }).join('');
 }
 
@@ -892,7 +1272,7 @@ function closeDM(){activeDMUser=null;clearInterval(dmRefreshInterval);dmRefreshI
 async function loadChatMessages(username){
   const msgs=await dbGet(dmKey(CU.username,username))||[];const el=document.getElementById('chat-messages');
   if(msgs.length===0){el.innerHTML='<div style="text-align:center;color:var(--text-faint);font-size:13px;padding:20px;">no messages yet — say hello!</div>';return;}
-  el.innerHTML=msgs.map(m=>{const out=m.from===CU.username;return`<div style="display:flex;flex-direction:column;align-items:${out?'flex-end':'flex-start'}"><div class="msg-bubble ${out?'msg-out':'msg-in'}">${escHtml(m.text)}</div><div class="msg-time" style="text-align:${out?'right':'left'};padding:0 4px">${timeAgo(m.ts)}</div></div>`;}).join('');
+  el.innerHTML=msgs.map(m=>{const out=m.from===CU.username;return`<div style="display:flex;flex-direction:column;align-items:${out?'flex-end':'flex-start'};"><div class="msg-bubble ${out?'msg-out':'msg-in'}">${escHtml(m.text)}</div><div class="msg-time" style="text-align:${out?'right':'left'};padding:0 6px;">${timeAgo(m.ts)}</div></div>`;}).join('');
   el.scrollTop=el.scrollHeight;
 }
 async function sendDM(){
@@ -902,23 +1282,76 @@ async function sendDM(){
   await dbSet(key,msgs);await loadChatMessages(activeDMUser);
 }
 
+// ADMIN
+async function openAdmin(){
+  document.getElementById('admin-panel').classList.add('open');
+  const statsEl=document.getElementById('admin-stats');
+  const reportsEl=document.getElementById('admin-reports');
+  const usersEl=document.getElementById('admin-users');
+  statsEl.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text-faint);font-size:13px;padding:20px;">loading...</div>';
+  const postIdx=await dbGet('posts:index')||[];
+  const reports=await dbGet('reports')||[];
+  const emailIndex=await dbGet('users:by:email')||{};
+  const usernames=Object.values(emailIndex);
+  statsEl.innerHTML=`
+    <div class="admin-stat-card"><div class="admin-stat-num">${usernames.length}</div><div class="admin-stat-label">users</div></div>
+    <div class="admin-stat-card"><div class="admin-stat-num">${postIdx.length}</div><div class="admin-stat-label">posts</div></div>
+    <div class="admin-stat-card"><div class="admin-stat-num">${reports.length}</div><div class="admin-stat-label">reports</div></div>
+    <div class="admin-stat-card"><div class="admin-stat-num">${usernames.length>0?Math.round(postIdx.length/usernames.length*10)/10:0}</div><div class="admin-stat-label">posts/user</div></div>
+  `;
+  if(reports.length===0){reportsEl.innerHTML='<div style="font-size:13px;color:var(--text-faint);padding:8px 0;">no reports yet.</div>';}
+  else{
+    reportsEl.innerHTML=reports.slice(-20).reverse().map((r,i)=>`
+      <div class="admin-report-card">
+        <div style="font-size:13px;font-weight:500;margin-bottom:4px;">Post: ${r.postId} — ${r.reason}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Reported by @${r.reportedBy} · ${timeAgo(r.ts)}</div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="adminDeletePost('${r.postId}',${i})" style="padding:6px 12px;background:var(--danger);color:white;border:none;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;min-height:36px;">delete post</button>
+          <button onclick="adminDismissReport(${i})" style="padding:6px 12px;background:none;border:1px solid var(--border);color:var(--text-muted);border-radius:var(--radius-sm);font-size:12px;cursor:pointer;min-height:36px;">dismiss</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  if(usernames.length===0){usersEl.innerHTML='<div style="font-size:13px;color:var(--text-faint);">no users yet.</div>';}
+  else{
+    const userData=await Promise.all(usernames.map(async u=>({username:u,data:await dbGet('user:'+u)||{}})));
+    usersEl.innerHTML=userData.map(({username,data})=>`
+      <div class="admin-user-row">
+        ${avatarHtml(username,data)}
+        <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:500;">${escHtml(data.name||username)}</div><div style="font-size:12px;color:var(--text-muted);">@${username}</div></div>
+        <button onclick="adminBanUser('${username}')" style="padding:6px 10px;background:none;border:1px solid var(--danger);color:var(--danger);border-radius:var(--radius-sm);font-size:12px;cursor:pointer;min-height:36px;">${data.blocked?'unban':'ban'}</button>
+      </div>
+    `).join('');
+  }
+}
+function closeAdmin(){document.getElementById('admin-panel').classList.remove('open');}
+async function adminDeletePost(postId,reportIdx){
+  if(!confirm('Delete this post?'))return;
+  await dbDel('post:'+postId);let idx=await dbGet('posts:index')||[];idx=idx.filter(id=>id!==postId);await dbSet('posts:index',idx);
+  await adminDismissReport(reportIdx);openAdmin();
+}
+async function adminDismissReport(idx){const reports=await dbGet('reports')||[];const reversed=reports.slice(-20).reverse();reversed.splice(idx,1);const kept=reports.slice(0,-20);await dbSet('reports',[...kept,...reversed.reverse()]);openAdmin();}
+async function adminBanUser(username){
+  const ud=await dbGet('user:'+username);if(!ud)return;
+  ud.blocked=!ud.blocked;await dbSet('user:'+username,ud);openAdmin();
+}
+
 updateTimerLabel();
+updateCharCount();
 
 async function boot(){
   loading(true);
   const params=new URLSearchParams(window.location.search);
   const inviter=params.get('invite');
   const session=getSession();
-  if(session){const ud=await dbGet('user:'+session);if(ud){CU={username:session,...ud};loading(false);enterApp();return;}}
+  if(session){const ud=await dbGet('user:'+session);if(ud&&!ud.blocked){CU={username:session,...ud};loading(false);enterApp();return;}}
   loading(false);
-  if(!hasSeenOnboarding()&&!inviter){
-    document.getElementById('onboarding-screen').classList.add('active');return;
-  }
+  if(!hasSeenOnboarding()&&!inviter){document.getElementById('onboarding-screen').classList.add('active');return;}
   document.getElementById('auth-screen').classList.add('active');
   if(inviter){switchAuth('signup');setMsg(`you've been invited by @${inviter} — create an account to join.`,'success');}
 }
 boot();
-setTimeout(initPullToRefresh,1000);
+setTimeout(initPullToRefresh,500);
 </script>
 </body>
 </html>
