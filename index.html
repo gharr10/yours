@@ -1068,10 +1068,10 @@ async function renderFriends(){
     return`<div class="friend-card" style="cursor:pointer" onclick="openFriendProfile('${u}')">
       ${avatarHtml(u,ud)}
       <div class="friend-info"><div class="friend-name">${escHtml(ud.name||u)}</div><div class="friend-handle">@${u}</div></div>
-      <button class="icon-btn" onclick="event.stopPropagation();toggleFav('${u}')" style="color:${isFav?'#C0392B':'var(--text-faint)'}">
-        <svg viewBox="0 0 24 24" style="width:20px;height:20px;${isFav?'fill:#C0392B;stroke:#C0392B':'stroke:currentColor;fill:none'}"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <button class="icon-btn" onclick="event.stopPropagation();toggleFav('${u}')" title="${isFav?'remove from favourites':'add to favourites'}" style="color:${isFav?'#C0392B':'var(--text-faint)'};min-width:44px;min-height:44px;">
+        <svg viewBox="0 0 24 24" style="width:22px;height:22px;${isFav?'fill:#C0392B;stroke:#C0392B':'stroke:currentColor;fill:none'};stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       </button>
-      <button class="icon-btn" onclick="event.stopPropagation();openFriendActionModal('${u}','${escHtml(ud.name||u)}')" style="color:var(--text-faint)">
+      <button class="icon-btn" onclick="event.stopPropagation();openFriendActionModal('${u}','${escHtml(ud.name||u)}')" style="color:var(--text-faint);min-width:44px;min-height:44px;">
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
       </button>
     </div>`;
@@ -1139,12 +1139,21 @@ async function renderProfile(){
   container.innerHTML=myPosts.map(post=>renderPost(post,ud)).join('');
   initDoubleTap();
   if(CU.username===ADMIN_USER){
-    const existing=document.getElementById('admin-btn');
-    if(!existing){
-      const adminBtn=document.createElement('button');
-      adminBtn.id='admin-btn';adminBtn.className='profile-btn';adminBtn.textContent='admin panel';adminBtn.style.marginTop='16px';
+    let adminBtn=document.getElementById('admin-btn');
+    if(!adminBtn){
+      adminBtn=document.createElement('button');
+      adminBtn.id='admin-btn';
+      adminBtn.className='profile-btn';
+      adminBtn.textContent='admin panel';
+      adminBtn.style.background='var(--text)';
+      adminBtn.style.color='white';
+      adminBtn.style.border='none';
+      adminBtn.style.marginTop='16px';
       adminBtn.onclick=openAdmin;
-      document.getElementById('profile-panel').insertBefore(adminBtn,document.querySelector('.profile-btn'));
+      const profilePanel=document.getElementById('profile-panel');
+      const firstBtn=profilePanel.querySelector('.profile-btn');
+      if(firstBtn)profilePanel.insertBefore(adminBtn,firstBtn);
+      else profilePanel.appendChild(adminBtn);
     }
   }
 }
