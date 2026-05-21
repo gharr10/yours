@@ -452,6 +452,7 @@ input,textarea,button{font-family:inherit;}
     <div class="section-label" style="margin-top:8px;" id="my-posts-label">your posts</div>
     <div id="my-posts-container"></div>
     <button class="profile-btn" style="margin-top:16px;" onclick="toggleEditProfile()">edit profile</button>
+    <button class="profile-btn" id="admin-btn" style="display:none;background:var(--text);color:white;border-color:var(--text);" onclick="openAdmin()">admin panel</button>
     <button class="profile-btn" onclick="logout()">sign out</button>
     <button class="profile-btn danger-btn" onclick="confirmDeleteAccount()">delete account</button>
     <div style="text-align:center;margin-top:16px;"><a onclick="openTerms()" style="font-size:12px;color:var(--text-faint);text-decoration:underline;cursor:pointer;">terms & privacy</a></div>
@@ -1134,28 +1135,13 @@ async function renderProfile(){
   document.getElementById('stat-posts').textContent=myPosts.length;
   document.getElementById('stat-friends').textContent=(ud.friends||[]).length;
   profileFriendsOpen=false;document.getElementById('profile-friends-section').style.display='none';
+  const adminBtn=document.getElementById('admin-btn');
+  if(adminBtn)adminBtn.style.display=CU.username===ADMIN_USER?'block':'none';
   const container=document.getElementById('my-posts-container');
   if(myPosts.length===0){container.innerHTML='<div style="font-size:14px;color:var(--text-muted);padding:8px 0 16px;">no posts yet.</div>';return;}
   container.innerHTML=myPosts.map(post=>renderPost(post,ud)).join('');
   initDoubleTap();
-  if(CU.username===ADMIN_USER){
-    let adminBtn=document.getElementById('admin-btn');
-    if(!adminBtn){
-      adminBtn=document.createElement('button');
-      adminBtn.id='admin-btn';
-      adminBtn.className='profile-btn';
-      adminBtn.textContent='admin panel';
-      adminBtn.style.background='var(--text)';
-      adminBtn.style.color='white';
-      adminBtn.style.border='none';
-      adminBtn.style.marginTop='16px';
-      adminBtn.onclick=openAdmin;
-      const profilePanel=document.getElementById('profile-panel');
-      const firstBtn=profilePanel.querySelector('.profile-btn');
-      if(firstBtn)profilePanel.insertBefore(adminBtn,firstBtn);
-      else profilePanel.appendChild(adminBtn);
-    }
-  }
+  // admin button handled in HTML directly
 }
 
 function scrollToMyPosts(){document.getElementById('my-posts-label').scrollIntoView({behavior:'smooth'});}
@@ -1361,6 +1347,13 @@ async function boot(){
 }
 boot();
 setTimeout(initPullToRefresh,500);
+if(window.location.hash==='#admin'){
+  const checkAdmin=setInterval(()=>{
+    if(CU&&CU.username===ADMIN_USER){clearInterval(checkAdmin);openAdmin();}
+    else if(CU){clearInterval(checkAdmin);}
+  },500);
+  setTimeout(()=>clearInterval(checkAdmin),10000);
+}
 </script>
 </body>
 </html>
