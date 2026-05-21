@@ -228,6 +228,11 @@ input,textarea,button{font-family:inherit;}
 .modal-option:last-of-type{border-bottom:none;}
 .modal-option.danger{color:var(--danger);}
 .modal-cancel{width:100%;padding:14px;background:var(--bg);border:none;border-radius:var(--radius-sm);font-size:15px;color:var(--text-muted);cursor:pointer;margin-top:12px;min-height:48px;}
+/* POST ACTION MODAL */
+.post-action-modal{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
+.post-action-sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:20px 20px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0));width:100%;max-width:520px;}
+.edit-caption-box{width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;color:var(--text);background:var(--bg);outline:none;resize:none;min-height:80px;margin-bottom:10px;-webkit-appearance:none;}
+.edit-caption-box:focus{border-color:var(--accent);}
 /* CIRCLES MANAGER */
 .circles-manager{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
 .circles-manager h3{font-size:15px;font-weight:500;margin-bottom:6px;}
@@ -514,6 +519,32 @@ input,textarea,button{font-family:inherit;}
   </div>
 </div>
 
+<!-- POST ACTION MODAL -->
+<div id="post-action-modal" class="post-action-modal" style="display:none;" onclick="closePostActionModal()">
+  <div class="post-action-sheet" onclick="event.stopPropagation()">
+    <div id="pam-view-options">
+      <div class="modal-title" id="pam-title" style="margin-bottom:16px;">post options</div>
+      <button class="modal-option" onclick="pamEdit()">✏️ edit caption</button>
+      <button class="modal-option" onclick="pamArchive()">📦 archive post</button>
+      <button class="modal-option danger" onclick="pamDelete()">🗑 delete post</button>
+      <button class="modal-cancel" onclick="closePostActionModal()">cancel</button>
+    </div>
+    <div id="pam-view-edit" style="display:none;">
+      <div class="modal-title" style="margin-bottom:6px;">edit post</div>
+      <div class="modal-subtitle" id="pam-edit-subtitle" style="margin-bottom:12px;"></div>
+      <textarea class="edit-caption-box" id="pam-caption-input" placeholder="what's on your mind?" maxlength="500"></textarea>
+      <div id="pam-circle-wrap" style="margin-bottom:14px;display:none;">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">visible to</div>
+        <div class="circle-chips" id="pam-circle-chips"></div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-primary" style="flex:1;padding:12px;margin:0;" onclick="pamSaveEdit()">save</button>
+        <button class="modal-cancel" style="flex:1;margin:0;padding:12px;border-radius:var(--radius-sm);" onclick="pamBackToOptions()">back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- REPORT MODAL -->
 <div id="report-modal" class="modal-overlay" style="display:none;" onclick="closeReportModal()">
   <div class="modal-sheet" onclick="event.stopPropagation()">
@@ -766,6 +797,7 @@ async function renderFeed(){
     const p=await dbGet('post:'+pid);if(!p)continue;
     if(!authors.includes(p.author))continue;
     if(p.durMs&&(p.ts+p.durMs)<now)continue;
+    if(p.archived)continue;
     if(p.circle){const circles=userData.circles||[];const myCircle=circles.find(c=>c.id===p.circle);if(!myCircle||!myCircle.members.includes(CU.username)){if(p.author!==CU.username)continue;}}
     posts.push(p);
   }
@@ -784,8 +816,8 @@ function renderPost(post,ud){
   const tl=timeLeft(post.ts,post.durMs);
   const isOwn=post.author===CU.username;
   const images=post.images||(post.image?[post.image]:[]);
-  const imgArr=JSON.stringify(images.slice(0,4)).replace(/'/g,"\'");
-  const imgHtml=images.length>0?`<div class="post-images-wrap count-${Math.min(images.length,4)}">${images.slice(0,4).map((src,i)=>`<img class="post-img" src="${src}" alt="" loading="lazy" onclick="openLightbox(${imgArr},${i})">`).join('')}</div>`:'';
+  const imgHtml=images.length>0?`<div class="post-images-wrap count-${Math.min(images.length,4)}">${images.slice(0,4).map((src,i)=>`<img class="post-img" src="${src}" alt="" loading="lazy" onclick="openLightboxPost('${post.id}',${i})">`).join('')}</div>`:'';
+  if(images.length>0)setTimeout(()=>storeLbImages(post.id,images),0);
   const circlePill=post.circleName?`<span class="circle-pill">${escHtml(post.circleName)}</span>`:'';
   return`<div class="post-card" id="post-${post.id}">
     <div class="post-header">
@@ -1148,7 +1180,7 @@ async function renderProfile(){
   const ud=await dbGet('user:'+CU.username)||{};
   const postIdx=await dbGet('posts:index')||[];
   const now=Date.now();const myPosts=[];
-  for(const pid of postIdx){const p=await dbGet('post:'+pid);if(p&&p.author===CU.username&&(!p.durMs||(p.ts+p.durMs)>now))myPosts.push(p);}
+  for(const pid of postIdx){const p=await dbGet('post:'+pid);if(p&&p.author===CU.username&&!p.archived&&(!p.durMs||(p.ts+p.durMs)>now))myPosts.push(p);}
   myPosts.sort((a,b)=>b.ts-a.ts);
   const avEl=document.getElementById('profile-av');
   if(ud.avatar){avEl.innerHTML=`<img src="${ud.avatar}" alt="">`;}
@@ -1354,11 +1386,99 @@ async function adminBanUser(username){
   ud.blocked=!ud.blocked;await dbSet('user:'+username,ud);openAdmin();
 }
 
+// POST ACTION MODAL
+let pamPostId=null;
+async function openPostActionModal(postId){
+  pamPostId=postId;
+  document.getElementById('pam-view-options').style.display='block';
+  document.getElementById('pam-view-edit').style.display='none';
+  document.getElementById('post-action-modal').style.display='flex';
+}
+function closePostActionModal(){
+  document.getElementById('post-action-modal').style.display='none';
+  pamPostId=null;
+}
+function pamBackToOptions(){
+  document.getElementById('pam-view-options').style.display='block';
+  document.getElementById('pam-view-edit').style.display='none';
+}
+async function pamEdit(){
+  if(!pamPostId)return;
+  const post=await dbGet('post:'+pamPostId);if(!post)return;
+  document.getElementById('pam-caption-input').value=post.text||'';
+  document.getElementById('pam-edit-subtitle').textContent=timeAgo(post.ts);
+  const ud=await dbGet('user:'+CU.username)||{};
+  const circles=ud.circles||[];
+  const circleWrap=document.getElementById('pam-circle-wrap');
+  const circleChips=document.getElementById('pam-circle-chips');
+  if(circles.length>0){
+    circleWrap.style.display='block';
+    let currentCircle=post.circle||'everyone';
+    circleChips.innerHTML=`<div class="circle-chip everyone${currentCircle==='everyone'?' selected':''}" id="pam-chip-everyone" onclick="pamSelectCircle('everyone')">everyone</div>`+
+      circles.map(c=>`<div class="circle-chip${currentCircle===c.id?' selected':''}" id="pam-chip-${c.id}" onclick="pamSelectCircle('${c.id}')">${escHtml(c.name)}</div>`).join('');
+  } else {
+    circleWrap.style.display='none';
+  }
+  document.getElementById('pam-view-options').style.display='none';
+  document.getElementById('pam-view-edit').style.display='block';
+}
+function pamSelectCircle(id){
+  document.querySelectorAll('#pam-circle-chips .circle-chip').forEach(el=>{
+    el.classList.toggle('selected',el.id==='pam-chip-'+id||(id==='everyone'&&el.id==='pam-chip-everyone'));
+  });
+}
+function pamGetSelectedCircle(){
+  const selected=document.querySelector('#pam-circle-chips .circle-chip.selected');
+  if(!selected||selected.id==='pam-chip-everyone')return{circle:null,circleName:null};
+  const id=selected.id.replace('pam-chip-','');
+  return{circle:id,circleName:selected.textContent};
+}
+async function pamSaveEdit(){
+  if(!pamPostId)return;
+  const post=await dbGet('post:'+pamPostId);if(!post)return;
+  const newText=document.getElementById('pam-caption-input').value.trim();
+  const {circle,circleName}=pamGetSelectedCircle();
+  post.text=newText;
+  post.circle=circle;
+  post.circleName=circleName;
+  post.edited=true;
+  await dbSet('post:'+pamPostId,post);
+  closePostActionModal();
+  renderFeed();
+  renderProfile();
+}
+async function pamArchive(){
+  if(!pamPostId||!confirm('Archive this post? It will be hidden from your feed but not deleted.'))return;
+  const post=await dbGet('post:'+pamPostId);if(!post)return;
+  post.archived=true;
+  await dbSet('post:'+pamPostId,post);
+  closePostActionModal();
+  const el=document.getElementById('post-'+pamPostId);if(el)el.remove();
+  renderProfile();
+}
+async function pamDelete(){
+  if(!pamPostId||!confirm('Delete this post? This cannot be undone.'))return;
+  await dbDel('post:'+pamPostId);
+  let idx=await dbGet('posts:index')||[];
+  idx=idx.filter(id=>id!==pamPostId);
+  await dbSet('posts:index',idx);
+  closePostActionModal();
+  const el=document.getElementById('post-'+pamPostId);if(el)el.remove();
+  renderProfile();
+}
+
 updateTimerLabel();
 updateCharCount();
 
 // LIGHTBOX
 let lbImages=[],lbIndex=0;
+const lbCache={};
+function storeLbImages(postId,images){lbCache[postId]=images;}
+function openLightboxPost(postId,index){
+  const images=lbCache[postId];
+  if(!images||!images.length)return;
+  openLightbox(images,index);
+}
 function openLightbox(images,index){
   lbImages=images;lbIndex=index;
   document.getElementById('lightbox-img').src=images[index];
