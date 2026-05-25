@@ -782,7 +782,10 @@ function showSkeletons(){
 
 async function renderFeed(){
   const container=document.getElementById('feed-container');
-  container.innerHTML=showSkeletons();
+  // Show cached feed instantly while loading
+  const cached=localStorage.getItem('yours_feed_cache');
+  if(cached){try{container.innerHTML=cached;}catch{container.innerHTML=showSkeletons();}}
+  else{container.innerHTML=showSkeletons();}
   const userData=await dbGet('user:'+CU.username);
   if(!userData){container.innerHTML='';return;}
   CU={...CU,...userData};
@@ -791,7 +794,7 @@ async function renderFeed(){
   const blocked=userData.blocked||[];
   const authors=feedMode==='favourites'?favs.filter(f=>!blocked.includes(f)):[CU.username,...friends.filter(f=>!blocked.includes(f))];
   if(feedMode==='favourites'&&favs.length===0){container.innerHTML=`<div class="empty-state"><h3>no favourites yet.</h3><p>heart a friend to see their posts here.</p></div>`;return;}
-  const postIndex=(await dbGet('posts:index')||[]).slice(0,100);
+  const postIndex=(await dbGet('posts:index')||[]).slice(0,20);
   const now=Date.now();const posts=[];
   for(const pid of postIndex){
     const p=await dbGet('post:'+pid);if(!p)continue;
@@ -805,7 +808,9 @@ async function renderFeed(){
   if(posts.length===0){container.innerHTML=`<div class="empty-state"><h3>nothing here yet.</h3><p>invite a friend to get started.</p><button onclick="showPanel('friends')">invite friends</button></div>`;return;}
   const authorSet=[...new Set(posts.map(p=>p.author))];
   const authorData={};for(const a of authorSet)authorData[a]=await dbGet('user:'+a)||{};
-  container.innerHTML=posts.map(post=>renderPost(post,authorData[post.author])).join('');
+  const html=posts.map(post=>renderPost(post,authorData[post.author])).join('');
+  container.innerHTML=html;
+  try{localStorage.setItem('yours_feed_cache',html);}catch{}
   initDoubleTap();
 }
 
