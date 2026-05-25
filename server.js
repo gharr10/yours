@@ -12,27 +12,19 @@ const APP_URL = process.env.APP_URL || 'https://yours-4nh3.onrender.com';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 const resend = new Resend(RESEND_API_KEY);
+const settleCodes = {};
 
 async function dbGet(key) {
-  const { data } = await supabase
-    .from('store')
-    .select('value')
-    .eq('key', key)
-    .single();
+  const { data } = await supabase.from('store').select('value').eq('key', key).single();
   return data ? data.value : null;
 }
 
 async function dbSet(key, value) {
-  await supabase
-    .from('store')
-    .upsert({ key, value });
+  await supabase.from('store').upsert({ key, value });
 }
 
 async function dbDel(key) {
-  await supabase
-    .from('store')
-    .delete()
-    .eq('key', key);
+  await supabase.from('store').delete().eq('key', key);
 }
 
 async function readBody(req) {
@@ -86,10 +78,7 @@ const server = http.createServer(async (req, res) => {
     if (!email) { res.writeHead(400); res.end('missing email'); return; }
     const users = await dbGet('users:by:email') || {};
     const username = users[email];
-    if (!username) {
-      res.writeHead(200); res.end('ok');
-      return;
-    }
+    if (!username) { res.writeHead(200); res.end('ok'); return; }
     const token = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
     const expires = Date.now() + 3600000;
     await dbSet('reset:' + token, JSON.stringify({ username, expires }));
@@ -185,6 +174,48 @@ async function reset(){
 </html>`;
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(html);
+    return;
+  }
+
+  if (pathname === '/send-settle-code' && req.method === 'POST') {
+    const body = await readBody(req);
+    let data;
+    try { data = JSON.parse(body); } catch { res.writeHead(400); res.end('bad json'); return; }
+    const email = (data.email || '').toLowerCase().trim();
+    if (!email || !email.includes('@')) { res.writeHead(400); res.end('invalid email'); return; }
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    settleCodes[email] = { code, expires: Date.now() + 600000 };
+    await resend.emails.send({
+      from: 'settle. <onboarding@resend.dev>',
+      to: email,
+      subject: `your settle. code: ${code}`,
+      html: `
+        <div style="font-family:sans-serif;max-width:400px;margin:0 auto;padding:40px 20px;background:#F7F3EE;">
+          <h2 style="font-family:Georgia,serif;font-size:28px;color:#1A1108;margin-bottom:4px;">settle.</h2>
+          <p style="color:#9A8878;margin-bottom:32px;font-size:14px;">you chose to go back. that's okay.</p>
+          <p style="font-size:14px;color:#1A1108;margin-bottom:16px;">your code is:</p>
+          <div style="font-size:48px;font-weight:300;color:#C47A3A;letter-spacing:8px;margin-bottom:24px;">${code}</div>
+          <p style="font-size:13px;color:#9A8878;">this code expires in 10 minutes.</p>
+          <p style="font-size:12px;color:#C0B0A0;margin-top:24px;">settle. doesn't analyse you. it just listens.</p>
+        </div>
+      `
+    });
+    res.writeHead(200); res.end('ok');
+    return;
+  }
+
+  if (pathname === '/verify-settle-code' && req.method === 'POST') {
+    const body = await readBody(req);
+    let data;
+    try { data = JSON.parse(body); } catch { res.writeHead(400); res.end('bad json'); return; }
+    const email = (data.email || '').toLowerCase().trim();
+    const code = (data.code || '').trim();
+    const stored = settleCodes[email];
+    if (!stored) { res.writeHead(400); res.end('no code'); return; }
+    if (Date.now() > stored.expires) { delete settleCodes[email]; res.writeHead(400); res.end('expired'); return; }
+    if (stored.code !== code) { res.writeHead(400); res.end('wrong code'); return; }
+    delete settleCodes[email];
+    res.writeHead(200); res.end('ok');
     return;
   }
 
