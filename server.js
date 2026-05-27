@@ -19,7 +19,7 @@ const YOU_RESEND_KEY = process.env.YOU_RESEND_KEY || process.env.RESEND_API_KEY;
 const YOU_APP_URL = process.env.YOU_APP_URL || 'https://you-app.onrender.com';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-const youSupabase = createClient(YOU_SUPABASE_URL, YOU_SUPABASE_KEY);
+const youSupabase = YOU_SUPABASE_URL && YOU_SUPABASE_KEY ? createClient(YOU_SUPABASE_URL, YOU_SUPABASE_KEY) : null;
 const resend = new Resend(RESEND_API_KEY);
 const youResend = new Resend(YOU_RESEND_KEY);
 const settleCodes = {};
