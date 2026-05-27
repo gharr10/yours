@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>yours.</title>
+<!-- BUILD-v11-2024 -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="yours.">
@@ -235,6 +236,42 @@ input,textarea,button{font-family:inherit;}
 .modal-option:last-of-type{border-bottom:none;}
 .modal-option.danger{color:var(--danger);}
 .modal-cancel{width:100%;padding:14px;background:var(--bg);border:none;border-radius:var(--radius-sm);font-size:15px;color:var(--text-muted);cursor:pointer;margin-top:12px;min-height:48px;}
+/* CIRCLES POPUP */
+.circles-popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
+.circles-popup-sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:20px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0));width:100%;max-width:520px;max-height:80vh;overflow-y:auto;}
+.circles-popup-title{font-size:16px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.circles-popup-sub{font-size:13px;color:var(--text-muted);margin-bottom:16px;}
+.circle-member-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border-light);cursor:pointer;min-height:52px;}
+.circle-member-row:last-child{border-bottom:none;}
+.circle-member-name{flex:1;font-size:15px;color:var(--text);}
+.circle-checkbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+.circle-checkbox.checked{background:var(--accent);border-color:var(--accent);}
+.circle-checkbox.checked::after{content:'✓';color:white;font-size:13px;font-weight:600;}
+.circles-popup-save{width:100%;padding:14px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;margin-top:16px;min-height:50px;}
+.circles-popup-cancel{width:100%;padding:12px;background:none;border:none;color:var(--text-muted);font-size:14px;cursor:pointer;font-family:inherit;margin-top:8px;}
+
+/* REACTIONS */
+.reactions-bar{display:flex;gap:6px;margin-top:8px;}
+.reaction-btn{background:var(--bg);border:1px solid var(--border-light);border-radius:20px;padding:5px 10px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:4px;min-height:34px;transition:all 0.15s;}
+.reaction-btn.reacted{background:var(--accent-light);border-color:var(--accent);}
+.reaction-btn span{font-size:12px;color:var(--text-muted);}
+.reaction-picker{display:flex;gap:8px;padding:10px 16px;border-top:1px solid var(--border-light);flex-wrap:wrap;}
+.reaction-pick-btn{font-size:22px;cursor:pointer;padding:6px;border-radius:8px;transition:background 0.15s;background:none;border:none;min-height:44px;min-width:44px;}
+.reaction-pick-btn:hover,.reaction-pick-btn:active{background:var(--bg);}
+
+/* NOTIFICATIONS */
+.notif-badge{position:absolute;top:4px;right:4px;background:#C0392B;color:white;font-size:10px;font-weight:600;border-radius:10px;min-width:16px;height:16px;padding:0 4px;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+
+/* OFFLINE */
+.offline-bar{background:#C0392B;color:white;text-align:center;font-size:13px;padding:8px;display:none;}
+.offline-bar.show{display:block;}
+
+/* GROUP CHATS */
+.group-tag{background:var(--accent-light);color:var(--accent);font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;letter-spacing:0.3px;}
+
+/* MUTE */
+.muted-badge{font-size:11px;color:var(--text-faint);background:var(--bg);padding:2px 8px;border-radius:10px;border:1px solid var(--border-light);}
+
 /* POST ACTION MODAL */
 .post-action-modal{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
 .post-action-sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:20px 20px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0));width:100%;max-width:520px;}
@@ -341,8 +378,15 @@ input,textarea,button{font-family:inherit;}
 
 <!-- APP -->
 <div id="app-screen" class="screen">
+  <div class="offline-bar" id="offline-bar">you're offline — some features may not work</div>
   <nav class="app-nav">
     <span class="app-logo">yours.</span>
+    <div style="display:flex;align-items:center;gap:4px;">
+      <button class="icon-btn" id="notif-btn" onclick="showPanel('notifications')" style="position:relative;min-width:44px;min-height:44px;">
+        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notif-badge" style="display:none"></span>
+      </button>
+    </div>
   </nav>
 
   <!-- FEED -->
@@ -421,10 +465,21 @@ input,textarea,button{font-family:inherit;}
   </div>
 
   <!-- MESSAGES -->
+  <div id="notifications-panel" class="panel">
+    <div class="panel-title">notifications.</div>
+    <div id="notif-container"></div>
+  </div>
+
   <div id="messages-panel" class="panel">
     <div id="dm-list-view">
       <div class="panel-title">messages.</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <button id="dm-tab-btn" onclick="switchMsgTab('dms')" style="flex:1;padding:10px;border:1px solid var(--text);background:var(--text);color:white;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;min-height:44px;">direct</button>
+        <button id="gc-tab-btn" onclick="switchMsgTab('groups')" style="flex:1;padding:10px;border:1px solid var(--border);background:none;color:var(--text-muted);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:44px;">groups</button>
+        <button onclick="createGroupChat()" style="padding:10px 14px;border:1px solid var(--border);background:none;color:var(--text-muted);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:44px;">+ new</button>
+      </div>
       <div id="dm-list-container"></div>
+      <div id="gc-list-container" style="display:none;"></div>
     </div>
     <div class="chat-view" id="chat-view">
       <div class="chat-header">
@@ -552,6 +607,17 @@ input,textarea,button{font-family:inherit;}
   </div>
 </div>
 
+<!-- CIRCLES POPUP -->
+<div id="circles-popup" class="circles-popup-overlay" style="display:none;" onclick="closeCirclesPopup()">
+  <div class="circles-popup-sheet" onclick="event.stopPropagation()">
+    <div class="circles-popup-title" id="circles-popup-title">edit circle</div>
+    <div class="circles-popup-sub">tap a friend to add or remove them</div>
+    <div id="circles-popup-list"></div>
+    <button class="circles-popup-save" onclick="saveCircleMembers()">save</button>
+    <button class="circles-popup-cancel" onclick="closeCirclesPopup()">cancel</button>
+  </div>
+</div>
+
 <!-- REPORT MODAL -->
 <div id="report-modal" class="modal-overlay" style="display:none;" onclick="closeReportModal()">
   <div class="modal-sheet" onclick="event.stopPropagation()">
@@ -572,6 +638,7 @@ input,textarea,button{font-family:inherit;}
     <div class="modal-subtitle" id="fam-handle"></div>
     <button class="modal-option" id="fam-message" onclick="fam_message()">💬 send a message</button>
     <button class="modal-option danger" id="fam-remove" onclick="fam_remove()">👋 remove friend</button>
+    <button class="modal-option" id="fam-mute" onclick="fam_mute()">🔇 mute (hide from feed)</button>
     <button class="modal-option danger" id="fam-block" onclick="fam_block()">🚫 block user</button>
     <button class="modal-cancel" onclick="closeFriendActionModal()">cancel</button>
   </div>
@@ -745,13 +812,14 @@ function enterApp(){
   document.getElementById('auth-screen').classList.remove('active');
   document.getElementById('app-screen').classList.add('active');
   showPanel('feed');
-  setTimeout(()=>{checkUnreadBadge();checkPendingBadge();},800);
-  if(!window._badgeTimer)window._badgeTimer=setInterval(()=>{checkUnreadBadge();checkPendingBadge();},30000);
+  setTimeout(()=>{checkUnreadBadge();checkPendingBadge();loadNotifications();},800);
+  if(!window._badgeTimer)window._badgeTimer=setInterval(()=>{checkUnreadBadge();checkPendingBadge();loadNotifications();},30000);
 }
 
 function showPanel(name){
-  ['feed','post','messages','friends','profile'].forEach(p=>{
+  ['feed','post','messages','friends','profile','notifications'].forEach(p=>{
     const el=document.getElementById(p+'-panel');
+    if(!el)return;
     if(p==='feed'){el.style.display=p===name?'flex':'none';}
     else{el.classList.toggle('active',p===name);}
     document.getElementById('bn-'+p)?.classList.toggle('active',p===name);
@@ -761,6 +829,7 @@ function showPanel(name){
   if(name==='profile')renderProfile();
   if(name==='post'){updateTimerLabel();updatePostBtn();loadCirclesForPost();}
   if(name==='messages')renderMessages();
+  if(name==='notifications')loadNotifications();
 }
 
 // PULL TO REFRESH
@@ -854,6 +923,14 @@ function renderPost(post,ud){
         </button>
         ${circlePill}
         <div class="timer-pill">${tl}</div>
+      </div>
+      <div class="reaction-picker" id="rp-${post.id}" style="display:none;">
+        ${'🔥😂❤️👏'.split('').map(e=>`<button class="reaction-pick-btn" onclick="addReaction('${post.id}','${e}')">${e}</button>`).join('')}
+        <button class="reaction-pick-btn" onclick="document.getElementById('rp-${post.id}').style.display='none'">✕</button>
+      </div>
+      <div class="reactions-bar" id="reactions-${post.id}">
+        ${Object.entries(post.reactions||{}).map(([e,users])=>users.length>0?`<button class="reaction-btn${users.includes(CU.username)?' reacted':''}" onclick="addReaction('${post.id}','${e}')">${e}<span>${users.length}</span></button>`:'').join('')}
+        <button class="reaction-btn" onclick="toggleReactionPicker('${post.id}')" style="font-size:16px;padding:4px 8px;">＋</button>
       </div>
     </div>
     <div class="comments-section" id="comments-${post.id}" style="display:none;">
@@ -1174,6 +1251,11 @@ async function fam_remove(){
   if(them){them.friends=(them.friends||[]).filter(x=>x!==CU.username);await dbSet('user:'+famUser,them);}
   CU={...CU,...ud};renderFriends();
 }
+async function fam_mute(){
+  if(!famUser)return;
+  closeFriendActionModal();
+  await muteUser(famUser);
+}
 async function fam_block(){
   if(!famUser||!confirm('Block this user? They will be removed from your friends and will not be able to interact with you.'))return;
   const u=famUser;closeFriendActionModal();
@@ -1330,7 +1412,7 @@ async function openDM(username){
   await loadChatMessages(username);document.getElementById('chat-input').focus();
   dmRefreshInterval=setInterval(async()=>{if(activeDMUser){markDMRead(activeDMUser);await loadChatMessages(activeDMUser);checkUnreadBadge();}},10000);
 }
-function closeDM(){activeDMUser=null;clearInterval(dmRefreshInterval);dmRefreshInterval=null;document.getElementById('dm-list-view').style.display='';document.getElementById('chat-view').classList.remove('active');}
+function closeDM(){activeDMUser=null;activeGroupId=null;clearInterval(dmRefreshInterval);dmRefreshInterval=null;document.getElementById('dm-list-view').style.display='';document.getElementById('chat-view').classList.remove('active');}
 async function loadChatMessages(username){
   const msgs=await dbGet(dmKey(CU.username,username))||[];const el=document.getElementById('chat-messages');
   if(msgs.length===0){el.innerHTML='<div style="text-align:center;color:var(--text-faint);font-size:13px;padding:20px;">no messages yet — say hello!</div>';return;}
@@ -1338,6 +1420,7 @@ async function loadChatMessages(username){
   el.scrollTop=el.scrollHeight;
 }
 async function sendDM(){
+  if(activeGroupId){sendGroupMessage();return;}
   const input=document.getElementById('chat-input');const text=input.value.trim();if(!text||!activeDMUser)return;input.value='';
   const key=dmKey(CU.username,activeDMUser);const msgs=await dbGet(key)||[];
   msgs.push({from:CU.username,text,ts:Date.now()});if(msgs.length>200)msgs.splice(0,msgs.length-200);
@@ -1396,6 +1479,209 @@ async function adminDismissReport(idx){const reports=await dbGet('reports')||[];
 async function adminBanUser(username){
   const ud=await dbGet('user:'+username);if(!ud)return;
   ud.blocked=!ud.blocked;await dbSet('user:'+username,ud);openAdmin();
+}
+
+// OFFLINE DETECTION
+window.addEventListener('online', () => document.getElementById('offline-bar').classList.remove('show'));
+window.addEventListener('offline', () => document.getElementById('offline-bar').classList.add('show'));
+if (!navigator.onLine) document.getElementById('offline-bar').classList.add('show');
+
+// NOTIFICATIONS
+async function loadNotifications(){
+  if(!CU)return;
+  const ud=await dbGet('user:'+CU.username)||{};
+  const notifs=ud.notifications||[];
+  const unread=notifs.filter(n=>!n.read).length;
+  const badge=document.getElementById('notif-badge');
+  if(badge){if(unread>0){badge.style.display='flex';badge.textContent=unread>9?'9+':String(unread);}else badge.style.display='none';}
+  const container=document.getElementById('notif-container');
+  if(!container)return;
+  if(notifs.length===0){container.innerHTML='<div class="empty-state"><h3>nothing yet.</h3><p>likes and comments will appear here.</p></div>';return;}
+  container.innerHTML=notifs.slice().reverse().slice(0,30).map(n=>`
+    <div style="background:var(--surface);border:1px solid ${n.read?'var(--border-light)':'var(--accent)'};border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start;">
+      <div style="font-size:20px;flex-shrink:0;">${n.type==='like'?'❤️':n.type==='comment'?'💬':n.type==='friend'?'👋':'✦'}</div>
+      <div style="flex:1;"><div style="font-size:14px;color:var(--text);">${escHtml(n.text)}</div><div style="font-size:12px;color:var(--text-faint);margin-top:3px;">${timeAgo(n.ts)}</div></div>
+    </div>
+  `).join('');
+  if(notifs.some(n=>!n.read)){const updated={...ud,notifications:notifs.map(n=>({...n,read:true}))};await dbSet('user:'+CU.username,updated);}
+}
+
+async function addNotification(toUser, type, text){
+  try{
+    const ud=await dbGet('user:'+toUser);if(!ud)return;
+    if(!ud.notifications)ud.notifications=[];
+    ud.notifications.push({type,text,ts:Date.now(),read:false});
+    if(ud.notifications.length>50)ud.notifications=ud.notifications.slice(-50);
+    await dbSet('user:'+toUser,ud);
+  }catch{}
+}
+
+// REACTIONS
+function toggleReactionPicker(postId){
+  const el=document.getElementById('rp-'+postId);
+  if(el)el.style.display=el.style.display==='none'?'flex':'none';
+}
+
+async function addReaction(postId,emoji){
+  const el=document.getElementById('rp-'+postId);
+  if(el)el.style.display='none';
+  const post=await dbGet('post:'+postId);if(!post)return;
+  if(!post.reactions)post.reactions={};
+  if(!post.reactions[emoji])post.reactions[emoji]=[];
+  const idx=post.reactions[emoji].indexOf(CU.username);
+  if(idx>-1)post.reactions[emoji].splice(idx,1);
+  else post.reactions[emoji].push(CU.username);
+  await dbSet('post:'+postId,post);
+  const bar=document.getElementById('reactions-'+postId);
+  if(bar){
+    bar.innerHTML=Object.entries(post.reactions).map(([e,users])=>users.length>0?`<button class="reaction-btn${users.includes(CU.username)?' reacted':''}" onclick="addReaction('${postId}','${e}')">${e}<span>${users.length}</span></button>`:'').join('')+
+    `<button class="reaction-btn" onclick="toggleReactionPicker('${postId}')" style="font-size:16px;padding:4px 8px;">＋</button>`;
+  }
+}
+
+// CIRCLES POPUP
+let circlePopupId=null;
+let circlePopupMembers=[];
+
+async function openCirclesPopup(circleId){
+  const ud=await dbGet('user:'+CU.username)||{};
+  const circle=(ud.circles||[]).find(c=>c.id===circleId);
+  if(!circle)return;
+  circlePopupId=circleId;
+  circlePopupMembers=[...(circle.members||[])];
+  document.getElementById('circles-popup-title').textContent=circle.name;
+  const friends=ud.friends||[];
+  const friendsData={};
+  for(const f of friends)friendsData[f]=await dbGet('user:'+f)||{};
+  const listEl=document.getElementById('circles-popup-list');
+  if(friends.length===0){listEl.innerHTML='<div style="font-size:14px;color:var(--text-muted);padding:16px 0;">add friends first to build circles</div>';} 
+  else{
+    listEl.innerHTML=friends.map(f=>{
+      const inCircle=circlePopupMembers.includes(f);
+      const fud=friendsData[f]||{};
+      return`<div class="circle-member-row" onclick="toggleCirclePopupMember('${f}')" id="cmr-${f}">
+        <div class="circle-member-name">${escHtml(fud.name||f)}</div>
+        <div class="circle-checkbox${inCircle?' checked':''}" id="ccb-${f}"></div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('circles-popup').style.display='flex';
+}
+
+function toggleCirclePopupMember(f){
+  const idx=circlePopupMembers.indexOf(f);
+  if(idx>-1)circlePopupMembers.splice(idx,1);
+  else circlePopupMembers.push(f);
+  const cb=document.getElementById('ccb-'+f);
+  if(cb)cb.className='circle-checkbox'+(circlePopupMembers.includes(f)?' checked':'');
+}
+
+async function saveCircleMembers(){
+  if(!circlePopupId)return;
+  const ud=await dbGet('user:'+CU.username)||{};
+  const circle=(ud.circles||[]).find(c=>c.id===circlePopupId);
+  if(!circle)return;
+  circle.members=[...circlePopupMembers];
+  await dbSet('user:'+CU.username,ud);
+  CU={...CU,...ud};
+  closeCirclesPopup();
+  renderFriends();
+}
+
+function closeCirclesPopup(){
+  document.getElementById('circles-popup').style.display='none';
+  circlePopupId=null;circlePopupMembers=[];
+}
+
+// MUTE
+async function muteUser(username){
+  const ud=await dbGet('user:'+CU.username)||{};
+  if(!ud.muted)ud.muted=[];
+  const idx=ud.muted.indexOf(username);
+  if(idx>-1)ud.muted.splice(idx,1);
+  else ud.muted.push(username);
+  await dbSet('user:'+CU.username,ud);
+  CU={...CU,...ud};
+  closeFriendActionModal();
+  renderFeed();
+}
+
+// GROUP CHATS
+async function createGroupChat(){
+  const name=prompt('Group name:');
+  if(!name||!name.trim())return;
+  const ud=await dbGet('user:'+CU.username)||{};
+  const friends=ud.friends||[];
+  if(friends.length===0){alert('Add friends first');return;}
+  const groupId='gc:'+Date.now().toString(36);
+  const group={id:groupId,name:name.trim(),creator:CU.username,members:[CU.username],ts:Date.now(),messages:[]};
+  await dbSet(groupId,group);
+  let myGroups=await dbGet('groups:'+CU.username)||[];
+  myGroups.push(groupId);
+  await dbSet('groups:'+CU.username,myGroups);
+  openGroupChat(groupId);
+}
+
+async function renderGroupList(){
+  const container=document.getElementById('gc-list-container');
+  const groupIds=await dbGet('groups:'+CU.username)||[];
+  if(groupIds.length===0){
+    container.innerHTML='<div class="empty-state"><h3>no groups yet.</h3><p>tap + new to create one.</p></div>';return;
+  }
+  const groups=await Promise.all(groupIds.map(id=>dbGet(id)));
+  const valid=groups.filter(Boolean);
+  container.innerHTML=valid.map(g=>`
+    <div class="dm-list-item" onclick="openGroupChat('${g.id}')">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">👥</div>
+      <div class="dm-preview"><div class="dm-name">${escHtml(g.name)}</div><div class="dm-last">${g.messages&&g.messages.length>0?escHtml(g.messages[g.messages.length-1].text.slice(0,40)):'no messages yet'}</div></div>
+      <span class="group-tag">${g.members.length} members</span>
+    </div>
+  `).join('');
+}
+
+let activeGroupId=null;
+
+async function openGroupChat(groupId){
+  activeGroupId=groupId;
+  const group=await dbGet(groupId);if(!group)return;
+  document.getElementById('chat-title').textContent=group.name;
+  document.getElementById('dm-list-view').style.display='none';
+  document.getElementById('chat-view').classList.add('active');
+  const msgs=group.messages||[];
+  const el=document.getElementById('chat-messages');
+  if(msgs.length===0){el.innerHTML='<div style="text-align:center;color:var(--text-faint);font-size:13px;padding:20px;">no messages yet — say something!</div>';}
+  else{
+    el.innerHTML=msgs.map(m=>{const out=m.from===CU.username;return`<div style="display:flex;flex-direction:column;align-items:${out?'flex-end':'flex-start'};"><div style="font-size:11px;color:var(--text-faint);padding:0 6px;margin-bottom:2px;">${out?'':escHtml(m.fromName||m.from)}</div><div class="msg-bubble ${out?'msg-out':'msg-in'}">${escHtml(m.text)}</div><div class="msg-time" style="text-align:${out?'right':'left'};padding:0 6px;">${timeAgo(m.ts)}</div></div>`;}).join('');
+    el.scrollTop=el.scrollHeight;
+  }
+}
+
+async function sendGroupMessage(){
+  if(!activeGroupId)return;
+  const input=document.getElementById('chat-input');
+  const text=input.value.trim();if(!text)return;input.value='';
+  const group=await dbGet(activeGroupId);if(!group)return;
+  if(!group.messages)group.messages=[];
+  group.messages.push({from:CU.username,fromName:CU.name,text,ts:Date.now()});
+  if(group.messages.length>200)group.messages.splice(0,group.messages.length-200);
+  await dbSet(activeGroupId,group);
+  await openGroupChat(activeGroupId);
+}
+
+function switchMsgTab(tab){
+  const dmBtn=document.getElementById('dm-tab-btn');
+  const gcBtn=document.getElementById('gc-tab-btn');
+  const dmList=document.getElementById('dm-list-container');
+  const gcList=document.getElementById('gc-list-container');
+  if(tab==='dms'){
+    dmBtn.style.cssText='flex:1;padding:10px;border:1px solid var(--text);background:var(--text);color:white;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;min-height:44px;';
+    gcBtn.style.cssText='flex:1;padding:10px;border:1px solid var(--border);background:none;color:var(--text-muted);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:44px;';
+    dmList.style.display='';gcList.style.display='none';
+  } else {
+    gcBtn.style.cssText='flex:1;padding:10px;border:1px solid var(--text);background:var(--text);color:white;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;min-height:44px;';
+    dmBtn.style.cssText='flex:1;padding:10px;border:1px solid var(--border);background:none;color:var(--text-muted);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:44px;';
+    dmList.style.display='none';gcList.style.display='';renderGroupList();
+  }
 }
 
 // POST ACTION MODAL
