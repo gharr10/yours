@@ -925,7 +925,7 @@ function renderPost(post,ud){
         <div class="timer-pill">${tl}</div>
       </div>
       <div class="reaction-picker" id="rp-${post.id}" style="display:none;">
-        ${'🔥😂❤️👏'.split('').map(e=>`<button class="reaction-pick-btn" onclick="addReaction('${post.id}','${e}')">${e}</button>`).join('')}
+        ${['🔥','😂','❤️','👏'].map(e=>`<button class="reaction-pick-btn" onclick="addReaction('${post.id}','${e}')">${e}</button>`).join('')}
         <button class="reaction-pick-btn" onclick="document.getElementById('rp-${post.id}').style.display='none'">✕</button>
       </div>
       <div class="reactions-bar" id="reactions-${post.id}">
