@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>yours.</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="yours.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1A1917">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#FAF9F7;--surface:#FFFFFF;--border:#E8E6E1;--border-light:#F0EEE9;--text:#1A1917;--text-muted:#888580;--text-faint:#B8B5AF;--accent:#2D5A27;--accent-light:#EAF3E8;--danger:#C0392B;--radius:14px;--radius-sm:8px;}
@@ -401,12 +408,12 @@ input,textarea,button{font-family:inherit;}
     </div>
     <div class="circles-manager" id="circles-manager">
       <h3>your circles</h3>
-      <p>create named groups to share posts with specific friends. tap a friend's name to add or remove them.</p>
-      <div id="circles-list"></div>
-      <div class="circle-row" style="border:none;padding-top:10px;">
-        <input class="circle-name-input" id="new-circle-input" placeholder="circle name e.g. close friends" maxlength="30" onkeydown="if(event.key==='Enter')createCircle()">
-        <button class="create-circle-btn" onclick="createCircle()">create</button>
+      <p>named groups for sharing posts with specific friends.</p>
+      <div class="circle-row" style="border:none;padding:0 0 12px;">
+        <input class="circle-name-input" id="new-circle-input" placeholder="e.g. close friends, family" maxlength="30" onkeydown="if(event.key==='Enter')createCircle()">
+        <button class="create-circle-btn" onclick="createCircle()">+ create</button>
       </div>
+      <div id="circles-list"></div>
     </div>
     <div id="pending-wrap"></div>
     <div class="section-label">your friends</div>
@@ -1521,6 +1528,11 @@ async function boot(){
 }
 boot();
 setTimeout(initPullToRefresh,500);
+
+// PWA Service Worker
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+}
 if(window.location.hash==='#admin'){
   const checkAdmin=setInterval(()=>{
     if(CU&&CU.username===ADMIN_USER){clearInterval(checkAdmin);openAdmin();}
