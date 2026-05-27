@@ -4,14 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>yours.</title>
-<!-- BUILD-v11-2024 -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="yours.">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#1A1917">
 <link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/icon.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#FAF9F7;--surface:#FFFFFF;--border:#E8E6E1;--border-light:#F0EEE9;--text:#1A1917;--text-muted:#888580;--text-faint:#B8B5AF;--accent:#2D5A27;--accent-light:#EAF3E8;--danger:#C0392B;--radius:14px;--radius-sm:8px;}
@@ -236,42 +234,6 @@ input,textarea,button{font-family:inherit;}
 .modal-option:last-of-type{border-bottom:none;}
 .modal-option.danger{color:var(--danger);}
 .modal-cancel{width:100%;padding:14px;background:var(--bg);border:none;border-radius:var(--radius-sm);font-size:15px;color:var(--text-muted);cursor:pointer;margin-top:12px;min-height:48px;}
-/* CIRCLES POPUP */
-.circles-popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
-.circles-popup-sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:20px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0));width:100%;max-width:520px;max-height:80vh;overflow-y:auto;}
-.circles-popup-title{font-size:16px;font-weight:500;color:var(--text);margin-bottom:4px;}
-.circles-popup-sub{font-size:13px;color:var(--text-muted);margin-bottom:16px;}
-.circle-member-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border-light);cursor:pointer;min-height:52px;}
-.circle-member-row:last-child{border-bottom:none;}
-.circle-member-name{flex:1;font-size:15px;color:var(--text);}
-.circle-checkbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
-.circle-checkbox.checked{background:var(--accent);border-color:var(--accent);}
-.circle-checkbox.checked::after{content:'✓';color:white;font-size:13px;font-weight:600;}
-.circles-popup-save{width:100%;padding:14px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;margin-top:16px;min-height:50px;}
-.circles-popup-cancel{width:100%;padding:12px;background:none;border:none;color:var(--text-muted);font-size:14px;cursor:pointer;font-family:inherit;margin-top:8px;}
-
-/* REACTIONS */
-.reactions-bar{display:flex;gap:6px;margin-top:8px;}
-.reaction-btn{background:var(--bg);border:1px solid var(--border-light);border-radius:20px;padding:5px 10px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:4px;min-height:34px;transition:all 0.15s;}
-.reaction-btn.reacted{background:var(--accent-light);border-color:var(--accent);}
-.reaction-btn span{font-size:12px;color:var(--text-muted);}
-.reaction-picker{display:flex;gap:8px;padding:10px 16px;border-top:1px solid var(--border-light);flex-wrap:wrap;}
-.reaction-pick-btn{font-size:22px;cursor:pointer;padding:6px;border-radius:8px;transition:background 0.15s;background:none;border:none;min-height:44px;min-width:44px;}
-.reaction-pick-btn:hover,.reaction-pick-btn:active{background:var(--bg);}
-
-/* NOTIFICATIONS */
-.notif-badge{position:absolute;top:4px;right:4px;background:#C0392B;color:white;font-size:10px;font-weight:600;border-radius:10px;min-width:16px;height:16px;padding:0 4px;display:flex;align-items:center;justify-content:center;pointer-events:none;}
-
-/* OFFLINE */
-.offline-bar{background:#C0392B;color:white;text-align:center;font-size:13px;padding:8px;display:none;}
-.offline-bar.show{display:block;}
-
-/* GROUP CHATS */
-.group-tag{background:var(--accent-light);color:var(--accent);font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;letter-spacing:0.3px;}
-
-/* MUTE */
-.muted-badge{font-size:11px;color:var(--text-faint);background:var(--bg);padding:2px 8px;border-radius:10px;border:1px solid var(--border-light);}
-
 /* POST ACTION MODAL */
 .post-action-modal{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
 .post-action-sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:20px 20px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0));width:100%;max-width:520px;}
@@ -320,6 +282,55 @@ input,textarea,button{font-family:inherit;}
 .admin-stat-label{font-size:12px;color:var(--text-muted);margin-top:4px;}
 .admin-report-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;}
 .admin-user-row{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+
+/* OFFLINE BAR */
+.offline-bar{background:#C0392B;color:white;text-align:center;font-size:13px;padding:10px;display:none;position:sticky;top:0;z-index:200;}
+.offline-bar.show{display:block;}
+
+/* NOTIFICATIONS */
+.notif-dot{width:8px;height:8px;border-radius:50%;background:#C0392B;position:absolute;top:6px;right:6px;}
+
+/* REACTIONS */
+.reactions-wrap{padding:8px 16px 12px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--border-light);}
+.reaction-chip{display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border-light);border-radius:20px;background:var(--bg);cursor:pointer;font-size:14px;min-height:38px;transition:all 0.15s;}
+.reaction-chip.mine{background:var(--accent-light);border-color:var(--accent);}
+.reaction-chip span{font-size:12px;color:var(--text-muted);}
+.reaction-picker-row{display:flex;gap:4px;padding:8px 16px;border-top:1px solid var(--border-light);overflow-x:auto;}
+.rp-btn{font-size:24px;padding:6px;background:none;border:none;cursor:pointer;border-radius:8px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;}
+.rp-btn:active{background:var(--bg);}
+.add-reaction-btn{padding:6px 10px;border:1px solid var(--border-light);border-radius:20px;background:var(--bg);cursor:pointer;font-size:16px;min-height:38px;color:var(--text-muted);}
+
+/* CIRCLES POPUP */
+.circle-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:350;display:flex;align-items:flex-end;justify-content:center;}
+.circle-sheet{background:var(--surface);border-radius:20px 20px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0));width:100%;max-width:520px;max-height:75vh;overflow-y:auto;}
+.circle-sheet-title{font-size:17px;font-weight:600;margin-bottom:4px;}
+.circle-sheet-sub{font-size:13px;color:var(--text-muted);margin-bottom:16px;}
+.circle-member-item{display:flex;align-items:center;padding:14px 0;border-bottom:1px solid var(--border-light);cursor:pointer;min-height:54px;gap:12px;}
+.circle-member-item:last-of-type{border-bottom:none;}
+.circle-member-label{flex:1;font-size:15px;color:var(--text);}
+.circle-check{width:24px;height:24px;border-radius:7px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+.circle-check.on{background:var(--accent);border-color:var(--accent);color:white;font-size:13px;font-weight:700;}
+.circle-save-btn{width:100%;padding:14px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer;margin-top:16px;min-height:50px;}
+.circle-cancel-btn{width:100%;padding:12px;background:none;border:none;font-family:inherit;font-size:14px;color:var(--text-muted);cursor:pointer;margin-top:4px;}
+.circle-manage-btn{width:100%;padding:11px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text-muted);cursor:pointer;margin-top:8px;min-height:44px;text-align:left;padding-left:14px;}
+
+/* THREE DOT */
+.post-options-btn{background:none;border:none;cursor:pointer;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:20px;font-weight:700;letter-spacing:2px;line-height:0.5;padding:0;}
+
+/* GROUP CHATS */
+.msg-tabs{display:flex;gap:8px;margin-bottom:16px;}
+.msg-tab-btn{flex:1;padding:11px;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;min-height:44px;transition:all 0.15s;}
+.msg-tab-btn.active{background:var(--text);color:white;border:1px solid var(--text);}
+.msg-tab-btn.inactive{background:none;color:var(--text-muted);border:1px solid var(--border);}
+.new-group-btn{padding:11px 14px;border:1px solid var(--border);background:none;color:var(--text-muted);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;cursor:pointer;min-height:44px;}
+.group-badge{font-size:10px;font-weight:600;background:var(--accent-light);color:var(--accent);padding:2px 8px;border-radius:10px;}
+
+/* NOTIFICATIONS PANEL */
+.notif-item{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;}
+.notif-item.unread{border-color:var(--accent);}
+.notif-icon{font-size:20px;flex-shrink:0;}
+.notif-text{font-size:14px;color:var(--text);line-height:1.4;}
+.notif-time{font-size:12px;color:var(--text-faint);margin-top:3px;}
 </style>
 </head>
 <body>
@@ -378,15 +389,13 @@ input,textarea,button{font-family:inherit;}
 
 <!-- APP -->
 <div id="app-screen" class="screen">
-  <div class="offline-bar" id="offline-bar">you're offline — some features may not work</div>
+  <div class="offline-bar" id="offline-bar">you're offline</div>
   <nav class="app-nav">
     <span class="app-logo">yours.</span>
-    <div style="display:flex;align-items:center;gap:4px;">
-      <button class="icon-btn" id="notif-btn" onclick="showPanel('notifications')" style="position:relative;min-width:44px;min-height:44px;">
-        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <span class="notif-badge" id="notif-badge" style="display:none"></span>
-      </button>
-    </div>
+    <button class="post-options-btn" onclick="showPanel('notifications')" style="position:relative;" title="notifications">
+      <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <div class="notif-dot" id="notif-dot" style="display:none;"></div>
+    </button>
   </nav>
 
   <!-- FEED -->
@@ -452,12 +461,12 @@ input,textarea,button{font-family:inherit;}
     </div>
     <div class="circles-manager" id="circles-manager">
       <h3>your circles</h3>
-      <p>named groups for sharing posts with specific friends.</p>
-      <div class="circle-row" style="border:none;padding:0 0 12px;">
-        <input class="circle-name-input" id="new-circle-input" placeholder="e.g. close friends, family" maxlength="30" onkeydown="if(event.key==='Enter')createCircle()">
-        <button class="create-circle-btn" onclick="createCircle()">+ create</button>
-      </div>
+      <p>create named groups to share posts with specific friends. tap a friend's name to add or remove them.</p>
       <div id="circles-list"></div>
+      <div class="circle-row" style="border:none;padding-top:10px;">
+        <input class="circle-name-input" id="new-circle-input" placeholder="circle name e.g. close friends" maxlength="30" onkeydown="if(event.key==='Enter')createCircle()">
+        <button class="create-circle-btn" onclick="createCircle()">create</button>
+      </div>
     </div>
     <div id="pending-wrap"></div>
     <div class="section-label">your friends</div>
@@ -467,16 +476,16 @@ input,textarea,button{font-family:inherit;}
   <!-- MESSAGES -->
   <div id="notifications-panel" class="panel">
     <div class="panel-title">notifications.</div>
-    <div id="notif-container"></div>
+    <div id="notif-list"></div>
   </div>
 
   <div id="messages-panel" class="panel">
     <div id="dm-list-view">
       <div class="panel-title">messages.</div>
-      <div style="display:flex;gap:8px;margin-bottom:16px;">
-        <button id="dm-tab-btn" onclick="switchMsgTab('dms')" style="flex:1;padding:10px;border:1px solid var(--text);background:var(--text);color:white;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;min-height:44px;">direct</button>
-        <button id="gc-tab-btn" onclick="switchMsgTab('groups')" style="flex:1;padding:10px;border:1px solid var(--border);background:none;color:var(--text-muted);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:44px;">groups</button>
-        <button onclick="createGroupChat()" style="padding:10px 14px;border:1px solid var(--border);background:none;color:var(--text-muted);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:44px;">+ new</button>
+      <div class="msg-tabs">
+        <button class="msg-tab-btn active" id="tab-dms" onclick="switchMsgTab('dms')">direct</button>
+        <button class="msg-tab-btn inactive" id="tab-groups" onclick="switchMsgTab('groups')">groups</button>
+        <button class="new-group-btn" onclick="createGroupChat()">+ group</button>
       </div>
       <div id="dm-list-container"></div>
       <div id="gc-list-container" style="display:none;"></div>
@@ -608,13 +617,13 @@ input,textarea,button{font-family:inherit;}
 </div>
 
 <!-- CIRCLES POPUP -->
-<div id="circles-popup" class="circles-popup-overlay" style="display:none;" onclick="closeCirclesPopup()">
-  <div class="circles-popup-sheet" onclick="event.stopPropagation()">
-    <div class="circles-popup-title" id="circles-popup-title">edit circle</div>
-    <div class="circles-popup-sub">tap a friend to add or remove them</div>
-    <div id="circles-popup-list"></div>
-    <button class="circles-popup-save" onclick="saveCircleMembers()">save</button>
-    <button class="circles-popup-cancel" onclick="closeCirclesPopup()">cancel</button>
+<div id="circle-overlay" class="circle-overlay" style="display:none;" onclick="closeCircleSheet()">
+  <div class="circle-sheet" onclick="event.stopPropagation()">
+    <div class="circle-sheet-title" id="circle-sheet-title">edit circle</div>
+    <div class="circle-sheet-sub">tap a name to add or remove</div>
+    <div id="circle-sheet-list"></div>
+    <button class="circle-save-btn" onclick="saveCircleSheet()">save changes</button>
+    <button class="circle-cancel-btn" onclick="closeCircleSheet()">cancel</button>
   </div>
 </div>
 
@@ -819,7 +828,6 @@ function enterApp(){
 function showPanel(name){
   ['feed','post','messages','friends','profile','notifications'].forEach(p=>{
     const el=document.getElementById(p+'-panel');
-    if(!el)return;
     if(p==='feed'){el.style.display=p===name?'flex':'none';}
     else{el.classList.toggle('active',p===name);}
     document.getElementById('bn-'+p)?.classList.toggle('active',p===name);
@@ -868,7 +876,8 @@ async function renderFeed(){
   const friends=userData.friends||[];
   const favs=userData.favourites||[];
   const blocked=userData.blocked||[];
-  const authors=feedMode==='favourites'?favs.filter(f=>!blocked.includes(f)):[CU.username,...friends.filter(f=>!blocked.includes(f))];
+  const muted=userData.muted||[];
+  const authors=feedMode==='favourites'?favs.filter(f=>!blocked.includes(f)&&!muted.includes(f)):[CU.username,...friends.filter(f=>!blocked.includes(f)&&!muted.includes(f))];
   if(feedMode==='favourites'&&favs.length===0){container.innerHTML=`<div class="empty-state"><h3>no favourites yet.</h3><p>heart a friend to see their posts here.</p></div>`;return;}
   const postIndex=(await dbGet('posts:index')||[]).slice(0,20);
   const now=Date.now();const posts=[];
@@ -921,17 +930,20 @@ function renderPost(post,ud){
           <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           <span>${comments.length>0?comments.length:''}</span>
         </button>
+        <button class="post-action" onclick="toggleReactionPicker('${post.id}')">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </button>
         ${circlePill}
         <div class="timer-pill">${tl}</div>
       </div>
-      <div class="reaction-picker" id="rp-${post.id}" style="display:none;">
-        ${['🔥','😂','❤️','👏'].map(e=>`<button class="reaction-pick-btn" onclick="addReaction('${post.id}','${e}')">${e}</button>`).join('')}
-        <button class="reaction-pick-btn" onclick="document.getElementById('rp-${post.id}').style.display='none'">✕</button>
-      </div>
-      <div class="reactions-bar" id="reactions-${post.id}">
-        ${Object.entries(post.reactions||{}).map(([e,users])=>users.length>0?`<button class="reaction-btn${users.includes(CU.username)?' reacted':''}" onclick="addReaction('${post.id}','${e}')">${e}<span>${users.length}</span></button>`:'').join('')}
-        <button class="reaction-btn" onclick="toggleReactionPicker('${post.id}')" style="font-size:16px;padding:4px 8px;">＋</button>
-      </div>
+    </div>
+    <div id="reaction-picker-${post.id}" class="reaction-picker-row" style="display:none;">
+      ${['🔥','😂','❤️','👏','💯','👀'].map(e=>`<button class="rp-btn" onclick="addReaction('${post.id}','${e}')">${e}</button>`).join('')}
+      <button class="rp-btn" style="font-size:14px;color:var(--text-muted);" onclick="document.getElementById('reaction-picker-${post.id}').style.display='none'">✕</button>
+    </div>
+    <div id="reactions-row-${post.id}" class="reactions-wrap" style="${Object.keys(post.reactions||{}).length===0?'display:none':''}">
+      ${Object.entries(post.reactions||{}).filter(([e,u])=>u.length>0).map(([e,users])=>`<button class="reaction-chip${users.includes(CU.username)?' mine':''}" onclick="addReaction('${post.id}','${e}')">${e}<span>${users.length}</span></button>`).join('')}
+      <button class="add-reaction-btn" onclick="toggleReactionPicker('${post.id}')">+</button>
     </div>
     <div class="comments-section" id="comments-${post.id}" style="display:none;">
       <div id="comments-list-${post.id}">
@@ -1251,11 +1263,6 @@ async function fam_remove(){
   if(them){them.friends=(them.friends||[]).filter(x=>x!==CU.username);await dbSet('user:'+famUser,them);}
   CU={...CU,...ud};renderFriends();
 }
-async function fam_mute(){
-  if(!famUser)return;
-  closeFriendActionModal();
-  await muteUser(famUser);
-}
 async function fam_block(){
   if(!famUser||!confirm('Block this user? They will be removed from your friends and will not be able to interact with you.'))return;
   const u=famUser;closeFriendActionModal();
@@ -1420,7 +1427,14 @@ async function loadChatMessages(username){
   el.scrollTop=el.scrollHeight;
 }
 async function sendDM(){
-  if(activeGroupId){sendGroupMessage();return;}
+  if(activeGroupId){
+    const input=document.getElementById('chat-input');const text=input.value.trim();if(!text)return;input.value='';
+    const group=await dbGet(activeGroupId);if(!group)return;
+    if(!group.messages)group.messages=[];
+    group.messages.push({from:CU.username,fromName:CU.name,text,ts:Date.now()});
+    if(group.messages.length>200)group.messages.splice(0,group.messages.length-200);
+    await dbSet(activeGroupId,group);await openGroupChat(activeGroupId);return;
+  }
   const input=document.getElementById('chat-input');const text=input.value.trim();if(!text||!activeDMUser)return;input.value='';
   const key=dmKey(CU.username,activeDMUser);const msgs=await dbGet(key)||[];
   msgs.push({from:CU.username,text,ts:Date.now()});if(msgs.length>200)msgs.splice(0,msgs.length-200);
@@ -1479,209 +1493,6 @@ async function adminDismissReport(idx){const reports=await dbGet('reports')||[];
 async function adminBanUser(username){
   const ud=await dbGet('user:'+username);if(!ud)return;
   ud.blocked=!ud.blocked;await dbSet('user:'+username,ud);openAdmin();
-}
-
-// OFFLINE DETECTION
-window.addEventListener('online', () => document.getElementById('offline-bar').classList.remove('show'));
-window.addEventListener('offline', () => document.getElementById('offline-bar').classList.add('show'));
-if (!navigator.onLine) document.getElementById('offline-bar').classList.add('show');
-
-// NOTIFICATIONS
-async function loadNotifications(){
-  if(!CU)return;
-  const ud=await dbGet('user:'+CU.username)||{};
-  const notifs=ud.notifications||[];
-  const unread=notifs.filter(n=>!n.read).length;
-  const badge=document.getElementById('notif-badge');
-  if(badge){if(unread>0){badge.style.display='flex';badge.textContent=unread>9?'9+':String(unread);}else badge.style.display='none';}
-  const container=document.getElementById('notif-container');
-  if(!container)return;
-  if(notifs.length===0){container.innerHTML='<div class="empty-state"><h3>nothing yet.</h3><p>likes and comments will appear here.</p></div>';return;}
-  container.innerHTML=notifs.slice().reverse().slice(0,30).map(n=>`
-    <div style="background:var(--surface);border:1px solid ${n.read?'var(--border-light)':'var(--accent)'};border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start;">
-      <div style="font-size:20px;flex-shrink:0;">${n.type==='like'?'❤️':n.type==='comment'?'💬':n.type==='friend'?'👋':'✦'}</div>
-      <div style="flex:1;"><div style="font-size:14px;color:var(--text);">${escHtml(n.text)}</div><div style="font-size:12px;color:var(--text-faint);margin-top:3px;">${timeAgo(n.ts)}</div></div>
-    </div>
-  `).join('');
-  if(notifs.some(n=>!n.read)){const updated={...ud,notifications:notifs.map(n=>({...n,read:true}))};await dbSet('user:'+CU.username,updated);}
-}
-
-async function addNotification(toUser, type, text){
-  try{
-    const ud=await dbGet('user:'+toUser);if(!ud)return;
-    if(!ud.notifications)ud.notifications=[];
-    ud.notifications.push({type,text,ts:Date.now(),read:false});
-    if(ud.notifications.length>50)ud.notifications=ud.notifications.slice(-50);
-    await dbSet('user:'+toUser,ud);
-  }catch{}
-}
-
-// REACTIONS
-function toggleReactionPicker(postId){
-  const el=document.getElementById('rp-'+postId);
-  if(el)el.style.display=el.style.display==='none'?'flex':'none';
-}
-
-async function addReaction(postId,emoji){
-  const el=document.getElementById('rp-'+postId);
-  if(el)el.style.display='none';
-  const post=await dbGet('post:'+postId);if(!post)return;
-  if(!post.reactions)post.reactions={};
-  if(!post.reactions[emoji])post.reactions[emoji]=[];
-  const idx=post.reactions[emoji].indexOf(CU.username);
-  if(idx>-1)post.reactions[emoji].splice(idx,1);
-  else post.reactions[emoji].push(CU.username);
-  await dbSet('post:'+postId,post);
-  const bar=document.getElementById('reactions-'+postId);
-  if(bar){
-    bar.innerHTML=Object.entries(post.reactions).map(([e,users])=>users.length>0?`<button class="reaction-btn${users.includes(CU.username)?' reacted':''}" onclick="addReaction('${postId}','${e}')">${e}<span>${users.length}</span></button>`:'').join('')+
-    `<button class="reaction-btn" onclick="toggleReactionPicker('${postId}')" style="font-size:16px;padding:4px 8px;">＋</button>`;
-  }
-}
-
-// CIRCLES POPUP
-let circlePopupId=null;
-let circlePopupMembers=[];
-
-async function openCirclesPopup(circleId){
-  const ud=await dbGet('user:'+CU.username)||{};
-  const circle=(ud.circles||[]).find(c=>c.id===circleId);
-  if(!circle)return;
-  circlePopupId=circleId;
-  circlePopupMembers=[...(circle.members||[])];
-  document.getElementById('circles-popup-title').textContent=circle.name;
-  const friends=ud.friends||[];
-  const friendsData={};
-  for(const f of friends)friendsData[f]=await dbGet('user:'+f)||{};
-  const listEl=document.getElementById('circles-popup-list');
-  if(friends.length===0){listEl.innerHTML='<div style="font-size:14px;color:var(--text-muted);padding:16px 0;">add friends first to build circles</div>';} 
-  else{
-    listEl.innerHTML=friends.map(f=>{
-      const inCircle=circlePopupMembers.includes(f);
-      const fud=friendsData[f]||{};
-      return`<div class="circle-member-row" onclick="toggleCirclePopupMember('${f}')" id="cmr-${f}">
-        <div class="circle-member-name">${escHtml(fud.name||f)}</div>
-        <div class="circle-checkbox${inCircle?' checked':''}" id="ccb-${f}"></div>
-      </div>`;
-    }).join('');
-  }
-  document.getElementById('circles-popup').style.display='flex';
-}
-
-function toggleCirclePopupMember(f){
-  const idx=circlePopupMembers.indexOf(f);
-  if(idx>-1)circlePopupMembers.splice(idx,1);
-  else circlePopupMembers.push(f);
-  const cb=document.getElementById('ccb-'+f);
-  if(cb)cb.className='circle-checkbox'+(circlePopupMembers.includes(f)?' checked':'');
-}
-
-async function saveCircleMembers(){
-  if(!circlePopupId)return;
-  const ud=await dbGet('user:'+CU.username)||{};
-  const circle=(ud.circles||[]).find(c=>c.id===circlePopupId);
-  if(!circle)return;
-  circle.members=[...circlePopupMembers];
-  await dbSet('user:'+CU.username,ud);
-  CU={...CU,...ud};
-  closeCirclesPopup();
-  renderFriends();
-}
-
-function closeCirclesPopup(){
-  document.getElementById('circles-popup').style.display='none';
-  circlePopupId=null;circlePopupMembers=[];
-}
-
-// MUTE
-async function muteUser(username){
-  const ud=await dbGet('user:'+CU.username)||{};
-  if(!ud.muted)ud.muted=[];
-  const idx=ud.muted.indexOf(username);
-  if(idx>-1)ud.muted.splice(idx,1);
-  else ud.muted.push(username);
-  await dbSet('user:'+CU.username,ud);
-  CU={...CU,...ud};
-  closeFriendActionModal();
-  renderFeed();
-}
-
-// GROUP CHATS
-async function createGroupChat(){
-  const name=prompt('Group name:');
-  if(!name||!name.trim())return;
-  const ud=await dbGet('user:'+CU.username)||{};
-  const friends=ud.friends||[];
-  if(friends.length===0){alert('Add friends first');return;}
-  const groupId='gc:'+Date.now().toString(36);
-  const group={id:groupId,name:name.trim(),creator:CU.username,members:[CU.username],ts:Date.now(),messages:[]};
-  await dbSet(groupId,group);
-  let myGroups=await dbGet('groups:'+CU.username)||[];
-  myGroups.push(groupId);
-  await dbSet('groups:'+CU.username,myGroups);
-  openGroupChat(groupId);
-}
-
-async function renderGroupList(){
-  const container=document.getElementById('gc-list-container');
-  const groupIds=await dbGet('groups:'+CU.username)||[];
-  if(groupIds.length===0){
-    container.innerHTML='<div class="empty-state"><h3>no groups yet.</h3><p>tap + new to create one.</p></div>';return;
-  }
-  const groups=await Promise.all(groupIds.map(id=>dbGet(id)));
-  const valid=groups.filter(Boolean);
-  container.innerHTML=valid.map(g=>`
-    <div class="dm-list-item" onclick="openGroupChat('${g.id}')">
-      <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">👥</div>
-      <div class="dm-preview"><div class="dm-name">${escHtml(g.name)}</div><div class="dm-last">${g.messages&&g.messages.length>0?escHtml(g.messages[g.messages.length-1].text.slice(0,40)):'no messages yet'}</div></div>
-      <span class="group-tag">${g.members.length} members</span>
-    </div>
-  `).join('');
-}
-
-let activeGroupId=null;
-
-async function openGroupChat(groupId){
-  activeGroupId=groupId;
-  const group=await dbGet(groupId);if(!group)return;
-  document.getElementById('chat-title').textContent=group.name;
-  document.getElementById('dm-list-view').style.display='none';
-  document.getElementById('chat-view').classList.add('active');
-  const msgs=group.messages||[];
-  const el=document.getElementById('chat-messages');
-  if(msgs.length===0){el.innerHTML='<div style="text-align:center;color:var(--text-faint);font-size:13px;padding:20px;">no messages yet — say something!</div>';}
-  else{
-    el.innerHTML=msgs.map(m=>{const out=m.from===CU.username;return`<div style="display:flex;flex-direction:column;align-items:${out?'flex-end':'flex-start'};"><div style="font-size:11px;color:var(--text-faint);padding:0 6px;margin-bottom:2px;">${out?'':escHtml(m.fromName||m.from)}</div><div class="msg-bubble ${out?'msg-out':'msg-in'}">${escHtml(m.text)}</div><div class="msg-time" style="text-align:${out?'right':'left'};padding:0 6px;">${timeAgo(m.ts)}</div></div>`;}).join('');
-    el.scrollTop=el.scrollHeight;
-  }
-}
-
-async function sendGroupMessage(){
-  if(!activeGroupId)return;
-  const input=document.getElementById('chat-input');
-  const text=input.value.trim();if(!text)return;input.value='';
-  const group=await dbGet(activeGroupId);if(!group)return;
-  if(!group.messages)group.messages=[];
-  group.messages.push({from:CU.username,fromName:CU.name,text,ts:Date.now()});
-  if(group.messages.length>200)group.messages.splice(0,group.messages.length-200);
-  await dbSet(activeGroupId,group);
-  await openGroupChat(activeGroupId);
-}
-
-function switchMsgTab(tab){
-  const dmBtn=document.getElementById('dm-tab-btn');
-  const gcBtn=document.getElementById('gc-tab-btn');
-  const dmList=document.getElementById('dm-list-container');
-  const gcList=document.getElementById('gc-list-container');
-  if(tab==='dms'){
-    dmBtn.style.cssText='flex:1;padding:10px;border:1px solid var(--text);background:var(--text);color:white;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;min-height:44px;';
-    gcBtn.style.cssText='flex:1;padding:10px;border:1px solid var(--border);background:none;color:var(--text-muted);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:44px;';
-    dmList.style.display='';gcList.style.display='none';
-  } else {
-    gcBtn.style.cssText='flex:1;padding:10px;border:1px solid var(--text);background:var(--text);color:white;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;min-height:44px;';
-    dmBtn.style.cssText='flex:1;padding:10px;border:1px solid var(--border);background:none;color:var(--text-muted);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:44px;';
-    dmList.style.display='none';gcList.style.display='';renderGroupList();
-  }
 }
 
 // POST ACTION MODAL
@@ -1765,6 +1576,138 @@ async function pamDelete(){
   renderProfile();
 }
 
+
+// OFFLINE
+window.addEventListener('online',()=>document.getElementById('offline-bar').classList.remove('show'));
+window.addEventListener('offline',()=>document.getElementById('offline-bar').classList.add('show'));
+if(!navigator.onLine)document.getElementById('offline-bar').classList.add('show');
+
+// NOTIFICATIONS
+async function loadNotifications(){
+  if(!CU)return;
+  const ud=await dbGet('user:'+CU.username)||{};
+  const notifs=ud.notifications||[];
+  const unread=notifs.filter(n=>!n.read).length;
+  const dot=document.getElementById('notif-dot');
+  if(dot)dot.style.display=unread>0?'block':'none';
+  const container=document.getElementById('notif-list');
+  if(!container)return;
+  if(notifs.length===0){container.innerHTML='<div class="empty-state"><h3>nothing yet.</h3><p>likes and comments will show here.</p></div>';return;}
+  container.innerHTML=notifs.slice().reverse().slice(0,30).map(n=>`
+    <div class="notif-item${n.read?'':' unread'}">
+      <div class="notif-icon">${n.type==='like'?'❤️':n.type==='comment'?'💬':n.type==='friend'?'👋':'✦'}</div>
+      <div><div class="notif-text">${escHtml(n.text)}</div><div class="notif-time">${timeAgo(n.ts)}</div></div>
+    </div>`).join('');
+  if(notifs.some(n=>!n.read)){ud.notifications=notifs.map(n=>({...n,read:true}));await dbSet('user:'+CU.username,ud);}
+}
+async function pushNotif(toUser,type,text){
+  try{const ud=await dbGet('user:'+toUser);if(!ud)return;if(!ud.notifications)ud.notifications=[];ud.notifications.push({type,text,ts:Date.now(),read:false});if(ud.notifications.length>50)ud.notifications=ud.notifications.slice(-50);await dbSet('user:'+toUser,ud);}catch{}
+}
+
+// REACTIONS
+function toggleReactionPicker(postId){
+  const el=document.getElementById('reaction-picker-'+postId);
+  if(el)el.style.display=el.style.display==='none'?'flex':'none';
+}
+async function addReaction(postId,emoji){
+  document.getElementById('reaction-picker-'+postId).style.display='none';
+  const post=await dbGet('post:'+postId);if(!post)return;
+  if(!post.reactions)post.reactions={};
+  if(!post.reactions[emoji])post.reactions[emoji]=[];
+  const idx=post.reactions[emoji].indexOf(CU.username);
+  if(idx>-1)post.reactions[emoji].splice(idx,1);else post.reactions[emoji].push(CU.username);
+  await dbSet('post:'+postId,post);
+  const row=document.getElementById('reactions-row-'+postId);
+  if(row){
+    const chips=Object.entries(post.reactions).filter(([e,u])=>u.length>0).map(([e,users])=>`<button class="reaction-chip${users.includes(CU.username)?' mine':''}" onclick="addReaction('${postId}','${e}')">${e}<span>${users.length}</span></button>`).join('');
+    row.innerHTML=chips+`<button class="add-reaction-btn" onclick="toggleReactionPicker('${postId}')">+</button>`;
+    row.style.display=chips?'':'none';
+  }
+}
+
+// CIRCLES SHEET
+let csId=null,csMembers=[];
+async function openCircleSheet(circleId){
+  const ud=await dbGet('user:'+CU.username)||{};
+  const circle=(ud.circles||[]).find(c=>c.id===circleId);if(!circle)return;
+  csId=circleId;csMembers=[...(circle.members||[])];
+  document.getElementById('circle-sheet-title').textContent=circle.name;
+  const friends=ud.friends||[];
+  const fdata={};for(const f of friends)fdata[f]=await dbGet('user:'+f)||{};
+  const list=document.getElementById('circle-sheet-list');
+  if(friends.length===0){list.innerHTML='<div style="padding:16px 0;font-size:14px;color:var(--text-muted);">add friends first</div>';}
+  else{list.innerHTML=friends.map(f=>{const isin=csMembers.includes(f);const name=escHtml((fdata[f]||{}).name||f);return`<div class="circle-member-item" onclick="toggleCSMember('${f}')" id="csi-${f}"><div class="circle-member-label">${name}</div><div class="circle-check${isin?' on':''}" id="csc-${f}">${isin?'✓':''}</div></div>`;}).join('');}
+  document.getElementById('circle-overlay').style.display='flex';
+}
+function toggleCSMember(f){
+  const idx=csMembers.indexOf(f);
+  if(idx>-1)csMembers.splice(idx,1);else csMembers.push(f);
+  const cb=document.getElementById('csc-'+f);
+  if(cb){cb.className='circle-check'+(csMembers.includes(f)?' on':'');cb.textContent=csMembers.includes(f)?'✓':'';}
+}
+async function saveCircleSheet(){
+  if(!csId)return;
+  const ud=await dbGet('user:'+CU.username)||{};
+  const c=(ud.circles||[]).find(x=>x.id===csId);if(!c)return;
+  c.members=[...csMembers];
+  await dbSet('user:'+CU.username,ud);CU={...CU,...ud};
+  closeCircleSheet();renderFriends();
+}
+function closeCircleSheet(){document.getElementById('circle-overlay').style.display='none';csId=null;csMembers=[];}
+
+// MUTE
+async function muteUser(username){
+  const ud=await dbGet('user:'+CU.username)||{};
+  if(!ud.muted)ud.muted=[];
+  const idx=ud.muted.indexOf(username);
+  if(idx>-1)ud.muted.splice(idx,1);else ud.muted.push(username);
+  await dbSet('user:'+CU.username,ud);CU={...CU,...ud};
+  closeFriendActionModal();renderFeed();
+}
+async function fam_mute(){if(!famUser)return;closeFriendActionModal();await muteUser(famUser);}
+
+// GROUP CHATS
+let activeGroupId=null;
+async function createGroupChat(){
+  const name=prompt('Group name:');if(!name||!name.trim())return;
+  const ud=await dbGet('user:'+CU.username)||{};
+  const friends=ud.friends||[];if(friends.length===0){alert('Add friends first');return;}
+  const groupId='gc:'+Date.now().toString(36);
+  const group={id:groupId,name:name.trim(),creator:CU.username,members:[CU.username],ts:Date.now(),messages:[]};
+  await dbSet(groupId,group);
+  const myGroups=await dbGet('groups:'+CU.username)||[];
+  myGroups.push(groupId);await dbSet('groups:'+CU.username,myGroups);
+  switchMsgTab('groups');openGroupChat(groupId);
+}
+async function renderGroupList(){
+  const container=document.getElementById('gc-list-container');if(!container)return;
+  const groupIds=await dbGet('groups:'+CU.username)||[];
+  if(groupIds.length===0){container.innerHTML='<div class="empty-state"><h3>no groups yet.</h3><p>tap + group to create one.</p></div>';return;}
+  const groups=(await Promise.all(groupIds.map(id=>dbGet(id)))).filter(Boolean);
+  container.innerHTML=groups.map(g=>`<div class="dm-list-item" onclick="openGroupChat('${g.id}')">${avatarHtml('group',null)}<div class="dm-preview"><div class="dm-name">${escHtml(g.name)}</div><div class="dm-last">${g.messages&&g.messages.length>0?escHtml(g.messages[g.messages.length-1].text.slice(0,40)):'no messages yet'}</div></div><span class="group-badge">${g.members.length}</span></div>`).join('');
+}
+async function openGroupChat(groupId){
+  activeGroupId=groupId;activeDMUser=null;
+  const group=await dbGet(groupId);if(!group)return;
+  document.getElementById('chat-title').textContent=group.name;
+  document.getElementById('dm-list-view').style.display='none';
+  document.getElementById('chat-view').classList.add('active');
+  const msgs=group.messages||[];
+  const el=document.getElementById('chat-messages');
+  if(msgs.length===0){el.innerHTML='<div style="text-align:center;color:var(--text-faint);font-size:13px;padding:20px;">no messages yet</div>';}
+  else{el.innerHTML=msgs.map(m=>{const out=m.from===CU.username;return`<div style="display:flex;flex-direction:column;align-items:${out?'flex-end':'flex-start'};"><div style="font-size:10px;color:var(--text-faint);padding:0 6px;margin-bottom:2px;">${out?'you':escHtml(m.fromName||m.from)}</div><div class="msg-bubble ${out?'msg-out':'msg-in'}">${escHtml(m.text)}</div><div class="msg-time" style="padding:0 6px;">${timeAgo(m.ts)}</div></div>`;}).join('');el.scrollTop=el.scrollHeight;}
+}
+function switchMsgTab(tab){
+  document.getElementById('tab-dms').className='msg-tab-btn'+(tab==='dms'?' active':' inactive');
+  document.getElementById('tab-groups').className='msg-tab-btn'+(tab==='groups'?' active':' inactive');
+  document.getElementById('dm-list-container').style.display=tab==='dms'?'':'none';
+  document.getElementById('gc-list-container').style.display=tab==='groups'?'':'none';
+  if(tab==='groups')renderGroupList();
+}
+
+// PWA
+if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}
+
 updateTimerLabel();
 updateCharCount();
 
@@ -1814,11 +1757,6 @@ async function boot(){
 }
 boot();
 setTimeout(initPullToRefresh,500);
-
-// PWA Service Worker
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/sw.js').catch(()=>{});
-}
 if(window.location.hash==='#admin'){
   const checkAdmin=setInterval(()=>{
     if(CU&&CU.username===ADMIN_USER){clearInterval(checkAdmin);openAdmin();}
