@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>yours.</title><-f v13b -->
+<title>yours.</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="yours.">
@@ -203,8 +203,6 @@ input,textarea,button{font-family:inherit;}
 .danger-btn:active{background:var(--danger);color:white;}
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border-light);display:flex;justify-content:space-around;padding:10px 0;padding-bottom:calc(10px + env(safe-area-inset-bottom,0));z-index:100;}
-.bn-label{font-size:10px;color:var(--text-faint);margin-top:2px;line-height:1;}
-.bn-btn.active .bn-label{color:var(--text);font-weight:500;}
 .bn-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 12px;color:var(--text-faint);transition:color 0.15s;min-width:48px;min-height:48px;justify-content:center;position:relative;}
 .bn-btn.active{color:var(--text);}
 .bn-btn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
@@ -285,15 +283,14 @@ input,textarea,button{font-family:inherit;}
 .admin-report-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;}
 .admin-user-row{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
 
-/* REACTIONS */
+.bn-label{font-size:10px;color:var(--text-faint);margin-top:2px;line-height:1;}
+.bn-btn.active .bn-label{color:var(--text);font-weight:500;}
 .reactions-row{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 12px;}
 .reaction-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border:1px solid var(--border-light);border-radius:20px;background:var(--bg);cursor:pointer;font-size:15px;min-height:36px;font-family:inherit;}
 .reaction-chip.mine{background:var(--accent-light);border-color:var(--accent);}
 .rc{font-size:12px;color:var(--text-muted);}
 .reaction-picker{display:flex;gap:4px;padding:8px 16px 10px;border-top:1px solid var(--border-light);}
 .rp-emoji{font-size:24px;padding:4px;background:none;border:none;cursor:pointer;border-radius:8px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;font-family:inherit;}
-
-/* CIRCLES POPUP */
 .circle-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:400;display:flex;align-items:flex-end;justify-content:center;}
 .circle-sheet{background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px calc(32px + env(safe-area-inset-bottom,0));width:100%;max-width:520px;max-height:80vh;overflow-y:auto;}
 .cs-title{font-size:18px;font-weight:600;color:var(--text);margin-bottom:4px;}
@@ -306,19 +303,16 @@ input,textarea,button{font-family:inherit;}
 .cs-save{width:100%;padding:15px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer;margin-top:18px;min-height:52px;}
 .cs-cancel{width:100%;padding:12px;background:none;border:none;font-family:inherit;font-size:14px;color:var(--text-muted);cursor:pointer;margin-top:6px;}
 .circle-manage-btn{width:100%;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text-muted);cursor:pointer;margin-top:10px;min-height:44px;display:flex;align-items:center;justify-content:space-between;}
-
-/* GROUP CHATS */
+.gs-name-input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:inherit;color:var(--text);background:var(--bg);outline:none;margin-bottom:16px;}
+.gs-name-input:focus{border-color:var(--accent);}
+.gc-add-members-btn{padding:8px 12px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:12px;color:var(--text-muted);cursor:pointer;min-height:36px;}
 .msg-tabs{display:flex;gap:8px;margin-bottom:16px;}
 .msg-tab{flex:1;padding:11px;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;min-height:44px;border:1px solid var(--border);background:none;color:var(--text-muted);}
 .msg-tab.on{background:var(--text);color:white;border-color:var(--text);}
 .new-grp-btn{padding:11px 14px;border:1px solid var(--border);background:none;color:var(--text-muted);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;cursor:pointer;min-height:44px;}
 .grp-badge{font-size:10px;font-weight:600;background:var(--accent-light);color:var(--accent);padding:3px 8px;border-radius:10px;}
-
-/* OFFLINE BAR */
 .offline-bar{background:#C0392B;color:white;text-align:center;font-size:13px;padding:10px;display:none;}
 .offline-bar.show{display:block;}
-
-/* NOTIFICATIONS */
 .notif-bell{position:relative;}
 .notif-red-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:#C0392B;display:none;}
 .notif-item{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;}
@@ -327,6 +321,15 @@ input,textarea,button{font-family:inherit;}
 .ni-body{flex:1;}
 .ni-text{font-size:14px;color:var(--text);line-height:1.4;}
 .ni-time{font-size:12px;color:var(--text-faint);margin-top:3px;}
+
+
+.chat-delete-btn{background:none;border:none;cursor:pointer;color:var(--text-faint);padding:8px;min-width:40px;min-height:40px;display:flex;align-items:center;justify-content:center;margin-left:auto;}
+.chat-delete-btn:hover{color:#C0392B;}
+.dm-list-item{position:relative;}
+.dm-delete-swipe{position:absolute;right:0;top:0;bottom:0;width:72px;background:#C0392B;color:white;border:none;display:flex;align-items:center;justify-content:center;font-family:inherit;font-size:13px;cursor:pointer;border-radius:0 var(--radius) var(--radius) 0;opacity:0;pointer-events:none;transition:opacity 0.15s;}
+.dm-list-item.show-delete .dm-delete-swipe{opacity:1;pointer-events:auto;}
+.dm-longpress-btn{background:none;border:none;cursor:pointer;color:var(--text-faint);padding:6px;min-width:36px;min-height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dm-longpress-btn:hover{color:#C0392B;}
 
 </style>
 </head>
@@ -389,10 +392,7 @@ input,textarea,button{font-family:inherit;}
   <div class="offline-bar" id="offline-bar">you're offline</div>
   <nav class="app-nav">
     <span class="app-logo">yours.</span>
-    <div class="notif-bell">
-      <button class="icon-btn" onclick="showPanel('notifications')" style="min-width:44px;min-height:44px;"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
-      <div class="notif-red-dot" id="notif-dot"></div>
-    </div>
+    <div class="notif-bell"><button class="icon-btn" onclick="showPanel('notifications')" style="min-width:44px;min-height:44px;"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button><div class="notif-red-dot" id="notif-dot"></div></div>
   </nav>
 
   <!-- FEED -->
@@ -479,11 +479,7 @@ input,textarea,button{font-family:inherit;}
   <div id="messages-panel" class="panel">
     <div id="dm-list-view">
       <div class="panel-title">messages.</div>
-      <div class="msg-tabs">
-        <button class="msg-tab on" id="mtab-dms" onclick="switchMsgTab('dms')">direct</button>
-        <button class="msg-tab" id="mtab-groups" onclick="switchMsgTab('groups')">groups</button>
-        <button class="new-grp-btn" onclick="createGroupChat()">+ group</button>
-      </div>
+      <div class="msg-tabs"><button class="msg-tab on" id="mtab-dms" onclick="switchMsgTab('dms')">direct</button><button class="msg-tab" id="mtab-groups" onclick="switchMsgTab('groups')">groups</button><button class="new-grp-btn" onclick="createGroupChat()">+ group</button></div>
       <div id="dm-list-container"></div>
       <div id="gc-list-container" style="display:none;"></div>
     </div>
@@ -491,6 +487,7 @@ input,textarea,button{font-family:inherit;}
       <div class="chat-header">
         <button class="chat-back" onclick="closeDM()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> back</button>
         <div class="chat-title" id="chat-title"></div>
+        <button class="chat-delete-btn" onclick="deleteActiveChat()" title="delete chat"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
       </div>
       <div class="chat-messages" id="chat-messages"></div>
       <div class="chat-input-row">
@@ -512,13 +509,7 @@ input,textarea,button{font-family:inherit;}
       <div class="profile-name" id="profile-name-display"></div>
       <div class="profile-handle" id="profile-handle-display"></div>
       <div id="profile-bio-display" style="font-size:13px;color:var(--text-muted);text-align:center;margin:6px 16px 0;line-height:1.5;cursor:pointer;" onclick="editBio()"></div>
-      <div id="bio-edit-wrap" style="display:none;width:100%;padding:0 16px;margin-top:8px;">
-        <input id="bio-input" type="text" maxlength="80" placeholder="add a short bio..." style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;color:var(--text);background:var(--bg);outline:none;text-align:center;">
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <button onclick="saveBio()" style="flex:1;padding:10px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:40px;">save</button>
-          <button onclick="cancelBio()" style="flex:1;padding:10px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:40px;color:var(--text-muted);">cancel</button>
-        </div>
-      </div>
+      <div id="bio-edit-wrap" style="display:none;width:100%;padding:0 16px;margin-top:8px;"><input id="bio-input" type="text" maxlength="80" placeholder="add a short bio..." style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;color:var(--text);background:var(--bg);outline:none;text-align:center;"><div style="display:flex;gap:8px;margin-top:8px;"><button onclick="saveBio()" style="flex:1;padding:10px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:40px;">save</button><button onclick="cancelBio()" style="flex:1;padding:10px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:inherit;min-height:40px;color:var(--text-muted);">cancel</button></div></div>
       <div class="profile-stats">
         <div class="stat stat-btn" onclick="scrollToMyPosts()"><div class="stat-num" id="stat-posts">0</div><div class="stat-label">posts</div></div>
         <div class="stat stat-btn" onclick="toggleProfileFriendsList()"><div class="stat-num" id="stat-friends">0</div><div class="stat-label">friends</div></div>
@@ -628,10 +619,23 @@ input,textarea,button{font-family:inherit;}
 <div id="circle-overlay" class="circle-overlay" style="display:none;" onclick="if(event.target===this)closeCircleSheet()">
   <div class="circle-sheet">
     <div class="cs-title" id="cs-title">edit circle</div>
-    <div class="cs-sub">tap a name to add or remove them</div>
+    <div class="cs-sub">tap a name to add or remove</div>
     <div id="cs-list"></div>
     <button class="cs-save" onclick="saveCircleSheet()">save</button>
     <button class="cs-cancel" onclick="closeCircleSheet()">cancel</button>
+  </div>
+</div>
+
+<!-- GROUP SHEET -->
+<div id="group-sheet-overlay" class="circle-overlay" style="display:none;" onclick="if(event.target===this)closeGroupSheet()">
+  <div class="circle-sheet">
+    <div class="cs-title" id="gs-title">create group</div>
+    <div class="cs-sub">name it and choose who to add</div>
+    <div id="gs-name-wrap"><input class="gs-name-input" id="gs-name-input" type="text" maxlength="40" placeholder="group name e.g. uni mates..."></div>
+    <div style="font-size:12px;font-weight:600;letter-spacing:0.4px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">add members</div>
+    <div id="gs-list"></div>
+    <button class="cs-save" id="gs-save-btn" onclick="saveGroupSheet()">create group</button>
+    <button class="cs-cancel" onclick="closeGroupSheet()">cancel</button>
   </div>
 </div>
 
@@ -946,8 +950,8 @@ function renderPost(post,ud){
       </div>
     </div>
     <div id="rp-${post.id}" class="reaction-picker" style="display:none;">
-      ${['🔥','😂','❤️','👏','💯','👀'].map(e=>`<button class="rp-emoji" onclick="addReaction('${post.id}','${e}')">${e}</button>`).join('')}
-      <button class="rp-emoji" style="font-size:14px;color:var(--text-muted);" onclick="document.getElementById('rp-${post.id}').style.display='none'">✕</button>
+      ${['\U0001f525','\U0001f602','\u2764\ufe0f','\U0001f44f','\U0001f4af','\U0001f440'].map(e=>`<button class="rp-emoji" onclick="addReaction('${post.id}','${e}')">${e}</button>`).join('')}
+      <button class="rp-emoji" style="font-size:14px;color:var(--text-muted);" onclick="document.getElementById('rp-${post.id}').style.display='none'">&#x2715;</button>
     </div>
     <div id="rr-${post.id}" class="reactions-row" style="${Object.values(post.reactions||{}).some(u=>u.length>0)?'':'display:none'}">
       ${Object.entries(post.reactions||{}).filter(([e,u])=>u.length>0).map(([e,u])=>`<button class="reaction-chip${u.includes(CU.username)?' mine':''}" onclick="addReaction('${post.id}','${e}')">${e}<span class="rc">${u.length}</span></button>`).join('')}
@@ -1152,7 +1156,7 @@ async function renderCircles(){
         <button class="delete-circle-btn" onclick="deleteCircle('${c.id}')">delete</button>
       </div>
       <button class="circle-manage-btn" onclick="openCircleSheet('${c.id}')">
-        <span>manage members</span><span style="font-size:12px;">${(c.members||[]).length} added →</span>
+        <span>manage members</span><span style="font-size:12px;">${(c.members||[]).length} added &#8594;</span>
       </button>
     </div>
   `).join('');
@@ -1292,6 +1296,8 @@ async function renderProfile(){
   document.getElementById('profile-handle-display').textContent='@'+CU.username;
   document.getElementById('stat-posts').textContent=myPosts.length;
   document.getElementById('stat-friends').textContent=(ud.friends||[]).length;
+  const _be=document.getElementById('profile-bio-display');if(_be){_be.textContent=ud.bio||'tap to add a bio';_be.style.display='block';}
+  const _bew=document.getElementById('bio-edit-wrap');if(_bew)_bew.style.display='none';
   profileFriendsOpen=false;document.getElementById('profile-friends-section').style.display='none';
   const adminBtn=document.getElementById('admin-btn');
   if(adminBtn)adminBtn.style.display=CU.username===ADMIN_USER?'block':'none';
@@ -1357,13 +1363,19 @@ async function openFriendProfile(username){
   document.getElementById('fp-name').textContent=ud.name||username;
   document.getElementById('fp-handle').textContent='@'+username;
   document.getElementById('fp-stat-friends').textContent=(ud.friends||[]).length;
-  const fpBio=document.getElementById('fp-bio');if(fpBio)fpBio.textContent=ud.bio||'';
+  const _fb=document.getElementById('fp-bio');if(_fb)_fb.textContent=ud.bio||'';
   const myData=await dbGet('user:'+CU.username)||{};
   const isFriend=(myData.friends||[]).includes(username);
   const actionsEl=document.getElementById('fp-actions');
   if(isFriend){
     actionsEl.innerHTML=`<button onclick="openFriendActionModal('${username}','${escHtml(ud.name||username)}')" style="flex:1;padding:10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:none;font-size:13px;cursor:pointer;color:var(--text-muted);min-height:44px;">more options</button>`;
   }else{actionsEl.innerHTML='';}
+  const _ffc=document.getElementById('fp-friends-container');
+  if(_ffc){
+    const tf=ud.friends||[];const _mf2=myData.friends||[];
+    if(!tf.length){_ffc.innerHTML='<div style="font-size:13px;color:var(--text-faint);padding:8px 0;">no friends yet</div>';}
+    else{const _fcs=await Promise.all(tf.map(async f=>{const fud=await dbGet('user:'+f)||{};const isMe=f===CU.username;const af=_mf2.includes(f);const btn=isMe?'':(af?'<span style="font-size:12px;color:var(--text-faint);padding:6px 10px;">friends</span>':`<button onclick="sendFriendRequest('${f}')" style="padding:8px 14px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;font-family:inherit;min-height:36px;">+ add</button>`);return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border-light);">${avatarHtml(f,fud,32)}<div style="flex:1;"><div style="font-size:14px;font-weight:500;">${escHtml(fud.name||f)}</div><div style="font-size:12px;color:var(--text-muted);">@${f}</div></div>${btn}</div>`;}));_ffc.innerHTML=_fcs.join('');}
+  }
   const postIdx=await dbGet('posts:index')||[];const now=Date.now();const posts=[];
   for(const pid of postIdx){const p=await dbGet('post:'+pid);if(!p||p.author!==username)continue;if(p.durMs&&(p.ts+p.durMs)<now)continue;posts.push(p);}
   posts.sort((a,b)=>b.ts-a.ts);
@@ -1409,7 +1421,7 @@ async function renderMessages(){
   container.innerHTML=convos.map(c=>{
     const preview=c.last?(c.last.from===CU.username?'you: ':'')+escHtml(c.last.text.slice(0,40))+(c.last.text.length>40?'…':''):'say hello...';
     const t=c.last?timeAgo(c.last.ts):'';const unread=isConvoUnread(c);
-    return`<div class="dm-list-item" onclick="openDM('${c.username}')">${avatarHtml(c.username,c.ud)}<div class="dm-preview"><div class="dm-name" style="${unread?'font-weight:600;':''}">${escHtml(c.name)}</div><div class="dm-last">${preview}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">${t?`<div class="dm-time">${t}</div>`:''}${unread?'<div class="unread-dot"></div>':''}</div></div>`;
+    return`<div class="dm-list-item" onclick="openDM('${c.username}')">${avatarHtml(c.username,c.ud)}<div class="dm-preview"><div class="dm-name" style="${unread?'font-weight:600;':''}">${escHtml(c.name)}</div><div class="dm-last">${preview}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">${t?`<div class="dm-time">${t}</div>`:''}${unread?'<div class="unread-dot"></div>':''}</div><button class="dm-longpress-btn" onclick="deleteDMConvo('${c.username}',event)" title="delete"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></div>`;
   }).join('');
 }
 
@@ -1615,17 +1627,11 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-
-function editBio(){const b=CU.bio||'';document.getElementById('bio-input').value=b;document.getElementById('profile-bio-display').style.display='none';document.getElementById('bio-edit-wrap').style.display='block';document.getElementById('bio-input').focus();}
-async function saveBio(){const bio=document.getElementById('bio-input').value.trim();const ud=await dbGet('user:'+CU.username)||{};ud.bio=bio;await dbSet('user:'+CU.username,ud);CU={...CU,bio};document.getElementById('profile-bio-display').textContent=bio||'tap to add a bio';document.getElementById('profile-bio-display').style.display='block';document.getElementById('bio-edit-wrap').style.display='none';}
-function cancelBio(){document.getElementById('profile-bio-display').style.display='block';document.getElementById('bio-edit-wrap').style.display='none';}
-
-// OFFLINE DETECTION
+// OFFLINE
 window.addEventListener('online',()=>document.getElementById('offline-bar').classList.remove('show'));
 window.addEventListener('offline',()=>document.getElementById('offline-bar').classList.add('show'));
 if(!navigator.onLine)document.getElementById('offline-bar').classList.add('show');
 
-// NOTIFICATIONS
 async function loadNotifications(){
   if(!CU)return;
   const ud=await dbGet('user:'+CU.username)||{};
@@ -1636,14 +1642,10 @@ async function loadNotifications(){
   const list=document.getElementById('notif-list');
   if(!list)return;
   if(!notifs.length){list.innerHTML='<div class="empty-state"><h3>nothing yet.</h3><p>likes and comments will appear here.</p></div>';return;}
-  list.innerHTML=notifs.slice().reverse().slice(0,30).map(n=>`<div class="notif-item${n.read?'':' unread'}"><div class="ni-icon">${n.type==='like'?'❤️':n.type==='comment'?'💬':n.type==='friend'?'👋':'✦'}</div><div class="ni-body"><div class="ni-text">${escHtml(n.text)}</div><div class="ni-time">${timeAgo(n.ts)}</div></div></div>`).join('');
+  list.innerHTML=notifs.slice().reverse().slice(0,30).map(n=>`<div class="notif-item${n.read?'':' unread'}"><div class="ni-icon">${n.type==='like'?'&#x2764;':n.type==='comment'?'&#x1f4ac;':n.type==='friend'?'&#x1f44b;':'&#x2756;'}</div><div class="ni-body"><div class="ni-text">${escHtml(n.text)}</div><div class="ni-time">${timeAgo(n.ts)}</div></div></div>`).join('');
   if(notifs.some(n=>!n.read)){ud.notifications=notifs.map(n=>({...n,read:true}));await dbSet('user:'+CU.username,ud);}
 }
-async function pushNotif(toUser,type,text){
-  try{const ud=await dbGet('user:'+toUser);if(!ud)return;if(!ud.notifications)ud.notifications=[];ud.notifications.push({type,text,ts:Date.now(),read:false});if(ud.notifications.length>50)ud.notifications=ud.notifications.slice(-50);await dbSet('user:'+toUser,ud);}catch{}
-}
 
-// REACTIONS
 async function addReaction(postId,emoji){
   const rp=document.getElementById('rp-'+postId);if(rp)rp.style.display='none';
   const post=await dbGet('post:'+postId);if(!post)return;
@@ -1660,7 +1662,6 @@ async function addReaction(postId,emoji){
   }
 }
 
-// CIRCLES SHEET
 let csId=null,csMembers=[];
 async function openCircleSheet(circleId){
   const ud=await dbGet('user:'+CU.username)||{};
@@ -1671,23 +1672,22 @@ async function openCircleSheet(circleId){
   const fdata={};for(const f of friends)fdata[f]=await dbGet('user:'+f)||{};
   const list=document.getElementById('cs-list');
   if(!friends.length){list.innerHTML='<div style="padding:16px 0;color:var(--text-muted);font-size:14px;">add friends first</div>';}
-  else{list.innerHTML=friends.map(f=>{const on=csMembers.includes(f);const nm=escHtml((fdata[f]||{}).name||f);return`<div class="cm-row" onclick="toggleCSMember('${f}')"><div class="cm-name">${nm}</div><div class="cm-check${on?' on':''}" id="csc-${f}">${on?'✓':''}</div></div>`;}).join('');}
+  else{list.innerHTML=friends.map(f=>{const on=csMembers.includes(f);const nm=escHtml((fdata[f]||{}).name||f);return`<div class="cm-row" onclick="toggleCSMember('${f}')"><div class="cm-name">${nm}</div><div class="cm-check${on?' on':''}" id="csc-${f}">${on?'&#x2713;':''}</div></div>`;}).join('');}
   document.getElementById('circle-overlay').style.display='flex';
 }
 function toggleCSMember(f){
   const idx=csMembers.indexOf(f);if(idx>-1)csMembers.splice(idx,1);else csMembers.push(f);
-  const cb=document.getElementById('csc-'+f);if(cb){const on=csMembers.includes(f);cb.className='cm-check'+(on?' on':'');cb.textContent=on?'✓':'';}
+  const cb=document.getElementById('csc-'+f);if(cb){const on=csMembers.includes(f);cb.className='cm-check'+(on?' on':'');cb.textContent=on?'&#x2713;':'';}  
 }
 async function saveCircleSheet(){
   if(!csId)return;
   const ud=await dbGet('user:'+CU.username)||{};
-  const c=(ud.circles||[]).find(x=>x.id===csId);if(!c)return;
-  c.members=[...csMembers];await dbSet('user:'+CU.username,ud);CU={...CU,...ud};
+  const circle=(ud.circles||[]).find(x=>x.id===csId);if(!circle)return;
+  circle.members=[...csMembers];await dbSet('user:'+CU.username,ud);CU={...CU,...ud};
   closeCircleSheet();renderFriends();
 }
 function closeCircleSheet(){document.getElementById('circle-overlay').style.display='none';csId=null;csMembers=[];}
 
-// MUTE
 async function muteUser(u){
   const ud=await dbGet('user:'+CU.username)||{};if(!ud.muted)ud.muted=[];
   const idx=ud.muted.indexOf(u);if(idx>-1)ud.muted.splice(idx,1);else ud.muted.push(u);
@@ -1695,45 +1695,184 @@ async function muteUser(u){
 }
 async function fam_mute(){if(famUser){closeFriendActionModal();await muteUser(famUser);}}
 
-// GROUP CHATS
-let activeGroupId=null;
-async function createGroupChat(){
-  const name=prompt('Group name:');if(!name||!name.trim())return;
-  const ud=await dbGet('user:'+CU.username)||{};
-  if(!(ud.friends||[]).length){alert('Add friends first');return;}
-  const gid='gc:'+Date.now().toString(36);
-  const group={id:gid,name:name.trim(),creator:CU.username,members:[CU.username],ts:Date.now(),messages:[]};
-  await dbSet(gid,group);
-  const myGroups=await dbGet('groups:'+CU.username)||[];myGroups.push(gid);await dbSet('groups:'+CU.username,myGroups);
-  switchMsgTab('groups');openGroupChat(gid);
+function editBio(){
+  document.getElementById('bio-input').value=CU.bio||'';
+  document.getElementById('profile-bio-display').style.display='none';
+  document.getElementById('bio-edit-wrap').style.display='block';
+  document.getElementById('bio-input').focus();
 }
+async function saveBio(){
+  const bio=document.getElementById('bio-input').value.trim();
+  const ud=await dbGet('user:'+CU.username)||{};ud.bio=bio;
+  await dbSet('user:'+CU.username,ud);CU={...CU,bio};
+  document.getElementById('profile-bio-display').textContent=bio||'tap to add a bio';
+  document.getElementById('profile-bio-display').style.display='block';
+  document.getElementById('bio-edit-wrap').style.display='none';
+}
+function cancelBio(){
+  document.getElementById('profile-bio-display').style.display='block';
+  document.getElementById('bio-edit-wrap').style.display='none';
+}
+
+let activeGroupId=null;
+let gsMode=null,gsGroupId=null,gsMembers=[];
+
+async function createGroupChat(){
+  const ud=await dbGet('user:'+CU.username)||{};
+  if(!(ud.friends||[]).length){alert('Add friends first to create a group');return;}
+  gsMode='create';gsGroupId=null;gsMembers=[];
+  document.getElementById('gs-title').textContent='create group';
+  document.getElementById('gs-save-btn').textContent='create group';
+  document.getElementById('gs-name-wrap').style.display='block';
+  document.getElementById('gs-name-input').value='';
+  const friends=ud.friends||[];
+  const fdata={};for(const f of friends)fdata[f]=await dbGet('user:'+f)||{};
+  const list=document.getElementById('gs-list');
+  if(!friends.length){list.innerHTML='<div style="padding:16px 0;color:var(--text-muted);font-size:14px;">no friends yet</div>';}
+  else{list.innerHTML=friends.map(f=>{const nm=escHtml((fdata[f]||{}).name||f);return`<div class="cm-row" onclick="toggleGSMember('${f}')"><div class="cm-name">${nm}</div><div class="cm-check" id="gsc-${f}"></div></div>`;}).join('');}
+  document.getElementById('group-sheet-overlay').style.display='flex';
+}
+
+async function addGroupMembers(gid){
+  const group=await dbGet(gid);if(!group)return;
+  const ud=await dbGet('user:'+CU.username)||{};
+  const available=(ud.friends||[]).filter(f=>!(group.members||[]).includes(f));
+  gsMode='add';gsGroupId=gid;gsMembers=[];
+  document.getElementById('gs-title').textContent='add to '+escHtml(group.name);
+  document.getElementById('gs-save-btn').textContent='add members';
+  document.getElementById('gs-name-wrap').style.display='none';
+  const fdata={};for(const f of available)fdata[f]=await dbGet('user:'+f)||{};
+  const list=document.getElementById('gs-list');
+  if(!available.length){list.innerHTML='<div style="padding:16px 0;color:var(--text-muted);font-size:14px;">all friends already in this group</div>';}
+  else{list.innerHTML=available.map(f=>{const nm=escHtml((fdata[f]||{}).name||f);return`<div class="cm-row" onclick="toggleGSMember('${f}')"><div class="cm-name">${nm}</div><div class="cm-check" id="gsc-${f}"></div></div>`;}).join('');}
+  document.getElementById('group-sheet-overlay').style.display='flex';
+}
+
+function toggleGSMember(f){
+  const idx=gsMembers.indexOf(f);if(idx>-1)gsMembers.splice(idx,1);else gsMembers.push(f);
+  const cb=document.getElementById('gsc-'+f);if(cb){const on=gsMembers.includes(f);cb.className='cm-check'+(on?' on':'');cb.textContent=on?'&#x2713;':'';}
+}
+
+async function saveGroupSheet(){
+  if(gsMode==='create'){
+    const name=document.getElementById('gs-name-input').value.trim();
+    if(!name){document.getElementById('gs-name-input').focus();return;}
+    const gid='gc:'+Date.now().toString(36);
+    const group={id:gid,name,creator:CU.username,members:[CU.username,...gsMembers],ts:Date.now(),messages:[]};
+    await dbSet(gid,group);
+    const myGroups=await dbGet('groups:'+CU.username)||[];myGroups.push(gid);await dbSet('groups:'+CU.username,myGroups);
+    for(const f of gsMembers){const fg=await dbGet('groups:'+f)||[];if(!fg.includes(gid)){fg.push(gid);await dbSet('groups:'+f,fg);}}
+    closeGroupSheet();switchMsgTab('groups');openGroupChat(gid);
+  } else {
+    if(!gsMembers.length){closeGroupSheet();return;}
+    const group=await dbGet(gsGroupId);if(!group)return;
+    group.members=[...new Set([...group.members,...gsMembers])];
+    await dbSet(gsGroupId,group);
+    for(const f of gsMembers){const fg=await dbGet('groups:'+f)||[];if(!fg.includes(gsGroupId)){fg.push(gsGroupId);await dbSet('groups:'+f,fg);}}
+    closeGroupSheet();openGroupChat(gsGroupId);
+  }
+}
+function closeGroupSheet(){document.getElementById('group-sheet-overlay').style.display='none';gsMode=null;gsGroupId=null;gsMembers=[];}
+
 async function renderGroupList(){
   const container=document.getElementById('gc-list-container');if(!container)return;
   const gids=await dbGet('groups:'+CU.username)||[];
   if(!gids.length){container.innerHTML='<div class="empty-state"><h3>no groups yet.</h3><p>tap + group to create one.</p></div>';return;}
   const groups=(await Promise.all(gids.map(id=>dbGet(id)))).filter(Boolean);
-  container.innerHTML=groups.map(g=>`<div class="dm-list-item" onclick="openGroupChat('${g.id}')"><div class="avatar c0" style="width:36px;height:36px;font-size:13px;flex-shrink:0;">👥</div><div class="dm-preview"><div class="dm-name">${escHtml(g.name)}</div><div class="dm-last">${g.messages&&g.messages.length?escHtml(g.messages[g.messages.length-1].text.slice(0,40)):'no messages yet'}</div></div><span class="grp-badge">${g.members.length}</span></div>`).join('');
+  container.innerHTML=groups.map(g=>`<div class="dm-list-item" onclick="openGroupChat('${g.id}')"><div class="avatar c0" style="width:36px;height:36px;font-size:13px;flex-shrink:0;">&#x1f465;</div><div class="dm-preview"><div class="dm-name">${escHtml(g.name)}</div><div class="dm-last">${g.messages&&g.messages.length?escHtml(g.messages[g.messages.length-1].text.slice(0,40)):'no messages yet'}</div></div><span class="grp-badge">${g.members.length}</span><button class="dm-longpress-btn" onclick="deleteGroupConvo('${g.id}',event)" title="delete or leave"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></div>`).join('');
 }
+
 async function openGroupChat(gid){
   activeGroupId=gid;activeDMUser=null;
   const group=await dbGet(gid);if(!group)return;
   document.getElementById('chat-title').textContent=group.name;
   document.getElementById('dm-list-view').style.display='none';
   document.getElementById('chat-view').classList.add('active');
+  const oldBtn=document.getElementById('gc-add-members-btn');if(oldBtn)oldBtn.remove();
+  if(group.creator===CU.username){
+    const hdr=document.querySelector('#chat-view .chat-header');
+    if(hdr){const btn=document.createElement('button');btn.id='gc-add-members-btn';btn.className='gc-add-members-btn';btn.textContent='+ members';btn.onclick=()=>addGroupMembers(activeGroupId);hdr.appendChild(btn);}
+  }
   const msgs=group.messages||[];
   const el=document.getElementById('chat-messages');
   if(!msgs.length){el.innerHTML='<div style="text-align:center;color:var(--text-faint);font-size:13px;padding:20px;">no messages yet</div>';}
   else{el.innerHTML=msgs.map(m=>{const out=m.from===CU.username;return`<div style="display:flex;flex-direction:column;align-items:${out?'flex-end':'flex-start'};"><div style="font-size:10px;color:var(--text-faint);padding:0 6px;margin-bottom:2px;">${out?'you':escHtml(m.fromName||m.from)}</div><div class="msg-bubble ${out?'msg-out':'msg-in'}">${escHtml(m.text)}</div><div class="msg-time" style="padding:0 6px;">${timeAgo(m.ts)}</div></div>`;}).join('');el.scrollTop=el.scrollHeight;}
 }
+
 function switchMsgTab(tab){
-  ['dms','groups'].forEach(t=>{document.getElementById('mtab-'+t).className='msg-tab'+(t===tab?' on':'');});
-  document.getElementById('dm-list-container').style.display=tab==='dms'?'':'none';
-  document.getElementById('gc-list-container').style.display=tab==='groups'?'':'none';
+  ['dms','groups'].forEach(t=>{const el=document.getElementById('mtab-'+t);if(el)el.className='msg-tab'+(t===tab?' on':'');});
+  const dm=document.getElementById('dm-list-container');const gc=document.getElementById('gc-list-container');
+  if(dm)dm.style.display=tab==='dms'?'':'none';
+  if(gc)gc.style.display=tab==='groups'?'':'none';
   if(tab==='groups')renderGroupList();
 }
 
-// PWA
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}
+
+
+// CHAT DELETION
+async function deleteActiveChat(){
+  if(activeGroupId){
+    const group=await dbGet(activeGroupId);
+    if(!group)return;
+    const isCreator=group.creator===CU.username;
+    const msg=isCreator?'Delete this group for everyone? This cannot be undone.':'Leave and remove this group from your messages?';
+    if(!confirm(msg))return;
+    if(isCreator){
+      // Remove group from all members' lists
+      for(const m of (group.members||[])){
+        const mg=await dbGet('groups:'+m)||[];
+        const filtered=mg.filter(g=>g!==activeGroupId);
+        await dbSet('groups:'+m,filtered);
+      }
+      await dbSet(activeGroupId,null);
+    } else {
+      // Just leave: remove self from group + remove from own list
+      group.members=(group.members||[]).filter(m=>m!==CU.username);
+      await dbSet(activeGroupId,group);
+      const mg=await dbGet('groups:'+CU.username)||[];
+      await dbSet('groups:'+CU.username,mg.filter(g=>g!==activeGroupId));
+    }
+    activeGroupId=null;
+    closeDM();switchMsgTab('groups');
+  } else if(activeDMUser){
+    if(!confirm('Delete this conversation? This clears the messages for you.'))return;
+    await dbSet(dmKey(CU.username,activeDMUser),[]);
+    const other=activeDMUser;
+    closeDM();renderMessages();
+  }
+}
+
+// Delete a DM directly from the list
+async function deleteDMConvo(username,ev){
+  if(ev){ev.stopPropagation();}
+  if(!confirm('Delete this conversation? This clears the messages for you.'))return;
+  await dbSet(dmKey(CU.username,username),[]);
+  renderMessages();
+}
+
+// Delete/leave a group from the list
+async function deleteGroupConvo(gid,ev){
+  if(ev){ev.stopPropagation();}
+  const group=await dbGet(gid);
+  if(!group)return;
+  const isCreator=group.creator===CU.username;
+  const msg=isCreator?'Delete this group for everyone? This cannot be undone.':'Leave this group?';
+  if(!confirm(msg))return;
+  if(isCreator){
+    for(const m of (group.members||[])){
+      const mg=await dbGet('groups:'+m)||[];
+      await dbSet('groups:'+m,mg.filter(g=>g!==gid));
+    }
+    await dbSet(gid,null);
+  } else {
+    group.members=(group.members||[]).filter(m=>m!==CU.username);
+    await dbSet(gid,group);
+    const mg=await dbGet('groups:'+CU.username)||[];
+    await dbSet('groups:'+CU.username,mg.filter(g=>g!==gid));
+  }
+  renderGroupList();
+}
 
 async function boot(){
   loading(true);
@@ -1758,4 +1897,3 @@ if(window.location.hash==='#admin'){
 </script>
 </body>
 </html>
-<-f Sat 30 May 2026 02:34:56 BST -->
